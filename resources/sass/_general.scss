@@ -1,0 +1,16 @@
+#flashAlert {
+    position: fixed;
+    left: 50%;
+    bottom: 1rem;
+    transform: translateX(-50%);
+    opacity: 1;
+    transition: opacity 500ms;
+
+    &.hidden {
+        opacity: 0;
+    }
+}
+
+.navbar .navbar-item .icon {
+    margin-right: .25em;
+}

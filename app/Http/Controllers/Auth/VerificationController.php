@@ -3,7 +3,15 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ChangePassword;
+use App\User;
+use Carbon\Carbon;
+use Illuminate\Auth\Events\Verified;
 use Illuminate\Foundation\Auth\VerifiesEmails;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\URL;
 
 class VerificationController extends Controller
 {
@@ -34,8 +42,48 @@ class VerificationController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth');
-        $this->middleware('signed')->only('verify');
+        $this->middleware('auth')->except(['verify', 'password']);
+        $this->middleware('signed')->only(['verify', 'password']);
         $this->middleware('throttle:6,1')->only('verify', 'resend');
+    }
+
+    /**
+     * Show the select password interface.
+     *
+     * @param int $id
+     * @param Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function verify(int $id, Request $request)
+    {
+        if (!is_null(User::findOrFail($id)->email_verified_at)) {
+            return redirect()->route('home');
+        }
+        $link = URL::temporarySignedRoute('verification.activate', Carbon::now()->addMinutes(60), compact('id'));
+        return view('auth.activate', compact('link'));
+    }
+
+    /**
+     * Mark the authenticated user's email address as verified and
+     * set a password.
+     *
+     * @param int $id
+     * @param ChangePassword $request
+     * @return \Illuminate\Http\Response
+     */
+    public function password(int $id, ChangePassword $request)
+    {
+        $user = User::findOrFail($id);
+
+        if ($user->markEmailAsVerified()) {
+            event(new Verified($request->user()));
+        }
+
+        $user->password = Hash::make($request->validated()['password']);
+        $user->save();
+
+        Auth::guard()->login($user);
+
+        return redirect($this->redirectPath())->with('alert', trans('auth.flash.account_activated'));
     }
 }

@@ -3,6 +3,7 @@
 /public/storage
 /public/css
 /public/js
+/public/fonts
 /storage/*.key
 /vendor
 /.idea
@@ -129,5 +130,7 @@ fabric.properties
 
 # Sonarlint plugin
 .idea/sonarlint
+
+_ide_helper.php
 
 # End of https://www.gitignore.io/api/phpstorm
