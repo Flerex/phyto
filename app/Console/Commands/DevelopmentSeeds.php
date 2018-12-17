@@ -41,8 +41,8 @@ class DevelopmentSeeds extends Command
     public function handle()
     {
         $user = User::create([
-            'name' => 'Administrator',
-            'email' => 'administrator@phyto.test',
+            'name' => 'Phyto',
+            'email' => 'phyto@phyto.test',
             'password' => bcrypt('admin'),
         ]);
 

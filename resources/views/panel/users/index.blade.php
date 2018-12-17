@@ -20,7 +20,8 @@
         @foreach($users as $user)
             <tr>
                 <th>{{ $user->id }}</th>
-                <td>{{ $user->name }}</td>
+                <td>
+                    @include('partials.avatar', compact('user'))<span>{{ $user->name }}</span></td>
                 <td><a href="mailto:{{ $user->email }}">{{ $user->email }}</a></td>
                 <td>
                     @forelse($user->roles as $role)
