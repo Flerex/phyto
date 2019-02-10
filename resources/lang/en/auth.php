@@ -1,5 +1,7 @@
 <?php
 
+use \App\Utils\Roles;
+
 return [
 
     /*
@@ -15,5 +17,35 @@ return [
 
     'failed' => 'These credentials do not match our records.',
     'throttle' => 'Too many login attempts. Please try again in :seconds seconds.',
+
+    'logout' => 'Logout',
+    'login' => 'Login',
+
+    'name' => 'Name',
+    'email' => 'Email',
+    'password' => 'Password',
+    'password_confirmation' => 'Password confirmation',
+    'remember_me' => 'Remember me',
+
+    // Forgot password
+    'forgot_password' => 'Forgot your password?',
+    'reset_password' => 'Reset password',
+    'send_password_reset' => 'Send password reset email',
+
+    // Reset password
+    'reset_password' => 'Reset password',
+
+    // Roles
+    'role' => 'Role',
+    'roles' => [
+        Roles::ADMIN => 'Administrator',
+        Roles::SUPERVISOR => 'Supervisor',
+        Roles::MANAGER => 'Manager',
+        Roles::TAGGER => 'Tagger',
+    ],
+
+    'flash' => [
+        'account_activated' => 'The account has been successfully activated',
+    ]
 
 ];

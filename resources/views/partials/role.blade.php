@@ -1,0 +1,1 @@
+<span class="tag user-role {{ $user->getRoleNames()->first() }}">@lang('auth.roles.' . $user->getRoleNames()->first())</span>

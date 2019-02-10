@@ -1,0 +1,55 @@
+#flashAlert {
+    position: fixed;
+    left: 50%;
+    bottom: 1rem;
+    transform: translateX(-50%);
+    opacity: 1;
+    transition: opacity 500ms;
+
+    &.hidden {
+        opacity: 0;
+    }
+}
+
+.navbar .navbar-item .icon {
+    margin-right: .25em;
+}
+
+.user-avatar {
+    vertical-align: middle;
+
+    .navbar & {
+        width: 40px;
+        height: 40px;
+    }
+
+    .table & {
+        width: 32px;
+        height: 32px;
+        margin-right: .5em;
+        border-radius: 100%;
+    }
+
+    &,
+    .navbar-item & {
+        max-height: none;
+    }
+
+    max-width: none;
+}
+
+.user-role {
+    margin-left: .5em;
+
+    &.admin {
+        @extend .is-danger;
+    }
+
+    &.supervisor {
+        @extend .is-warning;
+    }
+
+    &.manager {
+        @extend .is-success;
+    }
+}
