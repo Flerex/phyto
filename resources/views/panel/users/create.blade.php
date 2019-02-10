@@ -69,7 +69,7 @@
                 <button type="submit" class="button is-primary">@lang('general.create')</button>
             </div>
             <div class="control">
-                <a href="{{ route('panel.users') }}" class="button is-light">@lang('general.cancel')</a>
+                <a href="{{ route('panel.users.index') }}" class="button is-light">@lang('general.cancel')</a>
             </div>
         </div>
     </form>

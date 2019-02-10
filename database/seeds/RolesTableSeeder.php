@@ -19,10 +19,28 @@ class RolesTableSeeder extends Seeder
         $manager = Role::create(['name' => Roles::MANAGER]);
         $tagger = Role::create(['name' => Roles::TAGGER]);
 
+        // Tagger permissions
+
+
+        // Manager permissions
+
+
+        // Supervisor permissions
+        $supervisor->givePermissionTo(Permissions::SPECIES_MANAGEMENT);
+
+        $supervisor->givePermissionTo($manager->getAllPermissions());
+        $supervisor->givePermissionTo($tagger->getAllPermissions());
+
 
         // Permission definition
         $admin->givePermissionTo(Permissions::PANEL_ACCESS);
         $admin->givePermissionTo(Permissions::USER_MANAGEMENT);
+
+        $admin->givePermissionTo($supervisor->getAllPermissions());
+        $admin->givePermissionTo($manager->getAllPermissions());
+        $admin->givePermissionTo($tagger->getAllPermissions());
+
+
 
     }
 }

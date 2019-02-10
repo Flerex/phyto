@@ -13,24 +13,46 @@
 
 use App\Utils\Permissions;
 
+
+/*
+ * Home
+ */
 Route::get('/', function () {
     return view('welcome');
 });
 
-Auth::routes(['verify' => true, 'register' => false]);
-Route::post('/email/activate/{id}', 'Auth\VerificationController@password')->name('verification.activate');
-
 Route::get('/home', 'HomeController@index')->name('home');
 
+
+/*
+ * Auth
+ */
+Auth::routes(['verify' => true, 'register' => false]);
+Route::post('/email/activate/{id}', 'Auth\VerificationController@password')->name('verification.activate');
 Route::get('/password/change', 'PasswordController@index')->name('password.change');
 
-Route::prefix('panel')->middleware('permission:' . Permissions::PANEL_ACCESS)->group(function () {
-    Route::get('/', 'PanelController@index')->name('panel');
 
+/*
+ * Panel
+ */
+Route::prefix('panel')->middleware('permission:' . Permissions::PANEL_ACCESS)->group(function () {
+    Route::get('/', 'Panel\PanelController@index')->name('panel');
+
+
+    /*
+     * User Management
+     */
     Route::prefix('users')->middleware('permission:' . Permissions::USER_MANAGEMENT)->group(function () {
-        Route::get('/', 'PanelUserController@index')->name('panel.users');
-        Route::get('/create', 'PanelUserController@create')->name('panel.users.create');
-        Route::post('/store', 'PanelUserController@store')->name('panel.users.store');
-        Route::post('{id}/password/reset', 'PanelUserController@reset')->name('panel.users.password_reset');
+        Route::get('/', 'Panel\UserController@index')->name('panel.users.index');
+        Route::get('/create', 'Panel\UserController@create')->name('panel.users.create');
+        Route::post('/store', 'Panel\UserController@store')->name('panel.users.store');
+        Route::post('{id}/password/reset', 'Panel\UserController@reset')->name('panel.users.password_reset');
+    });
+
+    /*
+     * Species management
+     */
+    Route::prefix('species')->middleware('permission:' . Permissions::SPECIES_MANAGEMENT)->group(function () {
+        Route::get('/', 'Panel\SpeciesController@index')->name('panel.species.index');
     });
 });

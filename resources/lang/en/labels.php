@@ -6,5 +6,9 @@ return [
         'name' => 'Name',
         'email' => 'Email',
         'role' => 'Role',
+    ],
+
+    'species' => [
+        'name' => 'Name',
     ]
 ];
