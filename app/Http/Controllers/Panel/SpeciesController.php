@@ -22,9 +22,10 @@ class SpeciesController extends Controller
         $mode = $request->get('mode');
         $id = $request->get('model');
 
-        if ($mode && in_array($mode, ['domain', 'genus', 'class']) && $id) {
+        if ($mode && in_array($mode, ['domain', 'genus', 'classis']) && $id) {
 
-            $species = \App\Domain::findOrFail($id)->species()->paginate(config('phyto.pagination_size'));
+            $class = '\\App\\' . ucfirst($mode);
+            $species = $class::findOrFail($id)->species()->paginate(config('phyto.pagination_size'));
         }
 
         $domains = Domain::with('classis.genera.species')->get();

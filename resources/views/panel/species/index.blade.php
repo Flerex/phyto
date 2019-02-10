@@ -21,14 +21,14 @@
                     </a>
 
                     @foreach($domain->classis as $class)
-                        <a class="panel-block">
+                        <a class="panel-block" href="{{ route('panel.species.index') . '?mode=classis&model=' . $class->getKey() }}">
                             <span class="panel-icon"></span>
                             <span class="panel-icon"><i class="fas fa-circle" aria-hidden="true"></i></span>
                             {{ $class->name }}
                         </a>
 
                         @foreach($class->genera as $genus)
-                            <a class="panel-block">
+                            <a class="panel-block" href="{{ route('panel.species.index') . '?mode=genus&model=' . $genus->getKey() }}">
                                 <span class="panel-icon"></span><span class="panel-icon"></span>
                                 <span class="panel-icon"><i class="fas fa-square" aria-hidden="true"></i></span>
                                 {{ $genus->name }}
@@ -42,14 +42,12 @@
             <table class="table is-fullwidth">
                 <thead>
                 <tr>
-                    <th>@lang('labels.id')</th>
                     <th>@lang('labels.species.name')</th>
                 </tr>
                 </thead>
                 <tbody>
                     @foreach($species as $s)
                         <tr>
-                            <td>{{ $s->getKey() }}</td>
                             <td>{{ $s->name }}</td>
                         </tr>
                     @endforeach
