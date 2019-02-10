@@ -3,7 +3,7 @@
 namespace App\Providers;
 
 use App\Services\UserService;
-use App\Services\UserServiceImplementation;
+use App\Services\UserServiceImpl;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\ServiceProvider;
 
@@ -29,6 +29,6 @@ class AppServiceProvider extends ServiceProvider
     public function register()
     {
         // Bind implementation to interface in order for the kernel's IoC to work
-        $this->app->bind(UserService::class, UserServiceImplementation::class);
+        $this->app->bind(UserService::class, UserServiceImpl::class);
     }
 }

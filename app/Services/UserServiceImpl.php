@@ -4,24 +4,30 @@ namespace App\Services;
 
 
 use App\Mail\ActivateAccount;
-use App\Role;
+use App\Utils\Role;
 use App\User;
+use App\Utils\Roles;
+use http\Exception\InvalidArgumentException;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Password;
 
-class UserServiceImplementation implements UserService
+class UserServiceImpl implements UserService
 {
 
     /**
      * Creates a new user
      *
-     * @param String $name
-     * @param String $email
-     * @param Role $role
-     * @return mixed
+     * @param string $name
+     * @param string $email
+     * @param string $role
+     * @return int
      */
-    public function createUser(String $name, String $email, Role $role)
+    public function createUser(string $name, string $email, string $role): int
     {
+        if (!Roles::isValid($role)) {
+            throw new \InvalidArgumentException();
+        }
+
         $user = User::create([
             'name' => $name,
             'email' => $email,
@@ -31,6 +37,8 @@ class UserServiceImplementation implements UserService
 
         $user->assignRole($role);
 
+        return $user->getKey();
+
     }
 
     /**
@@ -38,11 +46,10 @@ class UserServiceImplementation implements UserService
      * @param int $user_id
      * @return void
      */
-    public function resetPassword(int $user_id)
+    public function resetPassword(int $user_id): void
     {
         User::findOrFail($user_id); // Throw ModelNotFoundException if user does not exist
 
-        // TODO: Add to queue. (Extending Laravel's default password broker)
         Password::broker()->sendResetLink(['id' => $user_id]);
     }
 }

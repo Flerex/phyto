@@ -17,6 +17,7 @@ class Role extends RoleModel
      */
     public function getIsDefaultAttribute()
     {
-        return $this->name == Roles::TAGGER;
+        return $this->name == config('phyto.default_role');
     }
+
 }

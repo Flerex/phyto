@@ -13,6 +13,7 @@
         <th>@lang('labels.user.email')</th>
         <th>@lang('labels.user.role')</th>
         <th class="has-text-centered">@lang('panel.users.joined')</th>
+        <th>@lang('panel.users.registered')</th>
         <th class="has-text-centered">@lang('panel.users.reset_password') @include('partials.info', ['info' => trans('panel.users.reset_password_info')])</th>
         </thead>
 
@@ -37,6 +38,9 @@
                     @else
                         <i class="fas fa-check"></i>
                     @endif
+                </td>
+                <td>
+                    {{ $user->created_at->diffForHumans() }}
                 </td>
                 <td class="has-text-centered">
                     <form method="POST" action="{{ route('panel.users.password_reset', [ 'id' => $user->id ]) }}">
