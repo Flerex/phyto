@@ -4,6 +4,7 @@
 /public/css
 /public/js
 /public/fonts
+/storage/debugbar
 /storage/*.key
 /vendor
 /.idea
