@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Panel;
 
+use App\Classis;
 use App\Domain;
 use App\Species;
 use Illuminate\Http\Request;
@@ -14,23 +15,15 @@ class SpeciesController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index()
     {
 
-        $species = Species::paginate(config('phyto.pagination_size'));
+        $hierarchySelectorLang = [
+            'title' => trans('panel.species.hierarchy_selector'),
+            'search' => trans('general.search'),
+        ];
 
-        $mode = $request->get('mode');
-        $id = $request->get('model');
-
-        if ($mode && in_array($mode, ['domain', 'genus', 'classis']) && $id) {
-
-            $class = '\\App\\' . ucfirst($mode);
-            $species = $class::findOrFail($id)->species()->paginate(config('phyto.pagination_size'));
-        }
-
-        $domains = Domain::with('classis.genera.species')->get();
-
-        return view('panel.species.index', compact('species', 'domains'));
+        return view('panel.species.index', compact('hierarchySelectorLang'));
     }
 
     /**
@@ -38,9 +31,36 @@ class SpeciesController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
-        //
+        $request->validate([
+            'domain' => 'exists:domains,id',
+            'classis' => 'exists:classis,id',
+            'genus' => 'exists:genera,id',
+        ]);
+
+        $domains = Domain::with('classis.genera.species')->get();
+
+        $lastStep = $request->has('genus');
+
+        $result = compact('domains', 'lastStep');
+
+        // FIXME: Needs refactor. Export validation logic to own class.
+
+
+        if ($request->has('domain')) {
+            $domain = Domain::firstOrFail($request->get('domain'));
+            $classis = $domain->classis->get();
+            $result = array_merge($result, $classis);
+        }
+
+        if ($request->has('classis')) {
+            $classis = Classis::firstOrFail($request->get('genus'));
+            $genera = $classis->genera->get();
+            $result = array_merge($result, $genera);
+        }
+
+        return view('panel.species.create', $result);
     }
 
     /**

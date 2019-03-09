@@ -52,7 +52,27 @@ Route::prefix('panel')->middleware('permission:' . Permissions::PANEL_ACCESS)->g
     /*
      * Species management
      */
-    Route::prefix('species')->middleware('permission:' . Permissions::SPECIES_MANAGEMENT)->group(function () {
-        Route::get('/', 'Panel\SpeciesController@index')->name('panel.species.index');
+    Route::middleware('permission:' . Permissions::SPECIES_MANAGEMENT)->group(function () {
+        Route::resource('species', 'Panel\SpeciesController')
+            ->only([
+                'index',
+                'store',
+                'create',
+            ])
+            ->names([
+                'index' => 'panel.species.index',
+                'create' => 'panel.species.create',
+                'store' => 'panel.species.store',
+            ]);
     });
+});
+
+
+/*
+ * AJAX Calls
+ */
+
+Route::prefix('async')->group(function () {
+    Route::get('/species', 'AsynchronousController@species')
+        ->name('async.species');
 });

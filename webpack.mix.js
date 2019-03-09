@@ -1,4 +1,5 @@
-const mix = require('laravel-mix');
+const mix = require('laravel-mix')
+require('laravel-mix-react-css-modules')
 
 /*
  |--------------------------------------------------------------------------
@@ -11,5 +12,11 @@ const mix = require('laravel-mix');
  |
  */
 
-mix.js('resources/js/app.js', 'public/js')
-   .sass('resources/sass/app.scss', 'public/css');
+mix.react('resources/js/app.js', 'public/js')
+    .sass('resources/sass/app.scss', 'public/css')
+    .reactCSSModules()
+
+
+Mix.listen('configReady', function(webpackConfig) {
+    console.log(JSON.stringify(webpackConfig))
+})

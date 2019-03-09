@@ -2,6 +2,8 @@
 
 return [
     'id' => 'ID',
+    'name' => 'Name',
+
     'user' => [
         'name' => 'Name',
         'email' => 'Email',
@@ -9,6 +11,8 @@ return [
     ],
 
     'species' => [
-        'name' => 'Name',
+        'domain' => 'Domain',
+        'classis' => 'Class',
+        'genus' => 'Genus',
     ]
 ];

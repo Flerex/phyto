@@ -8,6 +8,8 @@ class Classis extends Model
 {
     protected $table = 'classis';
 
+    protected $visible = ['id', 'name', 'genera'];
+
     public function domain()
     {
         return $this->belongsTo(Domain::class);

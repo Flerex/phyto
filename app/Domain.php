@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Domain extends Model
 {
+    protected $visible = ['id', 'name', 'classis'];
+
     public function classis()
     {
         return $this->hasMany(Classis::class);

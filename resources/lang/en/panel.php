@@ -17,7 +17,7 @@ return [
     'species' => [
         'management' => 'Species management',
         'create' => 'Create species',
-        'hierarchy_filter' => 'Hierarchy filter',
+        'hierarchy_selector' => 'Hierarchy',
     ],
 
     'label' => [
