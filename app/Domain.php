@@ -8,6 +8,8 @@ class Domain extends Model
 {
     protected $visible = ['id', 'name', 'classis'];
 
+    protected $fillable = ['name'];
+
     public function classis()
     {
         return $this->hasMany(Classis::class);

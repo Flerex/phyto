@@ -1,46 +1,58 @@
 @import '~bulma/sass/utilities/all';
 @import '~bulma/sass/components/panel';
 
+
+.add_new {
+    color: $grey;
+    display: inline-block;
+}
+
 .hierarchySelector {
-  @extend .panel;
-
-  li {
-    padding: .5rem 1rem;
-
-    ul {
-      border-left: 2px dashed $grey-lighter;
-      margin: 1rem 0;
-      margin-left: .75rem;
-      padding-left: 1rem;
-    }
-  }
-
-  > div:last-child {
-    padding: .7rem 0;
-    border: 1px solid $grey-lighter;
-    border-top: none;
-    border-radius: 0 0 $radius $radius;
-  }
-
-  li {
-    background-color: $info;
-
-    &:not(:last-child) {
-      border-bottom: 1px solid white;
-    }
+    @extend .panel;
+    position: relative;
 
     li {
-      background-color: $success;
+        padding: .5rem 1rem;
 
-      li {
-        background-color: $warning;
 
-        li {
-          background-color: $danger;
-          color: white;
+        &:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            right: 0;
+            border-bottom: 1px solid $grey-lighter;
+            margin-top: .5rem;
         }
-      }
+
+
+        ul {
+            margin-top: .5rem;
+            margin-left: .75rem;
+            padding-left: 1rem;
+
+            &::before {
+                content: '';
+                position: absolute;
+                left: 0;
+                right: 0;
+                border-bottom: 1px solid $grey-lighter;
+            }
+
+            li:last-child {
+                padding-bottom: 0;
+            }
+
+        }
     }
-  }
+
+    .panel-block + div {
+        border: 1px solid $grey-lighter;
+    }
+
+    > div:last-child {
+        border: 1px solid $grey-lighter;
+        border-top: none;
+        border-radius: 0 0 $radius $radius;
+    }
 
 }

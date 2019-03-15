@@ -8,6 +8,8 @@ class Genus extends Model
 {
     protected $visible = ['id', 'name', 'species'];
 
+    protected $fillable = ['name', 'classis_id'];
+
     public function class()
     {
         return $this->belongsTo(Classis::class, 'classis_id');

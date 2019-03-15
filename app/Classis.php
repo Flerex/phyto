@@ -10,6 +10,8 @@ class Classis extends Model
 
     protected $visible = ['id', 'name', 'genera'];
 
+    protected $fillable = ['name', 'domain_id'];
+
     public function domain()
     {
         return $this->belongsTo(Domain::class);

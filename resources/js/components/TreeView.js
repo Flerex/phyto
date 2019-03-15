@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {Component} from 'react'
 
 export default class TreeView extends Component {
 
@@ -11,7 +11,8 @@ export default class TreeView extends Component {
         return (
             <div>
                 <ul>
-                    {this.props.data.map((el, i) => <Node key={i} element={el}/>)}
+                    {this.props.data.map((el, i) => <Node key={i} element={el}
+                                                          appendList={this.props.appendList}/>)}
                 </ul>
             </div>
         )
@@ -19,10 +20,19 @@ export default class TreeView extends Component {
 }
 
 
+/**
+ * Component representing a node of the tree.
+ *
+ * This component will also render the node's children recursively.
+ */
 class Node extends Component {
 
     constructor(props) {
         super(props)
+
+        this.hasChildren = this.hasChildren.bind(this)
+        this.toggle = this.toggle.bind(this)
+        this.renderAppendList = this.renderAppendList.bind(this)
 
         this.state = {
             expanded: true,
@@ -40,8 +50,9 @@ class Node extends Component {
 
         return (
             <li>
-                <div onClick={this.toggle.bind(this)}>
-                    <span className="icon" hidden={!this.hasChildren.call(this)}><i className={this.state.expanded ? 'fas fa-minus-square' : 'fas fa-plus-square'}></i></span>
+                <div onClick={this.toggle}>
+                    <span className="icon" hidden={!this.hasChildren()}><i
+                        className={this.state.expanded ? 'fas fa-chevron-down' : 'fas fa-chevron-right'}/></span>
                     {el.name}
                 </div>
                 {this.renderChildren()}
@@ -49,21 +60,31 @@ class Node extends Component {
         )
     }
 
+
     hasChildren() {
         return this.props.element.hasOwnProperty('children') && this.props.element.children.length > 0;
     }
 
     renderChildren() {
 
-        if (!this.hasChildren.call(this))
+        if (!this.hasChildren())
             return '';
 
         return (
             <ul hidden={!this.state.expanded}>
                 {this.props.element.children.map((el, i) =>
-                    <Node key={i} element={el}/>
+                    <Node key={i} element={el} appendList={this.props.appendList}/>
                 )}
+                {this.renderAppendList()}
             </ul>
         )
     }
+
+    renderAppendList() {
+        if (!this.props.appendList)
+            return
+
+        return this.props.appendList(this.props.element)
+    }
 }
+
