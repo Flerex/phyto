@@ -6,4 +6,9 @@ return [
     'add_new' => 'Add new…',
     'add_node' => 'Add node',
 
+    'errors' => [
+        'parent' => [
+            'exists' => 'The parent node does not exist'
+        ]
+    ]
 ];

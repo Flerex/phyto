@@ -9,7 +9,9 @@ export default class HierarchySelector extends Component {
     constructor(props) {
         super(props)
 
+        this.escFunction = this.escFunction.bind(this)
         this.renderAddButton = this.renderAddButton.bind(this)
+        this.renderError = this.renderError.bind(this)
         this.hideModal = this.hideModal.bind(this)
         this.create = this.create.bind(this)
         this.speciesName = this.speciesName.bind(this)
@@ -40,18 +42,37 @@ export default class HierarchySelector extends Component {
             name: this.state.name,
         }).then(({data}) => {
 
-            parent.children.push({
-                id: data.data.id,
-                name: this.state.name,
-                children: [],
-            })
+            if (data.success) {
 
-            this.setState({
-                creating: false,
-            })
+
+                parent.children.push({
+                    id: data.data.id,
+                    name: this.state.name,
+                    children: [],
+                })
+
+                this.setState({
+                    creating: false,
+                    sending: false,
+                })
+
+            } else {
+                this.setState({
+                    error: data.message,
+                    sending: false,
+                })
+            }
+
+
 
         }).catch(e => {
+
             alert(e)
+
+            this.setState({
+                sending: false,
+            })
+
         })
     }
 
@@ -107,6 +128,16 @@ export default class HierarchySelector extends Component {
         this.setState({query, data})
     }
 
+    escFunction(event){
+        if(event.keyCode === 27) {
+            this.hideModal()
+        }
+    }
+
+    componentWillUnmount(){
+        document.removeEventListener("keydown", this.escFunction, false);
+    }
+
     render() {
         return (
             <React.Fragment>
@@ -129,6 +160,13 @@ export default class HierarchySelector extends Component {
         )
     }
 
+    renderError() {
+        if (!this.state.error)
+            return;
+
+        return (<span className="is-danger">{this.state.error}</span>);
+    }
+
     renderAddModal() {
         return (
             <div className={this.state.creating ? 'modal is-active' : 'modal'}>
@@ -139,7 +177,8 @@ export default class HierarchySelector extends Component {
                         <button className="delete" aria-label="close" onClick={this.hideModal}/>
                     </header>
                     <section className="modal-card-body">
-                        <input className="input" type="text" placeholder={this.props.lang.name} onChange={this.speciesName}/>
+                        <input className="input" type="text" placeholder={this.props.lang.name}
+                               onChange={this.speciesName}/>
                     </section>
                     <footer className="modal-card-foot">
                         <button
@@ -147,6 +186,7 @@ export default class HierarchySelector extends Component {
                             onClick={this.create}>{this.props.lang.add_node}
                         </button>
                         <button className="button" onClick={this.hideModal}>{this.props.lang.cancel}</button>
+                        {this.renderError()}
                     </footer>
                 </div>
             </div>
@@ -154,38 +194,11 @@ export default class HierarchySelector extends Component {
     }
 
     componentDidMount() {
+        document.addEventListener("keydown", this.escFunction, false);
         axios.get('/async/species')
             .then(r => {
 
                 const data = r.data;
-
-                data.forEach(c => {
-
-                    c.type = 'domain'
-                    Object.defineProperty(c, 'children', Object.getOwnPropertyDescriptor(c, 'classis'))
-                    c.contains = 'classis'
-                    delete c['classis']
-
-                    c.children.forEach(c => {
-                        c.type = 'classis'
-                        Object.defineProperty(c, 'children', Object.getOwnPropertyDescriptor(c, 'genera'))
-                        c.contains = 'genera'
-                        delete c['genera']
-
-                        c.children.forEach(c => {
-                            c.type = 'genus'
-                            Object.defineProperty(c, 'children', Object.getOwnPropertyDescriptor(c, 'species'))
-                            c.contains = 'species'
-                            delete c['species']
-
-                            c.children.forEach(c => {
-                                c.type = 'species'
-                            })
-                        })
-                    })
-
-                })
-
 
                 this.setState({data, originalData: data})
             })
@@ -221,7 +234,6 @@ class AddButton extends Component {
         </li>)
     }
 }
-
 
 
 const el = document.getElementById('hierarchy_selector');

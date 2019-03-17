@@ -2,23 +2,22 @@
 
 namespace App;
 
+use App\Traits\HierarchyNavigators;
 use Illuminate\Database\Eloquent\Model;
 
 class Domain extends Model
 {
-    protected $visible = ['id', 'name', 'classis'];
+
+    use HierarchyNavigators;
+
+    protected $visible = ['id', 'name', 'children'];
 
     protected $fillable = ['name'];
 
-    public function classis()
+    public function children()
     {
         return $this->hasMany(Classis::class);
     }
 
-    public function species()
-    {
-        return Species::whereHas('genus.class.domain', function ($q) {
-            return $q->where('id', $this->getKey());
-        });
-    }
+
 }

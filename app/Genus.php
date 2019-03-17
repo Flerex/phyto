@@ -2,20 +2,24 @@
 
 namespace App;
 
+use App\Traits\HierarchyNavigators;
 use Illuminate\Database\Eloquent\Model;
 
 class Genus extends Model
 {
-    protected $visible = ['id', 'name', 'species'];
+
+    use HierarchyNavigators;
+
+    protected $visible = ['id', 'name', 'children'];
 
     protected $fillable = ['name', 'classis_id'];
 
-    public function class()
+    public function parent()
     {
         return $this->belongsTo(Classis::class, 'classis_id');
     }
 
-    public function species()
+    public function children()
     {
         return $this->hasMany(Species::class);
     }

@@ -54,11 +54,7 @@ Route::prefix('panel')->middleware('permission:' . Permissions::PANEL_ACCESS)->g
      */
     Route::middleware('permission:' . Permissions::SPECIES_MANAGEMENT)->group(function () {
         Route::resource('species', 'Panel\SpeciesController')
-            ->only([
-                'index',
-                'store',
-                'create',
-            ])
+            ->only(['index'])
             ->names([
                 'index' => 'panel.species.index',
                 'create' => 'panel.species.create',
