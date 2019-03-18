@@ -57,8 +57,6 @@ Route::prefix('panel')->middleware('permission:' . Permissions::PANEL_ACCESS)->g
             ->only(['index'])
             ->names([
                 'index' => 'panel.species.index',
-                'create' => 'panel.species.create',
-                'store' => 'panel.species.store',
             ]);
     });
 });
@@ -72,9 +70,13 @@ Route::prefix('async')->group(function () {
     Route::get('/species', 'AsynchronousController@species')
         ->name('async.species');
 
-    Route::post('/hierarchy/add', 'AsynchronousController@add_to_hierarchy')
-        ->name('async.add_to_hierarchy');
 
-    Route::post('/hierarchy/edit', 'AsynchronousController@edit_node')
-        ->name('async.edit_node');
+    Route::middleware('permission:' . Permissions::SPECIES_MANAGEMENT)->group(function () {
+        Route::post('/hierarchy/add', 'AsynchronousController@add_to_hierarchy')
+            ->name('async.add_to_hierarchy');
+        Route::post('/hierarchy/edit', 'AsynchronousController@edit_node')
+            ->name('async.edit_node');
+    });
+
+
 });

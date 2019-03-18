@@ -13,12 +13,10 @@ class AsynchronousController extends Controller
     {
         $this->middleware('auth');
 
-        // TODO: permissions
     }
 
     public function species()
     {
-        // TODO: add permissions
         return Domain::with('children.children.children')->get();
     }
 
@@ -111,7 +109,6 @@ class AsynchronousController extends Controller
 
         $relationships = self::getRelationships();
 
-        // TODO: add permissions
         $validator = \Illuminate\Support\Facades\Validator::make($request->all(), [
             'name' => 'required|min:3',
             'type' => [
@@ -134,7 +131,6 @@ class AsynchronousController extends Controller
 
         $relationships = self::getRelationships();
 
-        // TODO: add permissions
         $validator = \Illuminate\Support\Facades\Validator::make($request->all(), [
             'name' => 'required|min:3',
             'type' => [

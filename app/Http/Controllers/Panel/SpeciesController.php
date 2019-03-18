@@ -5,11 +5,14 @@ namespace App\Http\Controllers\Panel;
 use App\Classis;
 use App\Domain;
 use App\Species;
+use App\Utils\Permissions;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 class SpeciesController extends Controller
 {
+
+
     /**
      * Display a listing of the resource.
      *
