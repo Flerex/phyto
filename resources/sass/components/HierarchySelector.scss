@@ -2,6 +2,17 @@
 @import '~bulma/sass/components/panel';
 
 
+.edit_button {
+    margin-left: auto;
+    color: $grey-light;
+    cursor: pointer;
+
+    &:hover {
+        color: $grey-dark;
+    }
+}
+
+
 .add_new {
     color: $link;
     display: inline-block;
@@ -17,7 +28,11 @@
     position: relative;
 
     li {
-        padding: .5rem 1rem;
+        padding: .5rem 0 .5rem 1rem;
+        
+        div {
+            display: flex;
+        }
 
 
         &:not(:last-child)::after {
@@ -58,6 +73,7 @@
         border: 1px solid $grey-lighter;
         border-top: none;
         border-radius: 0 0 $radius $radius;
+        padding-right: 1rem;
     }
 
 }

@@ -12,6 +12,8 @@ class AsynchronousController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+
+        // TODO: permissions
     }
 
     public function species()
@@ -31,6 +33,38 @@ class AsynchronousController extends Controller
         ];
     }
 
+    public function edit_node(Request $request)
+    {
+
+
+        $validator = $this->validateEditRequest($request);
+
+        if ($validator->fails()) {
+            return [
+                'success' => false,
+                'message' => $validator->errors()->first(),
+            ];
+        }
+
+        $validated = $validator->validated();
+
+        $className = 'App\\' . ucwords($validated['type']);
+
+        $el = $className::find($validated['id']);
+
+        $el->name = $validated['name'];
+
+        $el->save();
+
+        return [
+            'success' => 'true',
+            'data' => [
+                'name' => $el->name,
+            ]
+        ];
+
+    }
+
     public function add_to_hierarchy(Request $request)
     {
 
@@ -45,10 +79,6 @@ class AsynchronousController extends Controller
         }
 
         $validated = $validator->validated();
-
-
-        // TODO: add validation for parent (it has to exist)
-        // TODO: Refactor elements from hierarchy to only one model that has a foreign key to itself
 
 
         $data = [
@@ -97,6 +127,43 @@ class AsynchronousController extends Controller
         $this->checkNameIsUnique($validator);
 
         return $validator;
+    }
+
+    private function validateEditRequest(Request $request)
+    {
+
+        $relationships = self::getRelationships();
+
+        // TODO: add permissions
+        $validator = \Illuminate\Support\Facades\Validator::make($request->all(), [
+            'name' => 'required|min:3',
+            'type' => [
+                'required',
+                Rule::in(array_keys($relationships)),
+            ],
+            'id' => 'int',
+        ]);
+
+        $this->checkNodeExists($validator);
+        $this->checkNameIsUnique($validator);
+
+        return $validator;
+    }
+
+    private function checkNodeExists(Validator $validator)
+    {
+        $validator->after(function ($validator) {
+
+            $attr = $validator->attributes();
+
+            $model = 'App\\' . ucwords($attr['type']);
+
+            if ($model::find($attr['id']) === null) {
+                $validator->errors()->add('id', trans('hierarchy_selector.errors.id.exists'));
+            }
+
+
+        });
     }
 
     private function checkParentExists(Validator $validator)

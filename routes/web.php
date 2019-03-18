@@ -74,4 +74,7 @@ Route::prefix('async')->group(function () {
 
     Route::post('/hierarchy/add', 'AsynchronousController@add_to_hierarchy')
         ->name('async.add_to_hierarchy');
+
+    Route::post('/hierarchy/edit', 'AsynchronousController@edit_node')
+        ->name('async.edit_node');
 });

@@ -12,7 +12,7 @@ export default class TreeView extends Component {
             <div>
                 <ul>
                     {this.props.data.map((el, i) => <Node key={i} element={el}
-                                                          appendList={this.props.appendList}/>)}
+                                                          appendList={this.props.appendList} appendNode={this.props.appendNode} />)}
                 </ul>
             </div>
         )
@@ -33,6 +33,7 @@ class Node extends Component {
         this.hasChildren = this.hasChildren.bind(this)
         this.toggle = this.toggle.bind(this)
         this.renderAppendList = this.renderAppendList.bind(this)
+        this.renderAppendNode = this.renderAppendNode.bind(this)
 
         this.state = {
             expanded: true,
@@ -54,6 +55,7 @@ class Node extends Component {
                     <span className="icon" hidden={!this.hasChildren()}><i
                         className={this.state.expanded ? 'fas fa-chevron-down' : 'fas fa-chevron-right'}/></span>
                     <span className={this.hasChildren() ? 'has-text-weight-bold' : ''}>{el.name}</span>
+                    {this.renderAppendNode()}
                 </div>
                 {this.renderChildren()}
             </li>
@@ -73,7 +75,7 @@ class Node extends Component {
         return (
             <ul hidden={!this.state.expanded}>
                 {this.props.element.children.map((el, i) =>
-                    <Node key={i} element={el} appendList={this.props.appendList}/>
+                    <Node key={i} element={el} appendList={this.props.appendList} appendNode={this.props.appendNode} />
                 )}
                 {this.renderAppendList()}
             </ul>
@@ -85,6 +87,13 @@ class Node extends Component {
             return
 
         return this.props.appendList(this.props.element)
+    }
+
+    renderAppendNode() {
+        if (!this.props.appendNode)
+            return
+
+        return this.props.appendNode(this.props.element)
     }
 }
 
