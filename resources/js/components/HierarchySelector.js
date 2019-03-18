@@ -95,13 +95,19 @@ export default class HierarchySelector extends Component {
             sending: true,
         })
 
-        const parent = this.state.parent
+        const parent = this.state.parent,
 
-        axios.post('/async/hierarchy/add', {
-            type: parent.contains,
-            parent: parent.id,
-            name: this.state.name,
-        }).then(({data}) => {
+            request = {
+                name: this.state.name,
+                type: 'domain',
+            }
+
+        if (parent) {
+            request.type = parent.contains
+            request.parent = parent.id
+        }
+
+        axios.post('/async/hierarchy/add', request).then(({data}) => {
 
             if (!data.success) {
                 this.setState({
@@ -114,11 +120,14 @@ export default class HierarchySelector extends Component {
             }
 
 
-            parent.children.push({
+            const parentNode = request.type === 'domain' ? this.state.data : parent.children;
+
+            parentNode.push({
                 id: data.data.id,
                 name: this.state.name,
                 children: [],
             })
+
 
             this.setState({
                 creating: false,
@@ -259,7 +268,8 @@ export default class HierarchySelector extends Component {
                         </span>
                         </p>
                     </div>
-                    <TreeView data={this.state.data} appendList={this.renderAddButton} appendNode={this.renderEditButton} />
+                    <TreeView data={this.state.data} appendList={this.renderAddButton}
+                              appendNode={this.renderEditButton}/>
                 </div>
                 {this.renderModal()}
             </React.Fragment>
@@ -341,7 +351,7 @@ class AddButton extends Component {
 
     render() {
         return (<li className={styles.add_new} onClick={this.clicked}>
-            <span className="icon"><i className="fas fa-plus"/></span>
+            <span className="icon"><i className="fas fa-plus-circle"/></span>
             <span>{this.props.lang.add_new}</span>
         </li>)
     }
@@ -363,7 +373,8 @@ class EditButton extends Component {
     }
 
     render() {
-        return (<div className={styles.edit_button} title={this.props.lang.edit_node} onClick={this.clicked}><span className="icon"><i className="fas fa-edit" /></span></div>)
+        return (<div className={styles.edit_button} title={this.props.lang.edit_node} onClick={this.clicked}><span
+            className="icon"><i className="fas fa-edit"/></span></div>)
     }
 }
 

@@ -5,6 +5,15 @@ export default class TreeView extends Component {
 
     constructor(props) {
         super(props)
+
+        this.renderAppendList = this.renderAppendList.bind(this)
+    }
+
+    renderAppendList() {
+        if (!this.props.appendList)
+            return
+
+        return this.props.appendList(null)
     }
 
     render() {
@@ -12,11 +21,15 @@ export default class TreeView extends Component {
             <div>
                 <ul>
                     {this.props.data.map((el, i) => <Node key={i} element={el}
-                                                          appendList={this.props.appendList} appendNode={this.props.appendNode} />)}
+                                                          renderAppendList={this.renderAppendList}
+                                                          appendNode={this.props.appendNode}/>)}
+                    {this.renderAppendList()}
                 </ul>
             </div>
         )
     }
+
+
 }
 
 
@@ -32,8 +45,8 @@ class Node extends Component {
 
         this.hasChildren = this.hasChildren.bind(this)
         this.toggle = this.toggle.bind(this)
-        this.renderAppendList = this.renderAppendList.bind(this)
         this.renderAppendNode = this.renderAppendNode.bind(this)
+        this.renderChildren = this.renderChildren.bind(this)
 
         this.state = {
             expanded: true,
@@ -67,6 +80,7 @@ class Node extends Component {
         return this.props.element.hasOwnProperty('children') && this.props.element.children.length > 0;
     }
 
+
     renderChildren() {
 
         if (!this.hasChildren())
@@ -75,18 +89,11 @@ class Node extends Component {
         return (
             <ul hidden={!this.state.expanded}>
                 {this.props.element.children.map((el, i) =>
-                    <Node key={i} element={el} appendList={this.props.appendList} appendNode={this.props.appendNode} />
+                    <Node key={i} element={el} renderAppendList={this.props.renderAppendList} appendNode={this.props.appendNode}/>
                 )}
-                {this.renderAppendList()}
+                {this.props.renderAppendList()}
             </ul>
         )
-    }
-
-    renderAppendList() {
-        if (!this.props.appendList)
-            return
-
-        return this.props.appendList(this.props.element)
     }
 
     renderAppendNode() {
