@@ -5,10 +5,10 @@ namespace App\Traits;
 trait HierarchyNavigators
 {
 
-    public function __construct()
+    public function __construct(array $attributes = [])
     {
-        parent::__construct();
 
+        parent::__construct($attributes);
 
         $fields = ['type'];
 
@@ -18,9 +18,9 @@ trait HierarchyNavigators
             $fields[] = 'contains';
         }
 
-
         $this->appends = array_merge($this->appends, $fields);
         $this->visible = array_merge($this->visible, $fields);
+
     }
 
 

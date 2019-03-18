@@ -53,7 +53,7 @@ class Node extends Component {
                 <div onClick={this.toggle}>
                     <span className="icon" hidden={!this.hasChildren()}><i
                         className={this.state.expanded ? 'fas fa-chevron-down' : 'fas fa-chevron-right'}/></span>
-                    {el.name}
+                    <span className={this.hasChildren() ? 'has-text-weight-bold' : ''}>{el.name}</span>
                 </div>
                 {this.renderChildren()}
             </li>

@@ -8,7 +8,10 @@ return [
 
     'errors' => [
         'parent' => [
-            'exists' => 'The parent node does not exist'
+            'exists' => 'The parent node does not exist.',
+        ],
+        'name' => [
+            'unique' => 'The name is not unique.',
         ]
     ]
 ];

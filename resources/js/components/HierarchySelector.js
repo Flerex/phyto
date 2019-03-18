@@ -14,22 +14,28 @@ export default class HierarchySelector extends Component {
         this.renderError = this.renderError.bind(this)
         this.hideModal = this.hideModal.bind(this)
         this.create = this.create.bind(this)
-        this.speciesName = this.speciesName.bind(this)
         this.onCreating = this.onCreating.bind(this)
 
         this.state = {
             data: [],
             originalData: [],
             query: '',
+            name: '',
 
         }
     }
 
-    isAMatch(string, query) {
-        return string.toLowerCase().indexOf(query.toLowerCase()) !== -1;
-    }
 
-    create(e) {
+    /**
+     * When called, uses the state data to send a request and
+     * create a new node.
+     *
+     * The needed state data is:
+     *  - The parent node (so that when can get the id of it)
+     *  - The name of the new node
+     *  - The type of the node to be created
+     */
+    create() {
         this.setState({
             sending: true,
         })
@@ -42,31 +48,31 @@ export default class HierarchySelector extends Component {
             name: this.state.name,
         }).then(({data}) => {
 
-            if (data.success) {
-
-
-                parent.children.push({
-                    id: data.data.id,
-                    name: this.state.name,
-                    children: [],
-                })
-
-                this.setState({
-                    creating: false,
-                    sending: false,
-                })
-
-            } else {
+            if (!data.success) {
                 this.setState({
                     error: data.message,
                     sending: false,
                 })
+
+                return
+
             }
 
 
+            parent.children.push({
+                id: data.data.id,
+                name: this.state.name,
+                children: [],
+            })
+
+            this.setState({
+                creating: false,
+                sending: false,
+            })
 
         }).catch(e => {
 
+            // FIXME: Show errors in a user-friendly way
             alert(e)
 
             this.setState({
@@ -86,20 +92,39 @@ export default class HierarchySelector extends Component {
 
     }
 
-    speciesName(e) {
-        this.setState({
-            name: e.target.value,
-        })
-    }
 
-
+    /**
+     * Hides the modal
+     * @param e
+     */
     hideModal(e) {
         this.setState({
             creating: false,
+            name: '',
+            error: '',
         })
     }
 
 
+    /**
+     * Checks if a string matches with the query.
+     *
+     * @param string The string to compare
+     * @param query The query to be compared against
+     * @returns {boolean}
+     */
+    isAMatch(string, query) {
+        return string.toLowerCase().indexOf(query.toLowerCase()) !== -1;
+    }
+
+
+    /**
+     * Recursively filters a tree showing only the nodes
+     * that match the query and its children.
+     * @param data The tree
+     * @param query The query
+     * @returns array
+     */
     filter(data, query) {
         return data.reduce((acc, node) => {
             if (this.isAMatch(node.name, query)) {
@@ -122,19 +147,36 @@ export default class HierarchySelector extends Component {
 
     }
 
+    /**
+     * Listener for the onChange event of the search field.
+     *
+     * It takes care of filtering the tree.
+     *
+     * @param e
+     */
     handleSearch(e) {
         const query = e.target.value,
             data = query.trim() ? this.filter(this.state.originalData, query) : this.state.originalData;
         this.setState({query, data})
     }
 
-    escFunction(event){
-        if(event.keyCode === 27) {
+    /**
+     * Listener for the keyPress event in the document.
+     *
+     * Hides the modal if opened.
+     *
+     * @param event
+     */
+    escFunction(event) {
+        if (event.keyCode === 27) {
             this.hideModal()
         }
     }
 
-    componentWillUnmount(){
+    /**
+     * Removes the event listener for the escape key when unmounting the component.
+     */
+    componentWillUnmount() {
         document.removeEventListener("keydown", this.escFunction, false);
     }
 
@@ -164,7 +206,7 @@ export default class HierarchySelector extends Component {
         if (!this.state.error)
             return;
 
-        return (<span className="is-danger">{this.state.error}</span>);
+        return (<span className="has-text-danger">{this.state.error}</span>);
     }
 
     renderAddModal() {
@@ -178,7 +220,7 @@ export default class HierarchySelector extends Component {
                     </header>
                     <section className="modal-card-body">
                         <input className="input" type="text" placeholder={this.props.lang.name}
-                               onChange={this.speciesName}/>
+                               onChange={e => this.setState({name: e.target.value})}/>
                     </section>
                     <footer className="modal-card-foot">
                         <button

@@ -62,7 +62,7 @@ class AsynchronousController extends Controller
         } else {
             $className = 'App\\' . ucwords($validated['type']);
 
-            $data[self::getRelationships[$validated['type']] . '_id'] = $validated['parent'];
+            $data[self::getRelationships()[$validated['type']] . '_id'] = $validated['parent'];
 
             $el = $className::create($data);
         }
@@ -82,7 +82,7 @@ class AsynchronousController extends Controller
         $relationships = self::getRelationships();
 
         // TODO: add permissions
-        $validator = Validator::make($request->all(), [
+        $validator = \Illuminate\Support\Facades\Validator::make($request->all(), [
             'name' => 'required|min:3',
             'type' => [
                 'required',
@@ -109,7 +109,7 @@ class AsynchronousController extends Controller
                 $parentModel = 'App\\' . ucwords(self::getRelationships()[$attr['type']]);
 
                 if ($parentModel::find($attr['parent']) === null) {
-                    $validator->errors()->add('parent', 'Parent does not exist.');
+                    $validator->errors()->add('parent', trans('hierarchy_selector.errors.parent.exists'));
                 }
             }
 
@@ -124,8 +124,9 @@ class AsynchronousController extends Controller
 
             $model = 'App\\' . ucwords($attr['type']);
 
-            if ($model::whereName($attr['name'])->first() === null) {
-                $validator->errors()->add('name', 'Name is not unique.');
+
+            if ($model::whereName($attr['name'])->first() !== null) {
+                $validator->errors()->add('name', trans('hierarchy_selector.errors.name.unique'));
             }
 
         });
