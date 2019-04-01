@@ -23,5 +23,7 @@
         </main>
     </section>
     @include('partials.flash')
+
+    @stack('scripts')
 </body>
 </html>

@@ -1,14 +1,15 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Panel;
 
 use App\Http\Requests\CreateUser;
 use App\Services\UserService;
 use App\User;
 use Illuminate\Http\Request;
 use App\Role;
+use App\Http\Controllers\Controller;
 
-class PanelUserController extends Controller
+class UserController extends Controller
 {
     /**
      * @var UserService userService
@@ -42,7 +43,7 @@ class PanelUserController extends Controller
 
         $this->userService->createUser($data['name'], $data['email'], Role::findOrFail($data['role']));
 
-        return redirect()->route('panel.users');
+        return redirect()->route('panel.users.index');
 
     }
 

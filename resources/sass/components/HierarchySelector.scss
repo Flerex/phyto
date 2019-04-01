@@ -1,0 +1,79 @@
+@import '~bulma/sass/utilities/all';
+@import '~bulma/sass/components/panel';
+
+
+.edit_button {
+    margin-left: auto;
+    color: $grey-light;
+    cursor: pointer;
+
+    &:hover {
+        color: $grey-dark;
+    }
+}
+
+
+.add_new {
+    color: $link;
+    display: inline-block;
+    cursor: pointer;
+
+    &:hover {
+        color: lighten($link, 5%);
+    }
+}
+
+.hierarchySelector {
+    @extend .panel;
+    position: relative;
+
+    li {
+        padding: .5rem 0 .5rem 1rem;
+        
+        div {
+            display: flex;
+        }
+
+
+        &:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            right: 0;
+            border-bottom: 1px solid $grey-lighter;
+            margin-top: .5rem;
+        }
+
+
+        ul {
+            margin-top: .5rem;
+            margin-left: .75rem;
+            padding-left: 1rem;
+
+            &::before {
+                content: '';
+                position: absolute;
+                left: 0;
+                right: 0;
+                border-bottom: 1px solid $grey-lighter;
+            }
+
+            li:last-child {
+                padding-bottom: 0;
+            }
+
+        }
+    }
+
+    .panel-block + div {
+        border: 1px solid $grey-lighter;
+    }
+
+    > div:last-child {
+        border: 1px solid $grey-lighter;
+        border-top: none;
+        border-radius: 0 0 $radius $radius;
+        padding-right: 1rem;
+    }
+
+}

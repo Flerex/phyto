@@ -7,7 +7,7 @@
 
         {{-- Name --}}
         <div class="field">
-            <label for="name" class="label">{{ @trans('auth.name') }}</label>
+            <label for="name" class="label">@lang('auth.name')</label>
 
             <div class="control has-icons-left{{ $errors->has('name') ? ' has-icons-right' : '' }}">
                 <input id="name" type="text" class="input{{ $errors->has('name') ? ' is-danger' : '' }}"
@@ -28,7 +28,7 @@
 
         {{-- Email --}}
         <div class="field">
-            <label for="email" class="label">{{ @trans('auth.email') }}</label>
+            <label for="email" class="label">@lang('auth.email')</label>
 
             <div class="control has-icons-left{{ $errors->has('email') ? ' has-icons-right' : '' }}">
                 <input id="email" type="email" class="input{{ $errors->has('email') ? ' is-danger' : '' }}"
@@ -50,7 +50,7 @@
         {{-- Role --}}
         @if(!empty($roles))
             <div class="field">
-                <label class="label">{{ @trans('auth.role') }}</label>
+                <label class="label">@lang('auth.role')</label>
                 <div class="control">
                     <div class="select">
                         <select name="role">
@@ -69,7 +69,7 @@
                 <button type="submit" class="button is-primary">@lang('general.create')</button>
             </div>
             <div class="control">
-                <a href="{{ route('panel.users') }}" class="button is-light">@lang('general.cancel')</a>
+                <a href="{{ route('panel.users.index') }}" class="button is-light">@lang('general.cancel')</a>
             </div>
         </div>
     </form>

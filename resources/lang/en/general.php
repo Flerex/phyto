@@ -8,5 +8,6 @@ return [
     'none' => 'None',
     'send' => 'Send',
     'reset' => 'Reset',
+    'search' => 'Search',
 
 ];

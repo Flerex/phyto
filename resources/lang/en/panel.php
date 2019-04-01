@@ -4,7 +4,7 @@ return [
     'panel' => 'Management Panel',
 
     'users' => [
-        'manage' => 'Manager users',
+        'management' => 'Manage users',
         'create' => 'Create new user',
         'create_label' => 'Create user',
         'joined' => 'Joined',
@@ -14,7 +14,15 @@ return [
         'reset_password_alert' => 'The user <strong>:username</strong> has been sent a password reset email.',
     ],
 
+    'species' => [
+        'management' => 'Species management',
+        'create' => 'Create species',
+        'hierarchy_selector' => 'Hierarchy',
+    ],
+
     'label' => [
         'users' => 'Users',
+        'catalogs_species' => 'Catalogs & Species',
+        'species' => 'Species',
     ],
 ];
