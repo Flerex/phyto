@@ -16,5 +16,6 @@ class PermissionsTableSeeder extends Seeder
         Permission::create(['name' => Permissions::PANEL_ACCESS]);
         Permission::create(['name' => Permissions::USER_MANAGEMENT]);
         Permission::create(['name' => Permissions::SPECIES_MANAGEMENT]);
+        Permission::create(['name' => Permissions::CATALOG_MANAGEMENT]);
     }
 }

@@ -4,13 +4,13 @@ namespace App\Utils;
 
 use Spatie\Permission\Models\Role;
 
-final class Roles
+final class CatalogStatus
 {
-    public const ADMIN = 'admin';
-    public const SUPERVISOR = 'supervisor';
-    public const MANAGER = 'manager';
-    public const TAGGER = 'tagger';
+    public const EDITING = 'editing';
+    public const SEALED = 'sealed';
+    public const OBSOLETE = 'obsolete';
 
+    // TODO: Create enum common class. Generics? Extends implies overriding isValid method each time.
     private static function getConstants()
     {
         $oClass = new \ReflectionClass(__CLASS__);

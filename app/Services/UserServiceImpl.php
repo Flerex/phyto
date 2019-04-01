@@ -3,13 +3,12 @@
 namespace App\Services;
 
 
-use App\Mail\ActivateAccount;
-use App\Utils\Role;
-use App\User;
 use App\Utils\Roles;
+use App\User;
 use http\Exception\InvalidArgumentException;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Password;
+use Spatie\Permission\Models\Role;
 
 class UserServiceImpl implements UserService
 {
@@ -19,10 +18,10 @@ class UserServiceImpl implements UserService
      *
      * @param string $name
      * @param string $email
-     * @param string $role
+     * @param Role $role
      * @return int
      */
-    public function createUser(string $name, string $email, string $role): int
+    public function createUser(string $name, string $email, Role $role): int
     {
         if (!Roles::isValid($role)) {
             throw new \InvalidArgumentException();

@@ -3,6 +3,8 @@ import ReactDOM from 'react-dom'
 import TreeView from './TreeView'
 import styles from '../../sass/components/HierarchySelector.scss'
 
+
+/* TODO: Export creating/edit modal to its own component */
 export default class HierarchySelector extends Component {
 
 
@@ -12,6 +14,7 @@ export default class HierarchySelector extends Component {
         this.escFunction = this.escFunction.bind(this)
         this.renderAddButton = this.renderAddButton.bind(this)
         this.renderEditButton = this.renderEditButton.bind(this)
+        this.renderCheckbox = this.renderCheckbox.bind(this)
         this.renderError = this.renderError.bind(this)
         this.hideModal = this.hideModal.bind(this)
         this.create = this.create.bind(this)
@@ -26,6 +29,10 @@ export default class HierarchySelector extends Component {
             query: '',
 
             name: '',
+            creating: false,
+            editing: false,
+            parent: null,
+            sending: false,
         }
     }
 
@@ -95,6 +102,7 @@ export default class HierarchySelector extends Component {
             sending: true,
         })
 
+
         const parent = this.state.parent,
 
             request = {
@@ -153,6 +161,7 @@ export default class HierarchySelector extends Component {
             name: '',
             sending: false,
         })
+
     }
 
     onEditing(element) {
@@ -269,7 +278,7 @@ export default class HierarchySelector extends Component {
                         </p>
                     </div>
                     <TreeView data={this.state.data} appendList={this.renderAddButton}
-                              appendNode={this.renderEditButton}/>
+                              appendNode={this.renderEditButton} prependNode={this.renderCheckbox}/>
                 </div>
                 {this.renderModal()}
             </React.Fragment>
@@ -311,10 +320,16 @@ export default class HierarchySelector extends Component {
 
     componentDidMount() {
         document.addEventListener("keydown", this.escFunction, false);
-        axios.get('/async/species')
+
+        const url = this.props.mode === 'select' && this.props.catalog
+            ? '/async/catalogs/' + this.props.catalog + '/edit'
+            : '/async/hierarchy/edit'
+
+        axios.get(url)
             .then(r => {
 
-                const data = r.data;
+                const data = r.data
+
 
                 this.setState({data, originalData: data})
             })
@@ -322,15 +337,25 @@ export default class HierarchySelector extends Component {
     }
 
     renderAddButton(element) {
+        if (this.props.mode !== 'index')
+            return;
 
         return (<AddButton element={element} lang={this.props.lang} onCreating={this.onCreating}/>)
 
     }
 
     renderEditButton(element) {
-
+        if (this.props.mode !== 'index')
+            return;
         return (<EditButton element={element} lang={this.props.lang} onEditing={this.onEditing}/>)
 
+    }
+
+    renderCheckbox(element) {
+        if (this.props.mode !== 'select')
+            return;
+
+        return (<Checkbox element={element}/>)
     }
 }
 
@@ -350,10 +375,12 @@ class AddButton extends Component {
     }
 
     render() {
-        return (<li className={styles.add_new} onClick={this.clicked}>
-            <span className="icon"><i className="fas fa-plus-circle"/></span>
-            <span>{this.props.lang.add_new}</span>
-        </li>)
+        return (
+            <li className={styles.add_new} onClick={this.clicked}>
+                <span className="icon"><i className="fas fa-plus-circle"/></span>
+                <span>{this.props.lang.add_new}</span>
+            </li>
+        )
     }
 }
 
@@ -378,8 +405,29 @@ class EditButton extends Component {
     }
 }
 
+/**
+ * The Checkbox component.
+ */
+class Checkbox extends Component {
+
+    constructor(props) {
+        super(props)
+
+        this.changed = this.changed.bind(this);
+    }
+
+    changed(e) {
+
+    }
+
+    render() {
+        return (<input type="checkbox" className="checkbox" onChange={this.changed} name={this.props.element.type + '[]'}
+                       value={this.props.element.id} checked={this.props.element.selected} />)
+    }
+}
+
 
 const el = document.getElementById('hierarchy_selector');
 if (el) {
-    ReactDOM.render(<HierarchySelector lang={JSON.parse(el.dataset.lang)}/>, el);
+    ReactDOM.render(<HierarchySelector lang={JSON.parse(el.dataset.lang)} mode={el.dataset.mode} catalog={el.dataset.catalog} />, el);
 }

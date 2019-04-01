@@ -53,10 +53,25 @@ Route::prefix('panel')->middleware('permission:' . Permissions::PANEL_ACCESS)->g
      * Species management
      */
     Route::middleware('permission:' . Permissions::SPECIES_MANAGEMENT)->group(function () {
-        Route::resource('species', 'Panel\SpeciesController')
+        Route::resource('species', 'Panel\\SpeciesController')
             ->only(['index'])
             ->names([
                 'index' => 'panel.species.index',
+            ]);
+    });
+
+    /*
+     * Catalog management
+     */
+    Route::middleware('permission:' . Permissions::CATALOG_MANAGEMENT)->group(function () {
+        Route::resource('catalogs', 'Panel\\CatalogController')
+            ->only(['index', 'create', 'store', 'update', 'edit'])
+            ->names([
+                'index' => 'panel.catalogs.index',
+                'create' => 'panel.catalogs.create',
+                'store' => 'panel.catalogs.store',
+                'edit' => 'panel.catalogs.edit',
+                'update' => 'panel.catalogs.update',
             ]);
     });
 });
@@ -67,15 +82,17 @@ Route::prefix('panel')->middleware('permission:' . Permissions::PANEL_ACCESS)->g
  */
 
 Route::prefix('async')->group(function () {
-    Route::get('/species', 'AsynchronousController@species')
+    Route::get('/species', 'AsynchronousController@species') // TODO: No permissions because taggers might use this API call?
         ->name('async.species');
 
 
-    Route::middleware('permission:' . Permissions::SPECIES_MANAGEMENT)->group(function () {
+    Route::middleware('permission:' . Permissions::SPECIES_MANAGEMENT . ',' . Permissions::CATALOG_MANAGEMENT)->group(function () {
         Route::post('/hierarchy/add', 'AsynchronousController@add_to_hierarchy')
             ->name('async.add_to_hierarchy');
         Route::post('/hierarchy/edit', 'AsynchronousController@edit_node')
             ->name('async.edit_node');
+        Route::get('/catalogs/{catalog}/edit', 'AsynchronousController@edit_catalog')
+            ->name('async.edit_catalog');
     });
 
 

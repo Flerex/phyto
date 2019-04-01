@@ -12,7 +12,6 @@ use App\Http\Controllers\Controller;
 class SpeciesController extends Controller
 {
 
-
     /**
      * Display a listing of the resource.
      *

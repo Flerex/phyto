@@ -16,13 +16,21 @@ return [
 
     'species' => [
         'management' => 'Species management',
-        'create' => 'Create species',
         'hierarchy_selector' => 'Hierarchy',
+    ],
+
+    'catalogs' => [
+        'management' => 'Catalog management',
+        'create' => 'Create New Catalog',
+        'create_label' => 'Create Catalog',
+        'edit_label' => 'Edit Catalog',
+        'no_catalogs' => 'There are no catalogs.',
     ],
 
     'label' => [
         'users' => 'Users',
         'catalogs_species' => 'Catalogs & Species',
         'species' => 'Species',
+        'catalogs' => 'Catalogs',
     ],
 ];

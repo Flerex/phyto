@@ -10,12 +10,18 @@ class Species extends Model
 
     use HierarchyNavigators;
 
-    protected $visible = ['name'];
+    protected $visible = ['id', 'name'];
 
     protected $fillable = ['name', 'genus_id'];
 
     public function parent()
     {
         return $this->belongsTo(Genus::class);
+    }
+
+    public function catalogs() {
+        return $this
+            ->belongsToMany(Catalog::class, 'catalogs_nodes', 'catalog_id', 'node_id')
+            ->withTimestamps();
     }
 }

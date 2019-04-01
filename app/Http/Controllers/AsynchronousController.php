@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Catalog;
 use App\Domain;
+use foo\bar;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Validator;
@@ -193,6 +195,49 @@ class AsynchronousController extends Controller
             }
 
         });
+    }
+
+    public function edit_catalog(Catalog $catalog)
+    {
+
+        $domains = Domain::with('children.children.children')->get()->toArray();
+
+        $nodes = $catalog->nodes();
+
+        foreach ($domains as &$domain) {
+            $node = $nodes['domains']->first(function ($node) use ($domain) {
+                return $domain['id'] === $node->id;
+            });
+
+            $domain['selected'] = $node !== null;
+
+
+            foreach ($domain['children'] as &$genus) {
+                $node = $nodes['genera']->first(function ($node) use ($genus) {
+                    return $genus['id'] === $node->id;
+                });
+
+                $genus['selected'] = $node !== null;
+
+                foreach ($genus['children'] as &$classis) {
+                    $node = $nodes['classis']->first(function ($node) use ($classis) {
+                        return $classis['id'] === $node->id;
+                    });
+
+                    $classis['selected'] = $node !== null;
+
+                    foreach ($classis['children'] as &$species) {
+                        $node = $nodes['species']->first(function ($node) use ($species) {
+                            return $species['id'] === $node->id;
+                        });
+
+                        $species['selected'] = $node !== null;
+                    }
+                }
+            }
+        }
+
+        return $domains;
     }
 
 }

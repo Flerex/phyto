@@ -27,6 +27,7 @@ class RolesTableSeeder extends Seeder
 
         // Supervisor permissions
         $supervisor->givePermissionTo(Permissions::SPECIES_MANAGEMENT);
+        $supervisor->givePermissionTo(Permissions::CATALOG_MANAGEMENT);
 
         $supervisor->givePermissionTo($manager->getAllPermissions());
         $supervisor->givePermissionTo($tagger->getAllPermissions());
