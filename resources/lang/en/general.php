@@ -10,5 +10,7 @@ return [
     'send' => 'Send',
     'reset' => 'Reset',
     'search' => 'Search',
+    'actions' => 'Actions',
+    'edit' => 'Edit',
 
 ];

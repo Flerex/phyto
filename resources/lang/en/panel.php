@@ -25,6 +25,12 @@ return [
         'create_label' => 'Create Catalog',
         'edit_label' => 'Edit Catalog',
         'no_catalogs' => 'There are no catalogs.',
+        'seal' => 'Seal catalog',
+        'sealed_alert' => 'Catalog “:catalog” has been sealed. It will not be editable anymore.',
+        'mark_as_obsolete' => 'Mark catalog as obsolete',
+        'obsolete_alert' => 'Catalog “:catalog” has been marked as obsolete. It will not be available anymore.',
+        'restore' => 'Restore catalog',
+        'restore_alert' => 'Catalog “:catalog” has been restored. It will now be available for use.',
     ],
 
     'label' => [

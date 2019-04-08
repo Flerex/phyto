@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Panel;
 
 use App\Catalog;
 use App\Http\Requests\CatalogRequest;
+use App\Services\CatalogService;
 use App\Species;
 use App\Utils\CatalogStatus;
 use Illuminate\Http\Request;
@@ -11,6 +12,16 @@ use App\Http\Controllers\Controller;
 
 class CatalogController extends Controller
 {
+
+    /** @var CatalogService $catalogService */
+    protected $catalogService;
+
+    public function __construct(CatalogService $catalogService)
+    {
+        $this->catalogService = $catalogService;
+    }
+
+
     /**
      * Display a listing of the resource.
      *
@@ -50,22 +61,9 @@ class CatalogController extends Controller
 
         $validated = collect($request->validated());
 
-        $catalog = Catalog::create([
-            'name' => $validated->pull('name'),
-            'status' => CatalogStatus::EDITING,
-        ]);
+        $name = $validated->pull('name');
 
-
-        foreach ($validated as $nodeType => $list) {
-            $list = collect($list)->map(function ($id) use ($nodeType) {
-                return [
-                    'node_type' => $nodeType,
-                    'node_id' => $id,
-                ];
-            });
-
-            $catalog->$nodeType()->attach($list);
-        }
+        $this->catalogService->createCatalog($name, $validated);
 
         return redirect()->route('panel.catalogs.index');
 
@@ -87,9 +85,12 @@ class CatalogController extends Controller
      *
      * @param Catalog $catalog
      * @return \Illuminate\Http\Response
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function edit(Catalog $catalog)
     {
+        $this->authorize('edit', $catalog);
+
         $hierarchySelectorLang = array_merge([
             'title' => trans('panel.species.hierarchy_selector'),
             'search' => trans('general.search'),
@@ -108,25 +109,20 @@ class CatalogController extends Controller
      * @param CatalogRequest $request
      * @param Catalog $catalog
      * @return void
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function update(CatalogRequest $request, Catalog $catalog)
     {
 
-        $validated = $request->validated();
+        $this->authorize('edit', $catalog);
 
-        $catalog->name = $validated['name'];
-        unset($validated['name']);
+        $validated = collect($request->validated());
 
-        $catalog->save();
+        $name = $validated->pull('name');
 
+        $this->catalogService->overrideCatalog($catalog->getKey(), $name, $validated);
 
-        $catalog->empty();
-
-
-        //$validated['domains'] = $validated ['domain']
-        foreach ($validated as $nodeType => $list) {
-            $catalog->$nodeType()->attach($list);
-        }
+        return redirect()->route('panel.catalogs.index');
     }
 
     /**
@@ -138,5 +134,53 @@ class CatalogController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    /**
+     * Changes the status of a Catalog to sealed, so it cannot be edited anymore.
+     *
+     * @param Catalog $catalog
+     * @return \Illuminate\Http\RedirectResponse
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     */
+    public function seal(Catalog $catalog)
+    {
+        $this->authorize('seal', $catalog);
+
+        $this->catalogService->sealCatalog($catalog->getKey());
+
+        return back()->with('alert', trans('panel.catalogs.sealed_alert', ['catalog' => $catalog->name]));
+    }
+
+    /**
+     * Changes the status of a Catalog to obsolete, so it cannot be used anymore.
+     *
+     * @param Catalog $catalog
+     * @return \Illuminate\Http\RedirectResponse
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     */
+    public function markAsObsolete(Catalog $catalog)
+    {
+        $this->authorize('markAsObsolete', $catalog);
+
+        $this->catalogService->markCatalogAsObsolete($catalog->getKey());
+
+        return back()->with('alert', trans('panel.catalogs.obsolete_alert', ['catalog' => $catalog->name]));
+    }
+
+    /**
+     * Changes the status of a Catalog back to sealed.
+     *
+     * @param Catalog $catalog
+     * @return \Illuminate\Http\RedirectResponse
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     */
+    public function restore(Catalog $catalog)
+    {
+        $this->authorize('restore', $catalog);
+
+        $this->catalogService->restoreCatalog($catalog->getKey());
+
+        return back()->with('alert', trans('panel.catalogs.restore_alert', ['catalog' => $catalog->name]));
     }
 }

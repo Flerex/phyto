@@ -2,11 +2,24 @@
 
 namespace App;
 
+use App\Utils\CatalogStatus;
 use Illuminate\Database\Eloquent\Model;
 
 class Catalog extends Model
 {
     protected $fillable = ['name', 'status'];
+
+    public function isEditable() {
+        return $this->status === CatalogStatus::EDITING;
+    }
+
+    public function isSealed() {
+        return $this->status === CatalogStatus::SEALED;
+    }
+
+    public function isObsolete() {
+        return $this->status === CatalogStatus::OBSOLETE;
+    }
 
     public function species() {
         return $this->belongsToMany(Species::class, 'catalogs_nodes', 'catalog_id', 'node_id')

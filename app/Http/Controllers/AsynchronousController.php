@@ -212,21 +212,21 @@ class AsynchronousController extends Controller
             $domain['selected'] = $node !== null;
 
 
-            foreach ($domain['children'] as &$genus) {
-                $node = $nodes['genera']->first(function ($node) use ($genus) {
-                    return $genus['id'] === $node->id;
+            foreach ($domain['children'] as &$classis) {
+                $node = $nodes['classis']->first(function ($node) use ($classis) {
+                    return $classis['id'] === $node->id;
                 });
 
-                $genus['selected'] = $node !== null;
+                $classis['selected'] = $node !== null;
 
-                foreach ($genus['children'] as &$classis) {
-                    $node = $nodes['classis']->first(function ($node) use ($classis) {
-                        return $classis['id'] === $node->id;
+                foreach ($classis['children'] as &$genus) {
+                    $node = $nodes['genera']->first(function ($node) use ($genus) {
+                        return $genus['id'] === $node->id;
                     });
 
-                    $classis['selected'] = $node !== null;
+                    $genus['selected'] = $node !== null;
 
-                    foreach ($classis['children'] as &$species) {
+                    foreach ($genus['children'] as &$species) {
                         $node = $nodes['species']->first(function ($node) use ($species) {
                             return $species['id'] === $node->id;
                         });

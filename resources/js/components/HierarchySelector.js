@@ -278,7 +278,7 @@ export default class HierarchySelector extends Component {
                         </p>
                     </div>
                     <TreeView data={this.state.data} appendList={this.renderAddButton}
-                              appendNode={this.renderEditButton} prependNode={this.renderCheckbox}/>
+                              appendNode={this.props.mode === 'select' ? this.renderCheckbox : this.renderEditButton} />
                 </div>
                 {this.renderModal()}
             </React.Fragment>
@@ -429,7 +429,7 @@ class Checkbox extends Component {
     }
 
     render() {
-        return (<input type="checkbox" className="checkbox" onChange={this.changed} name={this.props.element.type + '[]'}
+        return (<input type="checkbox" className={'checkbox ' + styles.checkbox} onChange={this.changed} name={this.props.element.type + '[]'}
                        value={this.props.element.id} checked={this.state.selected} />)
     }
 }

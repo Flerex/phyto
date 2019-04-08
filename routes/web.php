@@ -73,6 +73,15 @@ Route::prefix('panel')->middleware('permission:' . Permissions::PANEL_ACCESS)->g
                 'edit' => 'panel.catalogs.edit',
                 'update' => 'panel.catalogs.update',
             ]);
+
+        Route::post('{catalog}/seal', 'Panel\\CatalogController@seal')
+            ->name('panel.catalogs.seal');
+
+        Route::post('{catalog}/mark-as-obsolete', 'Panel\\CatalogController@markAsObsolete')
+            ->name('panel.catalogs.mark_as_obsolete');
+
+        Route::post('{catalog}/restore', 'Panel\\CatalogController@restore')
+            ->name('panel.catalogs.restore');
     });
 });
 

@@ -38,7 +38,7 @@ class CatalogRequest extends FormRequest
             'species' => ['sometimes', 'array', 'distinct', 'min:1'],
             'domain' => ['sometimes', 'array', 'distinct', 'min:1'],
             'classis' => ['sometimes', 'array', 'distinct', 'min:1'],
-            'genera' => ['sometimes', 'array', 'distinct', 'min:1'],
+            'genus' => ['sometimes', 'array', 'distinct', 'min:1'],
         ];
     }
 
@@ -67,7 +67,7 @@ class CatalogRequest extends FormRequest
                 $validator->errors()->add('hierarchy', trans('validation.required', ['attribute' => 'hierarchy']));
             }
 
-            if (!$this->allNodesExist($availableTypes, $nodeTypesToBeAdded, $validated)) {
+            if (!$this->allNodesExist($nodeTypesToBeAdded, $validated)) {
                 $validator->errors()->add('hierarchy', trans('validation.exists', ['attribute' => 'hierarchy']));
             }
 
@@ -83,15 +83,10 @@ class CatalogRequest extends FormRequest
 
     }
 
-    private function allNodesExist(array $availableTypes, Collection $nodeTypesToBeAdded, array $validated)
+    private function allNodesExist(Collection $nodeTypesToBeAdded, array $validated)
     {
 
-        foreach ($availableTypes as $attribute) {
-
-            // We check for this because unwanted fields can be sent through a request
-            if (!$nodeTypesToBeAdded->contains($attribute)) {
-                continue;
-            }
+        foreach ($nodeTypesToBeAdded as $attribute) {
 
             $class = 'App\\' . ucwords($attribute);
 
