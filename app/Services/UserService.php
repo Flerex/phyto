@@ -27,4 +27,5 @@ interface UserService
      * @return void
      */
     public function resetPassword(int $user_id) : void;
+
 }

@@ -323,10 +323,12 @@ export default class HierarchySelector extends Component {
 
         const url = this.props.mode === 'select' && this.props.catalog
             ? '/async/catalogs/' + this.props.catalog + '/edit'
-            : '/async/hierarchy/edit'
+            : '/async/species/'
 
         axios.get(url)
             .then(r => {
+
+                console.log(url)
 
                 const data = r.data
 
@@ -413,16 +415,22 @@ class Checkbox extends Component {
     constructor(props) {
         super(props)
 
+        this.state = {
+            selected: this.props.element.selected,
+        }
+
         this.changed = this.changed.bind(this);
     }
 
     changed(e) {
-
+        this.setState({
+            selected: !this.state.selected,
+        })
     }
 
     render() {
         return (<input type="checkbox" className="checkbox" onChange={this.changed} name={this.props.element.type + '[]'}
-                       value={this.props.element.id} checked={this.props.element.selected} />)
+                       value={this.props.element.id} checked={this.state.selected} />)
     }
 }
 

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Panel;
 
 use App\Catalog;
-use App\Http\Requests\CreateCatalogRequest;
+use App\Http\Requests\CatalogRequest;
 use App\Species;
 use App\Utils\CatalogStatus;
 use Illuminate\Http\Request;
@@ -42,10 +42,10 @@ class CatalogController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(CreateCatalogRequest $request)
+    public function store(CatalogRequest $request)
     {
 
         $validated = collect($request->validated());
@@ -57,6 +57,13 @@ class CatalogController extends Controller
 
 
         foreach ($validated as $nodeType => $list) {
+            $list = collect($list)->map(function ($id) use ($nodeType) {
+                return [
+                    'node_type' => $nodeType,
+                    'node_id' => $id,
+                ];
+            });
+
             $catalog->$nodeType()->attach($list);
         }
 
@@ -67,7 +74,7 @@ class CatalogController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -78,7 +85,7 @@ class CatalogController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int $id
+     * @param Catalog $catalog
      * @return \Illuminate\Http\Response
      */
     public function edit(Catalog $catalog)
@@ -98,19 +105,34 @@ class CatalogController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
-     * @param  int $id
-     * @return \Illuminate\Http\Response
+     * @param CatalogRequest $request
+     * @param Catalog $catalog
+     * @return void
      */
-    public function update(Request $request, $id)
+    public function update(CatalogRequest $request, Catalog $catalog)
     {
-        //
+
+        $validated = $request->validated();
+
+        $catalog->name = $validated['name'];
+        unset($validated['name']);
+
+        $catalog->save();
+
+
+        $catalog->empty();
+
+
+        //$validated['domains'] = $validated ['domain']
+        foreach ($validated as $nodeType => $list) {
+            $catalog->$nodeType()->attach($list);
+        }
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)

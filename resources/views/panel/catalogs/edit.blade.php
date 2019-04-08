@@ -12,7 +12,7 @@
 
             <div class="control has-icons-left{{ $errors->has('name') ? ' has-icons-right' : '' }}">
                 <input id="name" type="text" class="input{{ $errors->has('name') ? ' is-danger' : '' }}"
-                       name="name" placeholder="{{ trans('labels.name') }}" value="{{ old('name') }}" required
+                       name="name" placeholder="{{ trans('labels.name') }}" value="{{ old('name') ?? $catalog->name }}" required
                        autofocus>
 
                 <span class="icon is-small is-left"><i class="fas fa-book"></i></span>
@@ -33,6 +33,12 @@
 
         <div class="field">
             <label class="label">@lang('labels.catalog.species')</label>
+
+            @if ($errors->has('hierarchy'))
+                <p class="help is-danger">
+                    {{ $errors->first('hierarchy') }}
+                </p>
+            @endif
         </div>
         <div id="hierarchy_selector" data-lang="{{ json_encode($hierarchySelectorLang) }}" data-mode="select"
              data-catalog="{{ $catalog->getKey() }}"></div>

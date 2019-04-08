@@ -30,6 +30,12 @@
         {{-- Species --}}
         <div class="field">
             <label class="label">@lang('labels.catalog.species')</label>
+
+            @if ($errors->has('hierarchy'))
+                <p class="help is-danger">
+                    {{ $errors->first('hierarchy') }}
+                </p>
+            @endif
         </div>
         <div id="hierarchy_selector" data-lang="{{ json_encode($hierarchySelectorLang) }}" data-mode="select"></div>
 
