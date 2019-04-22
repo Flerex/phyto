@@ -42,7 +42,16 @@
         {{-- Actions --}}
         <div class="field is-grouped">
             <div class="control">
-                <button type="submit" class="button is-primary">@lang('general.create')</button>
+                <button type="submit" class="button is-primary" name="mode" value="create">
+                    <span class="icon"><i class="fas fa-plus"></i></span>
+                    <span>@lang('general.create')</span>
+                </button>
+            </div>
+            <div class="control">
+                <button type="submit" class="button is-warning" name="mode" value="seal">
+                    <span class="icon"><i class="fas fa-stamp"></i></span>
+                    <span>@lang('panel.catalogs.seal')</span>
+                </button>
             </div>
             <div class="control">
                 <a href="{{ route('panel.catalogs.index') }}" class="button is-light">@lang('general.cancel')</a>

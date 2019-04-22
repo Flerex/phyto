@@ -3,6 +3,7 @@
 
 namespace App\Services;
 
+use App\Catalog;
 use Illuminate\Support\Collection;
 
 /**
@@ -17,7 +18,7 @@ interface CatalogService
      *
      * @param string $name
      * @param Collection $nodes
-     * @return mixed
+     * @return Catalog
      */
     public function createCatalog(string $name, Collection $nodes);
 

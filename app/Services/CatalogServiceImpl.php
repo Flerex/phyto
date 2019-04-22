@@ -29,6 +29,8 @@ class CatalogServiceImpl implements CatalogService
 
             $catalog->$nodeType()->attach($list);
         }
+
+        return $catalog;
     }
 
     public function overrideCatalog(int $catalogId, string $name, collection $nodes) {

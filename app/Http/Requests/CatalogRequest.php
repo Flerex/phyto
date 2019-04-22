@@ -39,6 +39,7 @@ class CatalogRequest extends FormRequest
             'domain' => ['sometimes', 'array', 'distinct', 'min:1'],
             'classis' => ['sometimes', 'array', 'distinct', 'min:1'],
             'genus' => ['sometimes', 'array', 'distinct', 'min:1'],
+            'mode' => ['sometimes', Rule::in(['create', 'seal'])],
         ];
     }
 

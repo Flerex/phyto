@@ -63,7 +63,13 @@ class CatalogController extends Controller
 
         $name = $validated->pull('name');
 
-        $this->catalogService->createCatalog($name, $validated);
+        $mode = $validated->pull('mode');
+
+        $catalog = $this->catalogService->createCatalog($name, $validated);
+
+        if ($mode && $mode === 'seal') {
+            $this->catalogService->sealCatalog($catalog->getKey());
+        }
 
         return redirect()->route('panel.catalogs.index');
 
