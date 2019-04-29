@@ -21,10 +21,37 @@
     @if(count($catalogs))
         <table class="table is-fullwidth">
             <thead>
-            <th style="width: 5%">@lang('labels.id')</th>
-            <th>@lang('labels.name')</th>
-            <th>@lang('labels.catalog.status_label')</th>
-            <th>@lang('labels.created_at')</th>
+            <th style="width: 8%">
+                <a href="{{ route('panel.catalogs.index') }}?sortBy=id&order={{ $order !== 'asc' ? 'asc' : 'desc' }}">
+                    @lang('labels.id')
+                    @if($sortBy == 'id' && $order !== '')
+                        <span class="icon"><i class="fas fa-chevron-{{ $order !== 'asc' ? 'down' : 'up' }}"></i></span>
+                    @endif
+                </a>
+            </th>
+            <th>
+                <a href="{{ route('panel.catalogs.index') }}?sortBy=name&order={{ $order !== 'asc' ? 'asc' : 'desc' }}">
+                    @lang('labels.name')
+                    @if($sortBy == 'name' && $order !== '')
+                        <span class="icon"><i class="fas fa-chevron-{{ $order !== 'asc' ? 'down' : 'up' }}"></i></span>
+                    @endif
+                </a>
+            </th>
+            <th>
+                <a href="{{ route('panel.catalogs.index') }}?sortBy=status&order={{ $order !== 'asc' ? 'asc' : 'desc' }}">
+                    @lang('labels.catalog.status_label')
+                    @if($sortBy == 'status' && $order !== '')
+                        <span class="icon"><i class="fas fa-chevron-{{ $order !== 'asc' ? 'down' : 'up' }}"></i></span>
+                    @endif
+                </a></th>
+            <th>
+                <a href="{{ route('panel.catalogs.index') }}?sortBy=created_at&order={{ $order !== 'asc' ? 'asc' : 'desc' }}">
+                    @lang('labels.created_at')
+                    @if($sortBy == 'created_at' && $order !== '')
+                        <span class="icon"><i class="fas fa-chevron-{{ $order !== 'asc' ? 'down' : 'up' }}"></i></span>
+                    @endif
+                </a>
+            </th>
             <th class="has-text-right" style="width: 8%">@lang('general.actions')</th>
             </thead>
 

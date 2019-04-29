@@ -7,8 +7,10 @@ use App\Http\Requests\CatalogRequest;
 use App\Services\CatalogService;
 use App\Species;
 use App\Utils\CatalogStatus;
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Validation\Rule;
 
 class CatalogController extends Controller
 {
@@ -27,10 +29,19 @@ class CatalogController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $catalogs = Catalog::orderBy('id', 'desc')->paginate(config('phyto.pagination_size'));
-        return view('panel.catalogs.index', compact('catalogs'));
+        $validated = $request->validate([
+            'sortBy' => ['sometimes', 'string', Rule::in('name', 'id', 'status', 'created_at')],
+            'order' => ['sometimes', 'string', Rule::in('asc', 'desc')],
+        ]);
+
+        $sortBy = isset($validated['sortBy']) ? $validated['sortBy'] : '';
+        $order = isset($validated['order']) ? $validated['order'] : '';
+
+        $catalogs = Catalog::orderBy($sortBy ?? 'id', $order ?? 'desc')->paginate(config('phyto.pagination_size'));
+
+        return view('panel.catalogs.index', compact('catalogs', 'sortBy', 'order'));
     }
 
     /**
