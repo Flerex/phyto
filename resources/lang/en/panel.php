@@ -21,9 +21,10 @@ return [
 
     'catalogs' => [
         'management' => 'Catalog management',
-        'create' => 'Create New Catalog',
-        'create_label' => 'Create Catalog',
-        'edit_label' => 'Edit Catalog',
+        'create' => 'Create new catalog',
+        'create_label' => 'Create catalog',
+        'create_seal_label' => 'Create & seal',
+        'edit_label' => 'Edit catalog',
         'no_catalogs' => 'There are no catalogs.',
         'seal' => 'Seal catalog',
         'sealed_alert' => 'Catalog “:catalog” has been sealed. It will not be editable anymore.',
@@ -31,6 +32,7 @@ return [
         'obsolete_alert' => 'Catalog “:catalog” has been marked as obsolete. It will not be available anymore.',
         'restore' => 'Restore catalog',
         'restore_alert' => 'Catalog “:catalog” has been restored. It will now be available for use.',
+        'create_from' => 'Create catalog from “:catalog”',
     ],
 
     'label' => [

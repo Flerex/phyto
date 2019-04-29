@@ -22,6 +22,17 @@ class CatalogPolicy
     }
 
     /**
+     * Determine whether the user can create a new catalog from a given one.
+     *
+     * @param User $user
+     * @param Catalog $catalog
+     * @return bool
+     */
+    public function create_from(User $user, Catalog $catalog) {
+        return true;
+    }
+
+    /**
      * Determine whether the user can seal a catalog.
      *
      * @param User $user

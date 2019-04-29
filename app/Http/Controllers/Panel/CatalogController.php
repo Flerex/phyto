@@ -189,4 +189,29 @@ class CatalogController extends Controller
 
         return back()->with('alert', trans('panel.catalogs.restore_alert', ['catalog' => $catalog->name]));
     }
+
+    /**
+     * Creates a catalog from a given catalog
+     *
+     * @param Catalog $catalog
+     * @return \Illuminate\Http\RedirectResponse
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     */
+    public function create_from(Catalog $catalog)
+    {
+
+        $this->authorize('create_from', $catalog);
+
+        $hierarchySelectorLang = array_merge([
+            'title' => trans('panel.species.hierarchy_selector'),
+            'search' => trans('general.search'),
+            'cancel' => trans('general.cancel'),
+            'name' => trans('labels.name'),
+        ], trans('hierarchy_selector'));
+
+        $nodes = $catalog->nodes();
+
+        return view('panel.catalogs.create_from', compact('catalog', 'nodes', 'hierarchySelectorLang'));
+
+    }
 }

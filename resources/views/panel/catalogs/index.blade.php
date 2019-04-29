@@ -36,8 +36,14 @@
                     <td>{{ trans('labels.catalog.status.' . $catalog->status) }}</td>
                     <td>{{ $catalog->created_at->diffForHumans() }}</td>
                     <td class="has-text-right">
-                        @if($catalog->isEditable())
-                            <div class="level">
+                        <div class="level">
+                            <div class="level-item" style="margin-right: 5px;">
+                                <a href="{{ route('panel.catalogs.create_from', compact('catalog')) }}"
+                                   class="button is-light is-small" title="@lang('panel.catalogs.create_from', ['catalog' => $catalog->name])">
+                                    <span class="icon"><i class="fas fa-clone"></i></span>
+                                </a>
+                            </div>
+                            @if($catalog->isEditable())
                                 <div class="level-item" style="margin-right: 5px;">
                                     <a href="{{ route('panel.catalogs.edit', compact('catalog')) }}"
                                        class="button is-light is-small" title="@lang('general.edit')">
@@ -54,29 +60,35 @@
                                     </form>
                                 </div>
 
-                            </div>
-                        @endif
 
-                        @if($catalog->isSealed())
-                            <form action="{{ route('panel.catalogs.mark_as_obsolete', compact('catalog')) }}"
-                                  method="POST">
-                                @csrf
-                                <button type="submit" class="button is-danger is-small"
-                                        title="@lang('panel.catalogs.mark_as_obsolete')">
-                                    <span class="icon"><i class="fas fa-times"></i></span>
-                                </button>
-                            </form>
-                        @endif
-                        @if($catalog->isObsolete())
-                            <form action="{{ route('panel.catalogs.restore', compact('catalog')) }}"
-                                  method="POST">
-                                @csrf
-                                <button type="submit" class="button is-light is-small"
-                                        title="@lang('panel.catalogs.restore')">
-                                    <span class="icon"><i class="fas fa-undo-alt"></i></span>
-                                </button>
-                            </form>
-                        @endif
+                            @endif
+
+                            @if($catalog->isSealed())
+                                <div class="level-item">
+                                    <form action="{{ route('panel.catalogs.mark_as_obsolete', compact('catalog')) }}"
+                                          method="POST">
+                                        @csrf
+                                        <button type="submit" class="button is-danger is-small"
+                                                title="@lang('panel.catalogs.mark_as_obsolete')">
+                                            <span class="icon"><i class="fas fa-times"></i></span>
+                                        </button>
+                                    </form>
+                                </div>
+                            @endif
+                            @if($catalog->isObsolete())
+                                <div class="level-item">
+                                    <form action="{{ route('panel.catalogs.restore', compact('catalog')) }}"
+                                          method="POST">
+                                        @csrf
+                                        <button type="submit" class="button is-light is-small"
+                                                title="@lang('panel.catalogs.restore')">
+                                            <span class="icon"><i class="fas fa-undo-alt"></i></span>
+                                        </button>
+                                    </form>
+                                </div>
+                            @endif
+                        </div>
+
                     </td>
                 </tr>
             @endforeach

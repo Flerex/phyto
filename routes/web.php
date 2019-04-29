@@ -74,6 +74,9 @@ Route::prefix('panel')->middleware('permission:' . Permissions::PANEL_ACCESS)->g
                 'update' => 'panel.catalogs.update',
             ]);
 
+        Route::get('{catalog}/create-from', 'Panel\\CatalogController@create_from')
+            ->name('panel.catalogs.create_from');
+
         Route::post('{catalog}/seal', 'Panel\\CatalogController@seal')
             ->name('panel.catalogs.seal');
 
