@@ -22,6 +22,17 @@ class CatalogPolicy
     }
 
     /**
+     * Determine whether the user can delete a catalog.
+     *
+     * @param User $user
+     * @param Catalog $catalog
+     * @return bool
+     */
+    public function destroy(User $user, Catalog $catalog) {
+        return $catalog->isEditable();
+    }
+
+    /**
      * Determine whether the user can create a new catalog from a given one.
      *
      * @param User $user

@@ -7,6 +7,7 @@ namespace App\Services;
 use App\Catalog;
 use App\Utils\CatalogStatus;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 
 class CatalogServiceImpl implements CatalogService
 {
@@ -33,7 +34,8 @@ class CatalogServiceImpl implements CatalogService
         return $catalog;
     }
 
-    public function overrideCatalog(int $catalogId, string $name, collection $nodes) {
+    public function overrideCatalog(int $catalogId, string $name, collection $nodes)
+    {
 
         $catalog = Catalog::findOrFail($catalogId);
 
@@ -108,5 +110,36 @@ class CatalogServiceImpl implements CatalogService
 
         $catalog->status = CatalogStatus::SEALED;
         $catalog->save();
+    }
+
+    /**
+     * Completely removes a catalog.
+     *
+     * @param int $catalogId
+     * @return mixed
+     */
+    public function destroyCatalog(int $catalogId)
+    {
+        $catalog = Catalog::findOrFail($catalogId);
+
+        if ($catalog->status != CatalogStatus::EDITING) {
+            return; // TODO: throw?
+        }
+
+        $nodes = $catalog->nodes();
+
+        foreach (array_reverse($nodes) as $nodeType => $list) {
+
+            if ($list->isEmpty()) {
+                continue;
+            }
+
+            $catalog->$nodeType()->detach($list->map(function ($el) {
+                return $el->getKey();
+            }));
+        }
+
+        $catalog->delete();
+
     }
 }

@@ -65,13 +65,13 @@ Route::prefix('panel')->middleware('permission:' . Permissions::PANEL_ACCESS)->g
      */
     Route::middleware('permission:' . Permissions::CATALOG_MANAGEMENT)->group(function () {
         Route::resource('catalogs', 'Panel\\CatalogController')
-            ->only(['index', 'create', 'store', 'update', 'edit'])
             ->names([
                 'index' => 'panel.catalogs.index',
                 'create' => 'panel.catalogs.create',
                 'store' => 'panel.catalogs.store',
                 'edit' => 'panel.catalogs.edit',
                 'update' => 'panel.catalogs.update',
+                'destroy' => 'panel.catalogs.destroy'
             ]);
 
         Route::get('{catalog}/create-from', 'Panel\\CatalogController@create_from')

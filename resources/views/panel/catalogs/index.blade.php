@@ -36,21 +36,22 @@
                     <td>{{ trans('labels.catalog.status.' . $catalog->status) }}</td>
                     <td>{{ $catalog->created_at->diffForHumans() }}</td>
                     <td class="has-text-right">
-                        <div class="level">
-                            <div class="level-item" style="margin-right: 5px;">
+                        <div class="catalog-options">
+                            <div class="catalog-options__option">
                                 <a href="{{ route('panel.catalogs.create_from', compact('catalog')) }}"
-                                   class="button is-light is-small" title="@lang('panel.catalogs.create_from', ['catalog' => $catalog->name])">
+                                   class="button is-light is-small"
+                                   title="@lang('panel.catalogs.create_from', ['catalog' => $catalog->name])">
                                     <span class="icon"><i class="fas fa-clone"></i></span>
                                 </a>
                             </div>
                             @if($catalog->isEditable())
-                                <div class="level-item" style="margin-right: 5px;">
+                                <div class="catalog-options__option">
                                     <a href="{{ route('panel.catalogs.edit', compact('catalog')) }}"
                                        class="button is-light is-small" title="@lang('general.edit')">
                                         <span class="icon"><i class="fas fa-pencil-alt"></i></span>
                                     </a>
                                 </div>
-                                <div class="level-item">
+                                <div class="catalog-options__option">
                                     <form action="{{ route('panel.catalogs.seal', compact('catalog')) }}" method="POST">
                                         @csrf
                                         <button type="submit" class="button is-warning is-small"
@@ -60,11 +61,23 @@
                                     </form>
                                 </div>
 
+                                <div class="catalog-options__option">
+                                    <form action="{{ route('panel.catalogs.destroy', compact('catalog')) }}"
+                                          method="POST">
+                                        @method('DELETE')
+                                        @csrf
+                                        <button type="submit" class="button is-danger is-small"
+                                                title="@lang('panel.catalogs.destroy')">
+                                            <span class="icon"><i class="fas fa-trash-alt"></i></span>
+                                        </button>
+                                    </form>
+                                </div>
+
 
                             @endif
 
                             @if($catalog->isSealed())
-                                <div class="level-item">
+                                <div class="catalog-options__option">
                                     <form action="{{ route('panel.catalogs.mark_as_obsolete', compact('catalog')) }}"
                                           method="POST">
                                         @csrf
@@ -76,7 +89,7 @@
                                 </div>
                             @endif
                             @if($catalog->isObsolete())
-                                <div class="level-item">
+                                <div class="catalog-options__option">
                                     <form action="{{ route('panel.catalogs.restore', compact('catalog')) }}"
                                           method="POST">
                                         @csrf

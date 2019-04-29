@@ -58,3 +58,12 @@
         @extend .is-success;
     }
 }
+
+.catalog-options {
+    display: flex;
+    justify-content: flex-end;
+
+    .catalog-options__option {
+        margin-right: 5px;
+    }
+}

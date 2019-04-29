@@ -136,10 +136,16 @@ class CatalogController extends Controller
      *
      * @param int $id
      * @return \Illuminate\Http\Response
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function destroy($id)
+    public function destroy(Catalog $catalog)
     {
-        //
+        $this->authorize('destroy', $catalog);
+
+        $this->catalogService->destroyCatalog($catalog->getKey());
+
+        return back()->with('alert', trans('panel.catalogs.destroyed_alert', ['catalog' => $catalog->name]));
+
     }
 
     /**

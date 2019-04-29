@@ -32,7 +32,9 @@ return [
         'obsolete_alert' => 'Catalog “:catalog” has been marked as obsolete. It will not be available anymore.',
         'restore' => 'Restore catalog',
         'restore_alert' => 'Catalog “:catalog” has been restored. It will now be available for use.',
-        'create_from' => 'Create catalog from “:catalog”',
+        'create_from' => 'Create new catalog from “:catalog”',
+        'destroyed_alert' => 'Catalog “:catalog” has been destroyed.',
+        'destroy' => 'Destroy catalog',
     ],
 
     'label' => [

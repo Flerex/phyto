@@ -55,4 +55,12 @@ interface CatalogService
      * @return mixed
      */
     public function restoreCatalog(int $catalogId);
+
+    /**
+     * Completely removes a catalog.
+     *
+     * @param int $catalogId
+     * @return mixed
+     */
+    public function destroyCatalog(int $catalogId);
 }
