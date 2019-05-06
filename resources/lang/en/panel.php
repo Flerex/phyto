@@ -35,6 +35,9 @@ return [
         'create_from' => 'Create new catalog from “:catalog”',
         'destroyed_alert' => 'Catalog “:catalog” has been destroyed.',
         'destroy' => 'Destroy catalog',
+        'obsolete_warning' => 'Are you sure you want to mark this catalog as obsolete?',
+        'seal_warning' => 'Are you sure you want to seal this catalog?',
+        'destroy_warning' => 'Are you sure you want to destroy this catalog?',
     ],
 
     'label' => [
