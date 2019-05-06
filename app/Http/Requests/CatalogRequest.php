@@ -59,8 +59,8 @@ class CatalogRequest extends FormRequest
 
             // List of the to-be-added nodes's categories
             $nodeTypesToBeAdded = collect(array_keys($validated));
-            $nodeTypesToBeAdded = $nodeTypesToBeAdded->filter(function ($e) {
-                return $e !== 'name';
+            $nodeTypesToBeAdded = $nodeTypesToBeAdded->filter(function ($e) use ($availableTypes) {
+                return in_array($e, $availableTypes);
             });
 
 
