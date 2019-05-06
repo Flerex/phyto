@@ -2,6 +2,7 @@
 
 namespace Tests\Unit;
 
+use App\Catalog;
 use App\Exceptions\CatalogStatusException;
 use App\Notifications\ActivateAccount;
 use App\Role;
@@ -14,7 +15,6 @@ use Carbon\Carbon;
 use function foo\func;
 use Illuminate\Auth\Events\Registered;
 use App\Notifications\ResetPassword as ResetPasswordNotification;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Hash;
@@ -22,6 +22,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Queue;
 use Tests\TestCase;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class CatalogServiceTest extends TestCase
 {
@@ -126,14 +127,84 @@ class CatalogServiceTest extends TestCase
 
         $catalog = $this->catalogService->createCatalog(self::CATALOG_NAME, collect(self::NODE_EXAMPLES));
 
-        $this->assertEquals(CatalogStatus::EDITING, $catalog->status);
 
-        $this->catalogService->sealCatalog($catalog->getKey());
+        $catalog->status = CatalogStatus::SEALED;
+        $catalog->save();
 
         $this->assertEquals(CatalogStatus::SEALED, $catalog->fresh()->status);
 
         $this->catalogService->sealCatalog($catalog->getKey());
 
+    }
+
+    public function test_obsolete_catalog() {
+
+        $catalog = $this->catalogService->createCatalog(self::CATALOG_NAME, collect(self::NODE_EXAMPLES));
+
+        $catalog->status = CatalogStatus::SEALED;
+        $catalog->save();
+
+        $this->catalogService->markCatalogAsObsolete($catalog->getKey());
+
+        $this->assertEquals(CatalogStatus::OBSOLETE, $catalog->fresh()->status);
+
+    }
+
+    public function test_only_sealed_catalogs_can_be_marked_as_obsolete() {
+
+        $this->expectException(CatalogStatusException::class);
+
+        $catalog = $this->catalogService->createCatalog(self::CATALOG_NAME, collect(self::NODE_EXAMPLES));
+
+        $this->catalogService->markCatalogAsObsolete($catalog->getKey());
+
+    }
+
+    public function test_restore_catalog() {
+
+        $catalog = $this->catalogService->createCatalog(self::CATALOG_NAME, collect(self::NODE_EXAMPLES));
+
+        $catalog->status = CatalogStatus::OBSOLETE;
+        $catalog->save();
+
+        $this->catalogService->restoreCatalog($catalog->getKey());
+
+        $this->assertEquals(CatalogStatus::SEALED, $catalog->fresh()->status);
+
+    }
+
+    public function test_only_obsolete_catalogs_can_be_restored() {
+
+        $this->expectException(CatalogStatusException::class);
+
+        $catalog = $this->catalogService->createCatalog(self::CATALOG_NAME, collect(self::NODE_EXAMPLES));
+
+        $this->catalogService->restoreCatalog($catalog->getKey());
+
+    }
+
+    public function test_destroy_catalog() {
+
+        $this->expectException(ModelNotFoundException::class);
+
+        $catalog = $this->catalogService->createCatalog(self::CATALOG_NAME, collect(self::NODE_EXAMPLES));
+
+        $this->catalogService->destroyCatalog($catalog->getKey());
+
+        Catalog::findOrFail($catalog->getKey());
+
+    }
+
+    public function test_only_editing_catalogs_can_be_destroyed() {
+
+        $this->expectException(CatalogStatusException::class);
+
+        $catalog = $this->catalogService->createCatalog(self::CATALOG_NAME, collect(self::NODE_EXAMPLES));
+
+        $catalog->status = CatalogStatus::SEALED;
+        $catalog->save();
+
+        $this->catalogService->destroyCatalog($catalog->getKey());
     }
 
 }
