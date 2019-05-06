@@ -4,7 +4,7 @@ return [
     'panel' => 'Management Panel',
 
     'users' => [
-        'management' => 'Manage users',
+        'management' => 'User management',
         'create' => 'Create new user',
         'create_label' => 'Create user',
         'joined' => 'Joined',
