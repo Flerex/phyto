@@ -4,6 +4,7 @@
 namespace App\Services;
 
 use App\Catalog;
+use App\Exceptions\CatalogStatusException;
 use Illuminate\Support\Collection;
 
 /**
@@ -20,7 +21,7 @@ interface CatalogService
      * @param Collection $nodes
      * @return Catalog
      */
-    public function createCatalog(string $name, Collection $nodes);
+    public function createCatalog(string $name, Collection $nodes) : Catalog;
 
     /**
      * Updates all data of a Catalog
@@ -30,7 +31,7 @@ interface CatalogService
      * @param Collection $nodes
      * @return mixed
      */
-    public function overrideCatalog(int $catalogId, string $name, Collection $nodes);
+    public function overrideCatalog(int $catalogId, string $name, Collection $nodes) : Catalog;
 
     /**
      * Changes the status of a catalog to sealed, so it cannot be opened again
@@ -45,6 +46,7 @@ interface CatalogService
      *
      * @param int $catalogId
      * @return mixed
+     * @throws CatalogStatusException
      */
     public function markCatalogAsObsolete(int $catalogId);
 
@@ -53,6 +55,7 @@ interface CatalogService
      *
      * @param int $catalogId
      * @return mixed
+     * @throws CatalogStatusException
      */
     public function restoreCatalog(int $catalogId);
 
@@ -61,6 +64,7 @@ interface CatalogService
      *
      * @param int $catalogId
      * @return mixed
+     * @throws CatalogStatusException
      */
     public function destroyCatalog(int $catalogId);
 }

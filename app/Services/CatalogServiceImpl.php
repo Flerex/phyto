@@ -5,6 +5,7 @@ namespace App\Services;
 
 
 use App\Catalog;
+use App\Exceptions\CatalogStatusException;
 use App\Utils\CatalogStatus;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
@@ -13,7 +14,7 @@ class CatalogServiceImpl implements CatalogService
 {
 
 
-    public function createCatalog(string $name, Collection $nodes)
+    public function createCatalog(string $name, Collection $nodes) : Catalog
     {
         $catalog = Catalog::create([
             'name' => $name,
@@ -34,10 +35,14 @@ class CatalogServiceImpl implements CatalogService
         return $catalog;
     }
 
-    public function overrideCatalog(int $catalogId, string $name, collection $nodes)
+    public function overrideCatalog(int $catalogId, string $name, collection $nodes) : Catalog
     {
 
         $catalog = Catalog::findOrFail($catalogId);
+
+        if ($catalog->status != CatalogStatus::EDITING) {
+            throw new CatalogStatusException($catalog, CatalogStatus::EDITING);
+        }
 
         $catalog->name = $name;
 
@@ -56,6 +61,8 @@ class CatalogServiceImpl implements CatalogService
             $catalog->$nodeType()->attach($list);
         }
 
+        return $catalog;
+
     }
 
     /**
@@ -63,13 +70,14 @@ class CatalogServiceImpl implements CatalogService
      *
      * @param int $catalogId
      * @return mixed
+     * @throws CatalogStatusException
      */
     public function sealCatalog(int $catalogId)
     {
         $catalog = Catalog::findOrFail($catalogId);
 
         if ($catalog->status != CatalogStatus::EDITING) {
-            return; // TODO: throw?
+            throw new CatalogStatusException($catalog, CatalogStatus::EDITING);
         }
 
         $catalog->status = CatalogStatus::SEALED;
@@ -81,13 +89,14 @@ class CatalogServiceImpl implements CatalogService
      *
      * @param int $catalogId
      * @return mixed
+     * @throws CatalogStatusException
      */
     public function markCatalogAsObsolete(int $catalogId)
     {
         $catalog = Catalog::findOrFail($catalogId);
 
         if ($catalog->status != CatalogStatus::SEALED) {
-            return; // TODO: throw?
+            throw new CatalogStatusException($catalog, CatalogStatus::SEALED);
         }
 
         $catalog->status = CatalogStatus::OBSOLETE;
@@ -99,13 +108,14 @@ class CatalogServiceImpl implements CatalogService
      *
      * @param int $catalogId
      * @return mixed
+     * @throws CatalogStatusException
      */
     public function restoreCatalog(int $catalogId)
     {
         $catalog = Catalog::findOrFail($catalogId);
 
         if ($catalog->status != CatalogStatus::OBSOLETE) {
-            return; // TODO: throw?
+            throw new CatalogStatusException($catalog, CatalogStatus::OBSOLETE);
         }
 
         $catalog->status = CatalogStatus::SEALED;
@@ -117,13 +127,14 @@ class CatalogServiceImpl implements CatalogService
      *
      * @param int $catalogId
      * @return mixed
+     * @throws CatalogStatusException
      */
     public function destroyCatalog(int $catalogId)
     {
         $catalog = Catalog::findOrFail($catalogId);
 
         if ($catalog->status != CatalogStatus::EDITING) {
-            return; // TODO: throw?
+            throw new CatalogStatusException($catalog, CatalogStatus::EDITING);
         }
 
         $nodes = $catalog->nodes();
