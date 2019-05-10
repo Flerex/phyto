@@ -49,7 +49,7 @@ class UserServiceTest extends TestCase
      *
      * @return User
      */
-    protected function create_user()
+    protected static function create_user()
     {
         return User::create([
             'name' => static::TESTING_USER_NAME,
@@ -103,14 +103,13 @@ class UserServiceTest extends TestCase
         Notification::fake();
 
         // Create a user
-        $id = $this->userService->createUser(static::TESTING_USER_NAME, static::TESTING_USER_EMAIL, Roles::TAGGER);
+        $role = Role::findByName(Roles::TAGGER);
+        $id = $this->userService->createUser(static::TESTING_USER_NAME, static::TESTING_USER_EMAIL, $role);
 
         // Retrieve user from DB
         $user = User::find($id);
 
-        Notification::assertSentTo($user, ActivateAccount::class, function ($notification) {
-            dd($notification);
-        });
+        Notification::assertSentTo($user, ActivateAccount::class);
 
     }
 
@@ -119,7 +118,7 @@ class UserServiceTest extends TestCase
      */
     public function reset_a_users_password()
     {
-        $user = $this->create_user();
+        $user = self::create_user();
 
         Notification::fake();
 

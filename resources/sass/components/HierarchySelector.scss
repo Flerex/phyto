@@ -2,6 +2,12 @@
 @import '~bulma/sass/components/panel';
 
 
+.checkbox {
+    margin-left: auto;
+    width: 20px;
+    height: 20px;
+}
+
 .edit_button {
     margin-left: auto;
     color: $grey-light;
@@ -32,6 +38,7 @@
         
         div {
             display: flex;
+            align-items: center;
         }
 
 

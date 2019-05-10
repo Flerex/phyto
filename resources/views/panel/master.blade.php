@@ -14,7 +14,7 @@
             {{-- TODO: remove harcoded translations & add routes --}}
             <p class="menu-label">@lang('panel.label.catalogs_species')</p>
             <ul class="menu-list">
-                <li><a href="#">Catalog management</a></li>
+                <li><a href="{{ route('panel.catalogs.index') }}"@if(substr(Route::currentRouteName(), 0, 15) == 'panel.catalogs.') class="is-active"@endif>@lang('panel.catalogs.management')</a></li>
                 <li><a href="{{ route('panel.species.index') }}"@if(substr(Route::currentRouteName(), 0, 14) == 'panel.species.') class="is-active"@endif>@lang('panel.species.management')</a></li>
             </ul>
             <p class="menu-label">Projects</p>

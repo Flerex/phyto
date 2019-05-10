@@ -1,4 +1,5 @@
 import React, {Component} from 'react'
+import styles from '../../sass/components/TreeView.scss'
 
 export default class TreeView extends Component {
 
@@ -18,11 +19,12 @@ export default class TreeView extends Component {
 
     render() {
         return (
-            <div>
+            <div className={styles.treeview}>
                 <ul>
                     {this.props.data.map((el, i) => <Node key={i} element={el}
-                                                          renderAppendList={this.renderAppendList}
-                                                          appendNode={this.props.appendNode}/>)}
+                                                          appendList={this.props.appendList}
+                                                          appendNode={this.props.appendNode}
+                                                          prependNode={this.props.prependNode}/>)}
                     {this.renderAppendList()}
                 </ul>
             </div>
@@ -46,6 +48,8 @@ class Node extends Component {
         this.hasChildren = this.hasChildren.bind(this)
         this.toggle = this.toggle.bind(this)
         this.renderAppendNode = this.renderAppendNode.bind(this)
+        this.renderAppendList = this.renderAppendList.bind(this)
+        this.renderPrependNode = this.renderPrependNode.bind(this)
         this.renderChildren = this.renderChildren.bind(this)
 
         this.state = {
@@ -59,15 +63,26 @@ class Node extends Component {
         })
     }
 
+    renderAppendList() {
+        if (!this.props.appendList)
+            return
+
+        return this.props.appendList(this.props.element)
+    }
+
     render() {
         const el = this.props.element;
 
         return (
             <li>
-                <div onClick={this.toggle}>
-                    <span className="icon" hidden={!this.hasChildren()}><i
-                        className={this.state.expanded ? 'fas fa-chevron-down' : 'fas fa-chevron-right'}/></span>
-                    <span className={this.hasChildren() ? 'has-text-weight-bold' : ''}>{el.name}</span>
+                <div>
+                    {this.renderPrependNode()}
+
+                    <span onClick={this.toggle} className={styles.toggler}>
+                        <span className="icon" hidden={!this.hasChildren()}><i
+                            className={this.state.expanded ? 'fas fa-chevron-down' : 'fas fa-chevron-right'}/></span>
+                        <span className={this.hasChildren() ? 'has-text-weight-bold' : ''}>{el.name}</span>
+                    </span>
                     {this.renderAppendNode()}
                 </div>
                 {this.renderChildren()}
@@ -89,9 +104,10 @@ class Node extends Component {
         return (
             <ul hidden={!this.state.expanded}>
                 {this.props.element.children.map((el, i) =>
-                    <Node key={i} element={el} renderAppendList={this.props.renderAppendList} appendNode={this.props.appendNode}/>
+                    <Node key={i} element={el} appendList={this.props.appendList}
+                          appendNode={this.props.appendNode} prependNode={this.props.prependNode} />
                 )}
-                {this.props.renderAppendList()}
+                {this.renderAppendList()}
             </ul>
         )
     }
@@ -101,6 +117,13 @@ class Node extends Component {
             return
 
         return this.props.appendNode(this.props.element)
+    }
+
+    renderPrependNode() {
+        if (!this.props.prependNode)
+            return
+
+        return this.props.prependNode(this.props.element)
     }
 }
 
