@@ -17,6 +17,11 @@
         </div>
     </div>
 
+    @if($canManageEverything)
+    <article class="message is-warning">
+        <div class="message-body">@lang('panel.projects.showing_everything_message')</div>
+    </article>
+    @endif
 
     @if(count($projects))
         <table class="table is-fullwidth">

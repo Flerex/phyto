@@ -45,6 +45,7 @@ return [
         'create' => 'Start new project',
         'no_projects' => 'There are no projects.',
         'create_alert' => 'Project “:name“ has been created.',
+        'showing_everything_message' => 'Due to your high-ranking permissions you are currently viewing all existing projects.',
     ],
 
     'label' => [
