@@ -29,7 +29,6 @@ return [
     ],
 
     'projects' => [
-        'users' => 'Users',
         'catalogs' => 'Catalogs',
         'manager' => 'Manager',
         'members' => 'Members',
