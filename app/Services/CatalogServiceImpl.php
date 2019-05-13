@@ -6,7 +6,7 @@ namespace App\Services;
 
 use App\Catalog;
 use App\Exceptions\CatalogStatusException;
-use App\Utils\CatalogStatus;
+use App\Enums\CatalogStatus;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 

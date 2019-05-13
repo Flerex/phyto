@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Utils\Roles;
+use App\Enums\Roles;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 use App\User;

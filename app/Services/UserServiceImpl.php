@@ -3,7 +3,7 @@
 namespace App\Services;
 
 
-use App\Utils\Roles;
+use App\Enums\Roles;
 use App\User;
 use http\Exception\InvalidArgumentException;
 use Illuminate\Auth\Events\Registered;
@@ -23,7 +23,7 @@ class UserServiceImpl implements UserService
      */
     public function createUser(string $name, string $email, Role $role): int
     {
-        if (!Roles::isValid($role)) {
+        if (!Roles::hasValue($role->name)) {
             throw new \InvalidArgumentException();
         }
 

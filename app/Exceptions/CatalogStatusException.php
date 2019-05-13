@@ -3,7 +3,7 @@
 namespace App\Exceptions;
 
 use App\Catalog;
-use App\Utils\CatalogStatus;
+use App\Enums\CatalogStatus;
 use Exception;
 use Throwable;
 

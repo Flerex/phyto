@@ -6,7 +6,7 @@ use App\Classis;
 use App\Domain;
 use App\Services\CatalogService;
 use App\User;
-use App\Utils\Roles;
+use App\Enums\Roles;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 

@@ -6,7 +6,7 @@ use App\Catalog;
 use App\Http\Requests\CatalogRequest;
 use App\Services\CatalogService;
 use App\Species;
-use App\Utils\CatalogStatus;
+use App\Enums\CatalogStatus;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;

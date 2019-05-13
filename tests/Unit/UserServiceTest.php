@@ -6,7 +6,7 @@ use App\Notifications\ActivateAccount;
 use App\Role;
 use App\Services\UserService;
 use App\User;
-use App\Utils\Roles;
+use App\Enums\Roles;
 use Carbon\Carbon;
 use function foo\func;
 use Illuminate\Auth\Events\Registered;
