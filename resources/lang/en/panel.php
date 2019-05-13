@@ -40,10 +40,18 @@ return [
         'destroy_warning' => 'Are you sure you want to destroy this catalog?',
     ],
 
+    'projects' => [
+        'management' => 'Projects management',
+        'create' => 'Start new project',
+        'no_projects' => 'There are no projects.',
+        'create_alert' => 'Project “:name“ has been created.',
+    ],
+
     'label' => [
         'users' => 'Users',
         'catalogs_species' => 'Catalogs & Species',
         'species' => 'Species',
         'catalogs' => 'Catalogs',
+        'projects' => 'Projects',
     ],
 ];

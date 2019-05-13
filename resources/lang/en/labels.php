@@ -4,6 +4,7 @@ return [
     'id' => 'ID',
     'name' => 'Name',
     'created_at' => 'Created',
+    'description' => 'Description',
 
     'user' => [
         'name' => 'Name',
@@ -25,5 +26,12 @@ return [
             'sealed' => 'Sealed',
             'obsolete' => 'Obsolete',
         ],
-    ]
+    ],
+
+    'projects' => [
+        'users' => 'Users',
+        'catalogs' => 'Catalogs',
+        'manager' => 'Manager',
+        'members' => 'Members',
+    ],
 ];

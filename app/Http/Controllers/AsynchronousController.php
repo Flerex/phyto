@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Catalog;
 use App\Domain;
+use App\User;
 use foo\bar;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Validator;
 
@@ -17,10 +19,16 @@ class AsynchronousController extends Controller
 
     }
 
+    /**
+     * Returns the hierarchy tree, starting from the Domains all the way to the Species model.
+     *
+     * @return Domain[]|\Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection
+     */
     public function species()
     {
         return Domain::with('children.children.children')->get();
     }
+
 
     private static function getRelationships()
     {
@@ -33,6 +41,13 @@ class AsynchronousController extends Controller
         ];
     }
 
+    /**
+     * Handles the modification of the data of a node.
+     *
+     * @param Request $request
+     * @return array
+     * @throws \Illuminate\Validation\ValidationException
+     */
     public function edit_node(Request $request)
     {
 
@@ -65,6 +80,13 @@ class AsynchronousController extends Controller
 
     }
 
+    /**
+     * Handles the addition of a node to the hierarchy.
+     *
+     * @param Request $request
+     * @return array
+     * @throws \Illuminate\Validation\ValidationException
+     */
     public function add_to_hierarchy(Request $request)
     {
 
@@ -197,6 +219,12 @@ class AsynchronousController extends Controller
         });
     }
 
+    /**
+     * Obtains the hierarchy tree, specifying which nodes are selected in the catalog.
+     *
+     * @param Catalog $catalog
+     * @return array
+     */
     public function edit_catalog(Catalog $catalog)
     {
 
@@ -238,6 +266,34 @@ class AsynchronousController extends Controller
         }
 
         return $domains;
+    }
+
+
+    /**
+     * Searches users from a given query.
+     *
+     */
+    public function search_users(Request $request)
+    {
+
+        $validated = $request->validate([
+            'query' => 'sometimes|string',
+        ]);
+
+        if(!isset($validated['query'])) {
+            return [];
+        }
+
+
+        $users = User::where(DB::raw('LOWER(name)'), 'like', '%' . strtolower($validated['query']) . '%')->limit(15)->get();
+
+        return $users->map(function($user) {
+            return [
+                'value' => $user->getKey(),
+                'label' => $user->name,
+            ];
+        });
+
     }
 
 }

@@ -27,5 +27,7 @@
         "sass-loader": "^7.1.0",
         "tippy.js": "^3.3.0"
     },
-    "dependencies": {}
+    "dependencies": {
+        "react-select": "^2.4.3"
+    }
 }
