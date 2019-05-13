@@ -1,7 +1,7 @@
 <?php
 
-use App\Utils\Permissions;
-use App\Utils\Roles;
+use App\Enums\Permissions;
+use App\Enums\Roles;
 use Illuminate\Database\Seeder;
 use App\Role;
 
@@ -23,12 +23,15 @@ class RolesTableSeeder extends Seeder
 
 
         // Manager permissions
+        $supervisor->givePermissionTo(Permissions::PANEL_ACCESS);
+        $supervisor->givePermissionTo(Permissions::PROJECT_MANAGEMENT);
 
 
         // Supervisor permissions
         $supervisor->givePermissionTo(Permissions::PANEL_ACCESS);
         $supervisor->givePermissionTo(Permissions::SPECIES_MANAGEMENT);
         $supervisor->givePermissionTo(Permissions::CATALOG_MANAGEMENT);
+        $supervisor->givePermissionTo(Permissions::MANAGE_ALL_PROJECTS);
 
         $supervisor->givePermissionTo($manager->getAllPermissions());
         $supervisor->givePermissionTo($tagger->getAllPermissions());
