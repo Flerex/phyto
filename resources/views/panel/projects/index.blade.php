@@ -37,13 +37,15 @@
 
             <tbody>
             @foreach($projects as $project)
-                <td>{{ $project->getKey() }}</td>
-                <td>{{ $project->name }}</td>
-                @if($canManageEverything)
-                    <td>{{ $project->manager->name }}</td>
-                @endif
-                <td>{{ $project->users()->count() }}</td>
-                <td>{{ $project->description }}</td>
+                <tr>
+                    <td>{{ $project->getKey() }}</td>
+                    <td>{{ $project->name }}</td>
+                    @if($canManageEverything)
+                        <td>{{ $project->manager->name }}</td>
+                    @endif
+                    <td>{{ $project->users()->count() }}</td>
+                    <td>{{ $project->description }}</td>
+                </tr>
             @endforeach
             </tbody>
         </table>
