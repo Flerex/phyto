@@ -326,12 +326,8 @@ export default class HierarchySelector extends Component {
 
         axios.get(url)
             .then(r => {
-
-                console.log(url)
-
                 const data = r.data
-
-
+                
                 this.setState({data, originalData: data})
             })
 
