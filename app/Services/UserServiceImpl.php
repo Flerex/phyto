@@ -32,10 +32,10 @@ class UserServiceImpl implements UserService
             'email' => $email,
         ]);
 
-        event(new Registered($user));
-
         $user->assignRole($role);
 
+        event(new Registered($user));
+        
         return $user->getKey();
 
     }
