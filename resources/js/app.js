@@ -15,3 +15,5 @@ require('./bootstrap');
 
 require('./components/HierarchySelector');
 require('./components/UserSelector');
+
+require('./navbar');
