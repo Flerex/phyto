@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-use App\Enums\Roles;
 use Spatie\Permission\Models\Role;
 
 /**

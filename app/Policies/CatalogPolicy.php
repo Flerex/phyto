@@ -2,13 +2,24 @@
 
 namespace App\Policies;
 
-use App\User;
 use App\Catalog;
+use App\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class CatalogPolicy
 {
     use HandlesAuthorization;
+
+    /**
+     * Determine whether the user can view any holas.
+     *
+     * @param  \App\User  $user
+     * @return mixed
+     */
+    public function viewAny(User $user)
+    {
+        return true;
+    }
 
     /**
      * Determine whether the user can edit a catalog.

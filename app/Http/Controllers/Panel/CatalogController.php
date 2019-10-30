@@ -3,13 +3,10 @@
 namespace App\Http\Controllers\Panel;
 
 use App\Catalog;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\CatalogRequest;
 use App\Services\CatalogService;
-use App\Species;
-use App\Enums\CatalogStatus;
-use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use Illuminate\Validation\Rule;
 
 class CatalogController extends Controller

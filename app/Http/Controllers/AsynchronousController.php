@@ -4,10 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Catalog;
 use App\Domain;
-use App\User;
-use foo\bar;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Validator;
 
@@ -20,15 +17,37 @@ class AsynchronousController extends Controller
     }
 
     /**
-     * Returns the hierarchy tree, starting from the Domains all the way to the Species model.
+     * Searches users from a given query.
      *
-     * @return Domain[]|\Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection
      */
+    public function search_users(Request $request)
+    {
+
+        $validated = $request->validate([
+            'query' => 'sometimes|string',
+        ]);
+
+        if (!isset($validated['query'])) {
+            return [];
+        }
+
+
+        $users = User::where(DB::raw('LOWER(name)'), 'like',
+            '%' . strtolower($validated['query']) . '%')->limit(15)->get();
+
+        return $users->map(function ($user) {
+            return [
+                'value' => $user->getKey(),
+                'label' => $user->name,
+            ];
+        });
+
+    }
+
     public function species()
     {
         return Domain::with('children.children.children')->get();
     }
-
 
     private static function getRelationships()
     {
@@ -268,7 +287,6 @@ class AsynchronousController extends Controller
         return $domains;
     }
 
-
     /**
      * Searches users from a given query.
      *
@@ -280,14 +298,15 @@ class AsynchronousController extends Controller
             'query' => 'sometimes|string',
         ]);
 
-        if(!isset($validated['query'])) {
+        if (!isset($validated['query'])) {
             return [];
         }
 
 
-        $users = User::where(DB::raw('LOWER(name)'), 'like', '%' . strtolower($validated['query']) . '%')->limit(15)->get();
+        $users = User::where(DB::raw('LOWER(name)'), 'like',
+            '%' . strtolower($validated['query']) . '%')->limit(15)->get();
 
-        return $users->map(function($user) {
+        return $users->map(function ($user) {
             return [
                 'value' => $user->getKey(),
                 'label' => $user->name,

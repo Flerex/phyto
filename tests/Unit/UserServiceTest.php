@@ -3,21 +3,17 @@
 namespace Tests\Unit;
 
 use App\Notifications\ActivateAccount;
+use App\Notifications\ResetPassword as ResetPasswordNotification;
 use App\Role;
 use App\Services\UserService;
 use App\User;
 use App\Enums\Roles;
 use Carbon\Carbon;
-use function foo\func;
 use Illuminate\Auth\Events\Registered;
-use App\Notifications\ResetPassword as ResetPasswordNotification;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Notification;
-use Illuminate\Support\Facades\Queue;
 use Tests\TestCase;
 
 class UserServiceTest extends TestCase

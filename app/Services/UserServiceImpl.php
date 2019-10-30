@@ -3,9 +3,8 @@
 namespace App\Services;
 
 
-use App\Enums\Roles;
 use App\User;
-use http\Exception\InvalidArgumentException;
+use App\Utils\Roles;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Password;
 use Spatie\Permission\Models\Role;
@@ -35,7 +34,7 @@ class UserServiceImpl implements UserService
         $user->assignRole($role);
 
         event(new Registered($user));
-        
+
         return $user->getKey();
 
     }

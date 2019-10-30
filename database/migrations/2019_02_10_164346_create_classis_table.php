@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CreateClassisTable extends Migration
 {
@@ -14,9 +14,9 @@ class CreateClassisTable extends Migration
     public function up()
     {
         Schema::create('classis', function (Blueprint $table) {
-            $table->increments('id');
+            $table->bigIncrements('id');
             $table->string('name');
-            $table->unsignedInteger('domain_id');
+            $table->unsignedBigInteger('domain_id');
             $table->timestamps();
 
             $table->foreign('domain_id')->references('id')->on('domains');

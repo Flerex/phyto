@@ -4,25 +4,10 @@ namespace Tests\Unit;
 
 use App\Catalog;
 use App\Exceptions\CatalogStatusException;
-use App\Notifications\ActivateAccount;
-use App\Role;
 use App\Services\CatalogService;
-use App\Services\UserService;
-use App\User;
-use App\Enums\CatalogStatus;
-use App\Enums\Roles;
-use Carbon\Carbon;
-use function foo\func;
-use Illuminate\Auth\Events\Registered;
-use App\Notifications\ResetPassword as ResetPasswordNotification;
-use Illuminate\Support\Facades\Bus;
-use Illuminate\Support\Facades\Event;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Notification;
-use Illuminate\Support\Facades\Queue;
-use Tests\TestCase;
+use App\Utils\CatalogStatus;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Tests\TestCase;
 
 class CatalogServiceTest extends TestCase
 {

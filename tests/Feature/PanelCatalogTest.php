@@ -2,12 +2,9 @@
 
 namespace Tests\Feature;
 
-use App\Classis;
-use App\Domain;
 use App\Services\CatalogService;
 use App\User;
-use App\Enums\Roles;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use App\Utils\Roles;
 use Tests\TestCase;
 
 class PanelCatalogTest extends TestCase

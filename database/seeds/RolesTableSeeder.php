@@ -1,9 +1,9 @@
 <?php
 
-use App\Enums\Permissions;
-use App\Enums\Roles;
-use Illuminate\Database\Seeder;
 use App\Role;
+use App\Utils\Permissions;
+use App\Utils\Roles;
+use Illuminate\Database\Seeder;
 
 class RolesTableSeeder extends Seeder
 {

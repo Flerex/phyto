@@ -3,8 +3,7 @@
 namespace App;
 
 
-use App\Enums\Roles;
-use \Spatie\Permission\Models\Role as RoleModel;
+use Spatie\Permission\Models\Role as RoleModel;
 
 class Role extends RoleModel
 {
