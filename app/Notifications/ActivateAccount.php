@@ -7,8 +7,8 @@ use App\User;
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Mail\Mailable;
-use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\URL;
 
 class ActivateAccount extends Notification implements ShouldQueue

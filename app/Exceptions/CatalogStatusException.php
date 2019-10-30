@@ -3,9 +3,7 @@
 namespace App\Exceptions;
 
 use App\Catalog;
-use App\Utils\CatalogStatus;
 use Exception;
-use Throwable;
 
 class CatalogStatusException extends Exception
 {
