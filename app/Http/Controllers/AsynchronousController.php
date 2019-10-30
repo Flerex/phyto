@@ -41,7 +41,7 @@ class AsynchronousController extends Controller
                 'label' => $user->name,
             ];
         });
-        
+
     }
 
     public function species()
