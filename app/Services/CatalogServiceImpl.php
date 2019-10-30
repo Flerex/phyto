@@ -8,7 +8,6 @@ use App\Catalog;
 use App\Exceptions\CatalogStatusException;
 use App\Utils\CatalogStatus;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\DB;
 
 class CatalogServiceImpl implements CatalogService
 {

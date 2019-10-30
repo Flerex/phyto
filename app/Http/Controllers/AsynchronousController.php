@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Catalog;
 use App\Domain;
-use foo\bar;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Validator;

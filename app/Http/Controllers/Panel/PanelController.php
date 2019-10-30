@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers\Panel;
 
-use Illuminate\Http\Request;
-use App\User;
 use App\Http\Controllers\Controller;
 
 class PanelController extends Controller

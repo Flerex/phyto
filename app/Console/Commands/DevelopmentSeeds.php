@@ -2,10 +2,10 @@
 
 namespace App\Console\Commands;
 
+use App\User;
 use App\Utils\Roles;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
-use App\User;
 
 class DevelopmentSeeds extends Command
 {

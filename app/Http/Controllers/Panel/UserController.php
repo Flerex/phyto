@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers\Panel;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateUser;
+use App\Role;
 use App\Services\UserService;
 use App\User;
-use Illuminate\Http\Request;
-use App\Role;
-use App\Http\Controllers\Controller;
 
 class UserController extends Controller
 {
