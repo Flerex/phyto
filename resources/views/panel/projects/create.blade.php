@@ -33,8 +33,7 @@
 
             <div class="control">
                 <textarea id="description" class="textarea" name="description"
-                          placeholder="{{ trans('labels.description') }}"
-                          value="{{ old('description') }}" required>{{ old('description') }}</textarea>
+                          placeholder="{{ trans('labels.description') }}" required>{{ old('description') }}</textarea>
             </div>
 
             @if ($errors->has('description'))

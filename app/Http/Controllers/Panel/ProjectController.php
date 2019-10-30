@@ -84,7 +84,7 @@ class ProjectController extends Controller
      */
     public function show(Project $project)
     {
-        //
+        return view('panel.projects.show', compact('project'));
     }
 
     /**
@@ -119,5 +119,41 @@ class ProjectController extends Controller
     public function destroy(Project $project)
     {
         //
+    }
+
+
+    /**
+     * Add new user to project page.
+     *
+     * @param Project $project
+     * @return string
+     */
+    public function add_user(Project $project)
+    {
+        // Fixme: Should only be accessible by project managers.
+
+        return view('panel.projects.add-user', compact('project'));
+    }
+
+
+    public function add_user_store(Project $project, Request $request)
+    {
+        $validated = $request->validate([
+            'users' => ['required', 'array', 'min:1', 'exists:users,id'],
+        ]);
+
+        $alreadyAdded = $project->users
+            ->push($project->manager)
+            ->pluck('id');
+
+        $filteredUsers = collect($validated['users'])->filter(function ($id) use ($alreadyAdded) {
+            return !$alreadyAdded->contains($id);
+        });
+
+        // fixme: filtering not working
+
+        $project->users()->attach($filteredUsers);
+
+        return redirect()->route('panel.projects.show', compact('project'));
     }
 }

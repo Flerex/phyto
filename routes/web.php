@@ -92,12 +92,26 @@ Route::prefix('panel')->middleware('permission:' . Permissions::PANEL_ACCESS)->g
      */
     Route::middleware('permission:' . Permissions::PROJECT_MANAGEMENT)->group(function () {
         Route::resource('projects', 'Panel\ProjectController')
-            ->only(['index', 'create', 'store'])
+            ->only(['index', 'create', 'store', 'show'])
             ->names([
                 'index' => 'panel.projects.index',
                 'create' => 'panel.projects.create',
                 'store' => 'panel.projects.store',
+                'show' => 'panel.projects.show',
             ]);
+
+        Route::get('projects/{project}/users/add', 'Panel\\ProjectController@add_user')
+            ->name('panel.projects.add_user');
+
+        Route::post('projects/{project}/users/add', 'Panel\\ProjectController@add_user_store')
+            ->name('panel.projects.add_user_store');
+
+        Route::get('projects/{project}/samples/create', 'Panel\\SampleController@create')
+            ->name('panel.projects.samples.create');
+
+        Route::post('projects/{project}/samples/create', 'Panel\\SampleController@store')
+            ->name('panel.projects.samples.store');
+
     });
 });
 

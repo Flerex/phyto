@@ -4,7 +4,7 @@ namespace App\Services;
 
 
 use App\User;
-use App\Utils\Roles;
+use App\Enums\Roles;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Password;
 use Spatie\Permission\Models\Role;

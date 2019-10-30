@@ -26,7 +26,6 @@
     @if(count($projects))
         <table class="table is-fullwidth">
             <thead>
-            <th>@lang('labels.id')</th>
             <th>@lang('labels.name')</th>
             @if($canManageEverything)
                 <th>@lang('labels.projects.manager')</th>
@@ -38,8 +37,7 @@
             <tbody>
             @foreach($projects as $project)
                 <tr>
-                    <td>{{ $project->getKey() }}</td>
-                    <td>{{ $project->name }}</td>
+                    <td><a href="{{ route('panel.projects.show', compact('project')) }}">{{ $project->name }}</a></td>
                     @if($canManageEverything)
                         <td>{{ $project->manager->name }}</td>
                     @endif

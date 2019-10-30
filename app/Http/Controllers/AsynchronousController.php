@@ -41,7 +41,7 @@ class AsynchronousController extends Controller
                 'label' => $user->name,
             ];
         });
-
+        
     }
 
     public function species()
@@ -286,33 +286,4 @@ class AsynchronousController extends Controller
 
         return $domains;
     }
-
-    /**
-     * Searches users from a given query.
-     *
-     */
-    public function search_users(Request $request)
-    {
-
-        $validated = $request->validate([
-            'query' => 'sometimes|string',
-        ]);
-
-        if (!isset($validated['query'])) {
-            return [];
-        }
-
-
-        $users = User::where(DB::raw('LOWER(name)'), 'like',
-            '%' . strtolower($validated['query']) . '%')->limit(15)->get();
-
-        return $users->map(function ($user) {
-            return [
-                'value' => $user->getKey(),
-                'label' => $user->name,
-            ];
-        });
-
-    }
-
 }

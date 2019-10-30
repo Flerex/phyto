@@ -5,6 +5,7 @@ return [
     'name' => 'Name',
     'created_at' => 'Created',
     'description' => 'Description',
+    'files' => 'Files',
 
     'user' => [
         'name' => 'Name',
