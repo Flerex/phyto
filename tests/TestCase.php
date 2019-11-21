@@ -19,7 +19,7 @@ abstract class TestCase extends BaseTestCase
     /**
      * Seeds database at the beginning of every test.
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
