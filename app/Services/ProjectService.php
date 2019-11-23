@@ -6,6 +6,7 @@ namespace App\Services;
 use App\Catalog;
 use App\Exceptions\CatalogStatusException;
 use App\Project;
+use App\Sample;
 use Illuminate\Support\Collection;
 
 /**
@@ -26,5 +27,17 @@ interface ProjectService
      * @return Project
      */
     public function createProject(string $name, string $description, int $manager_id, Collection $catalogs, Collection $users) : Project;
+
+
+    /**
+     * Creates a new Sample entity and adds it to the given Project.
+     *
+     * @param string $name
+     * @param string $description
+     * @param Collection $files
+     * @param Project $project
+     * @return Sample
+     */
+    public function addSampleToProject(string $name, string $description, Collection $files, Project $project) : Sample;
 
 }

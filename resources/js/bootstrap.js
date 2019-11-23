@@ -25,3 +25,5 @@ if (token) {
 }
 
 window.tippy = require('tippy.js');
+
+window.Resumable = require('resumablejs')

@@ -108,6 +108,11 @@ Route::prefix('panel')->middleware('permission:' . Permissions::PANEL_ACCESS)->g
         Route::post('projects/{project}/samples/create', 'Panel\\SampleController@store')
             ->name('panel.projects.samples.store');
 
+        Route::get('projects/{project}/samples/upload', 'Panel\\SampleController@checkChunk');
+
+        Route::post('projects/{project}/samples/upload', 'Panel\\SampleController@upload')
+            ->name('panel.projects.samples.upload');
+
     });
 });
 

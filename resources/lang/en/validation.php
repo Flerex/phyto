@@ -132,6 +132,7 @@ return [
         'attribute-name' => [
             'rule-name' => 'custom-message',
         ],
+        'unreachable' => 'Passed data is not valid and was not expected.',
     ],
 
     /*

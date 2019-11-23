@@ -4,7 +4,8 @@
     <h1 class="title">@lang('panel.projects.samples.create')</h1>
     <p class="subtitle is-6">{{ trans('panel.projects.samples.feedback', ['project' => $project->name]) }}</p>
 
-    <form action="{{ route('panel.projects.samples.store', compact('project')) }}" method="POST"> {{-- FIXME: Multipart --}}
+    <form action="{{ route('panel.projects.samples.store', compact('project')) }}"
+          method="POST"> {{-- FIXME: Multipart --}}
 
         {{-- Name field --}}
         <div class="field">
@@ -48,9 +49,39 @@
         {{-- Batch upload field --}}
         <div class="field">
             <label for="file" class="label">@lang('labels.files')</label>
-            <div class="control">upload here</div>
+            <div class="control">
+                <div class="upload-dropzone empty" id="upload-dropzone"
+                     data-url="{{ route('panel.projects.samples.upload', compact('project')) }}"
+                     data-help="@lang('uploads.help')"></div>
+                <div class="notification is-danger upload-dropzone__error">
+                    <button class="delete" type="button" onclick="document.querySelector('.upload-dropzone__error').classList.remove('active')"></button>
+                    Format not supported.
+                </div>
+            </div>
+            @if ($errors->has('files'))
+                <p class="help is-danger">
+                    {{ $errors->first('files') }}
+                </p>
+            @endif
+        </div>
+
+        {{-- Actions --}}
+        <div class="field is-grouped">
+            <div class="control">
+                <button type="submit" class="button is-primary" disabled>
+                    <span class="icon"><i class="fas fa-plus"></i></span>
+                    <span>@lang('general.create')</span>
+                </button>
+            </div>
+            <div class="control">
+                <a href="{{ route('panel.projects.show', compact('project')) }}" class="button is-light">@lang('general.cancel')</a>
+            </div>
         </div>
 
         @csrf
     </form>
 @endsection
+
+@push('scripts')
+    <script src="{{ asset('js/sample-upload.js') }}"></script>
+@endpush

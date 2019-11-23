@@ -1,0 +1,12 @@
+@mixin icon($code, $font-weight: 900) {
+    content: unquote('\'\\#{$code}\'');
+
+    display: inline-block;
+    font: normal normal normal 14px/1 'Font Awesome 5 Free';
+    font-size: inherit;
+    font-weight: $font-weight;
+    text-rendering: auto;
+
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}

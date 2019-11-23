@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Panel;
 
 use App\Catalog;
+use App\Enums\CatalogStatus;
 use App\Enums\Permissions;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateProjectRequest;
@@ -50,7 +51,7 @@ class ProjectController extends Controller
      */
     public function create()
     {
-        $catalogs = Catalog::all();
+        $catalogs = Catalog::where('status', CatalogStatus::SEALED)->get();
 
         return view('panel.projects.create', compact('catalogs'));
     }
