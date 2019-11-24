@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateSampleRequest;
 use App\Http\Requests\SampleRequest;
 use App\Project;
+use App\Sample;
 use App\Services\ProjectService;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Contracts\View\Factory;
@@ -27,6 +28,21 @@ class SampleController extends Controller
     public function __construct(ProjectService $projectService)
     {
         $this->projectService = $projectService;
+    }
+
+    /**
+     * Sample list for a project.
+     *
+     * @param Project $project
+     * @return Factory|View
+     */
+    public function index(Project $project)
+    {
+        $samples = Sample::withCount('images')
+            ->where('project_id', $project->getKey())
+            ->paginate(config('phyto.pagination_size'));
+
+        return view('panel.projects.samples.index', compact('project', 'samples'));
     }
 
     /**
@@ -52,8 +68,11 @@ class SampleController extends Controller
 
         $validated = $request->validated();
 
-        $sample = $this->projectService->addSampleToProject($validated['name'], $validated['description'],
-            collect($validated['files']), $project);
+        $files = collect($validated['files'])->map(function($file) {
+            return $file->path . $file->name;
+        });
+
+        $sample = $this->projectService->addSampleToProject($validated['name'], $validated['description'], $files, $project);
 
         return redirect()->route('panel.projects.show', compact('project', 'sample'));
     }

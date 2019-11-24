@@ -102,6 +102,9 @@ Route::prefix('panel')->middleware('permission:' . Permissions::PANEL_ACCESS)->g
         Route::post('projects/{project}/users/add', 'Panel\\ProjectController@add_user_store')
             ->name('panel.projects.add_user_store');
 
+        Route::get('projects/{project}/samples/', 'Panel\\SampleController@index')
+            ->name('panel.projects.samples.index');
+
         Route::get('projects/{project}/samples/create', 'Panel\\SampleController@create')
             ->name('panel.projects.samples.create');
 
@@ -112,6 +115,9 @@ Route::prefix('panel')->middleware('permission:' . Permissions::PANEL_ACCESS)->g
 
         Route::post('projects/{project}/samples/upload', 'Panel\\SampleController@upload')
             ->name('panel.projects.samples.upload');
+
+        Route::get('projects/{project}/samples/{sample}/images', 'Panel\\ImageController@index')
+            ->name('panel.projects.images.index');
 
     });
 });

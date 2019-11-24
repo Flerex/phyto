@@ -47,16 +47,22 @@
         <div class="field">
             <label for="catalogs" class="label">@lang('labels.projects.catalogs')</label>
 
-            <div class="control">
-                <div class="select is-multiple is-fullwidth">
-                    <select id="catalogs" name="catalogs[]" multiple size="{{ count($catalogs) }}">
-                        @foreach($catalogs as $catalog)
-                            <option value="{{ $catalog->getKey() }}">{{ $catalog->name }}</option>
-                        @endforeach
-                    </select>
+            @if(count($catalogs))
+                <div class="control">
+                    <div class="select is-multiple is-fullwidth">
+                        <select id="catalogs" name="catalogs[]" multiple size="{{ count($catalogs) }}">
+                            @foreach($catalogs as $catalog)
+                                <option value="{{ $catalog->getKey() }}">{{ $catalog->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
                 </div>
-            </div>
-            <p class="help">@lang('general.multiple_select_help')</p>
+                <p class="help">@lang('general.multiple_select_help')</p>
+            @else
+                <article class="message is-danger">
+                    <div class="message-body">@lang('panel.projects.no_catalogs')</div>
+                </article>
+            @endif
 
             @if ($errors->has('catalogs'))
                 <p class="help is-danger">

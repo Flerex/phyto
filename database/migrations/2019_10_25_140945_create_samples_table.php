@@ -14,10 +14,15 @@ class CreateSamplesTable extends Migration
     public function up()
     {
         Schema::create('samples', function (Blueprint $table) {
-            $table->increments('id');
+            $table->bigIncrements('id');
             $table->string('name');
-            $table->text('description');
+            $table->text('description')->nullable();
+            $table->bigInteger('project_id');
             $table->timestamps();
+
+            $table->foreign('project_id')
+                ->references('id')
+                ->on('projects');
         });
     }
 

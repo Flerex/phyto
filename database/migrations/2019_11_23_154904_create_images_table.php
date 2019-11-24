@@ -17,6 +17,7 @@ class CreateImagesTable extends Migration
             $table->bigIncrements('id');
             $table->bigInteger('sample_id');
             $table->string('path');
+            $table->string('preview_path')->nullable();
             $table->timestamps();
 
             $table->foreign('sample_id')

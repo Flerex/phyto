@@ -46,12 +46,18 @@ return [
         'no_projects' => 'There are no projects.',
         'create_alert' => 'Project “:name“ has been created.',
         'showing_everything_message' => 'Due to your high-ranking permissions you are currently viewing all existing projects.',
-        'add_users' => 'Add users',
+        'add_users' => 'Add members',
+        'no_catalogs' => 'There are no catalogs. Create one before being able to start a new project.',
 
         'samples' => [
             'label' => 'Sample|Samples',
             'create' => 'Add new sample',
             'feedback' => 'Current project is “:project”',
+            'no_samples' => 'No samples',
+        ],
+
+        'images' => [
+            'label' => 'Image|Images',
         ],
     ],
 
