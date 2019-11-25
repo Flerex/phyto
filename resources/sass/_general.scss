@@ -167,3 +167,53 @@
     }
 
 }
+
+.blocks {
+    display: flex;
+
+    .block {
+        margin-bottom: 0;
+        text-align: center;
+        padding: 2.5em;
+    }
+
+    .block__value {
+        font-size: 2em;
+        font-weight: bold;
+    }
+
+    .block__label {
+        text-transform: uppercase;
+        font-size: .85em;
+        letter-spacing: 1px;
+    }
+
+    .block:not(:last-child) {
+        margin-right: 2rem;
+    }
+}
+
+
+.definitions {
+
+    .definition {
+        display: flex;
+
+        &:not(:last-child) {
+            margin-bottom: .85em;
+        }
+    }
+
+    .definition__label {
+        flex: 1;
+        font-weight: bold;
+
+        &::after {
+            content: ': ';
+        }
+    }
+
+    .definition__value {
+        flex: 4;
+    }
+}

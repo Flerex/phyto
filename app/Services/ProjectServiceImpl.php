@@ -30,24 +30,17 @@ class ProjectServiceImpl implements ProjectService
      * @param Collection $users
      * @return Project
      */
-    public function createProject(
-        string $name,
-        string $description,
-        int $manager_id,
-        Collection $catalogs,
-        Collection $users
-    ): Project {
+    public function createProject(string $name, string $description, int $manager_id, Collection $catalogs,
+        Collection $users): Project {
 
-        $project = new Project;
-
-        $project->fill([
+        $project = Project::create([
             'name' => $name,
             'description' => $description,
             'user_id' => $manager_id,
         ]);
+
         $project->users()->attach($users);
         $project->catalogs()->attach($catalogs);
-        $project->save();
 
         return $project;
     }

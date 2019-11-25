@@ -17,14 +17,18 @@ class Project extends Model
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function users() {
-        return $this->belongsToMany(User::class);
+        return $this->belongsToMany(User::class)->withPivot('active')->withTimestamps();
     }
 
     public function catalogs() {
-        return $this->belongsToMany(Catalog::class);
+        return $this->belongsToMany(Catalog::class)->withTimestamps();
     }
 
     public function manager() {
         return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function samples() {
+        return $this->hasMany(Sample::class);
     }
 }

@@ -33,6 +33,11 @@
                     {{ trans_choice('panel.projects.samples.label', 0) }}
                 </a>
             </li>
+            <li @if(Str::startsWith(Route::currentRouteName(), 'panel.projects.members.index'))class="is-active"@endif>
+                <a href="{{ route('panel.projects.members.index', compact('project')) }}">
+                    {{ trans_choice('panel.projects.members.label', 0) }}
+                </a>
+            </li>
         </ul>
     </div>
 

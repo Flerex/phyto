@@ -60,6 +60,14 @@ return [
             'label' => 'Image|Images',
             'normalizing_in_progress' => 'There are images currently being processed. Please come back later.',
         ],
+
+        'members' => [
+            'label' => 'Member|Members',
+            'empty' => 'There are no members in this project.',
+            'disable' => 'Disable member',
+            'enable' => 'Enable member',
+            'added_on' => 'Added on',
+        ]
     ],
 
     'label' => [

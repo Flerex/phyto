@@ -6,6 +6,7 @@ use App\Catalog;
 use App\Enums\CatalogStatus;
 use App\Enums\Permissions;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\AddUserToProjectRequest;
 use App\Http\Requests\CreateProjectRequest;
 use App\Project;
 use App\Services\ProjectService;
@@ -85,7 +86,11 @@ class ProjectController extends Controller
      */
     public function show(Project $project)
     {
-        return view('panel.projects.show', compact('project'));
+        $stats = (object) [
+            'totalMembers' => $project->users()->count(),
+            'totalSamples' => $project->samples()->count(),
+        ];
+        return view('panel.projects.show', compact('project', 'stats'));
     }
 
     /**
@@ -137,11 +142,9 @@ class ProjectController extends Controller
     }
 
 
-    public function add_user_store(Project $project, Request $request)
+    public function add_user_store(Project $project, AddUserToProjectRequest $request)
     {
-        $validated = $request->validate([
-            'users' => ['required', 'array', 'min:1', 'exists:users,id'],
-        ]);
+        $validated = $request->validated();
 
         $alreadyAdded = $project->users
             ->push($project->manager)

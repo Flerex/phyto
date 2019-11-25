@@ -119,6 +119,12 @@ Route::prefix('panel')->middleware('permission:' . Permissions::PANEL_ACCESS)->g
         Route::get('projects/{project}/samples/{sample}/images', 'Panel\\ImageController@index')
             ->name('panel.projects.images.index');
 
+        Route::get('projects/{project}/members', 'Panel\\MemberController@index')
+            ->name('panel.projects.members.index');
+
+        Route::post('projects/{project}/members/{member}/change-status', 'Panel\\MemberController@change_status')
+            ->name('panel.projects.members.change_status');
+
     });
 });
 
