@@ -14,7 +14,7 @@ class Sample extends Model
     protected $fillable = ['name', 'description', 'project_id'];
 
     public const VALIDATION_RULES = [
-        'name' => ['required', 'string', 'min:3'],
+        'name' => ['required', 'string', 'min:3', 'unique:samples'],
         'description' => ['string', 'min:3'],
         'files' => ['required', 'array'],
         'files[]' => ['json'],

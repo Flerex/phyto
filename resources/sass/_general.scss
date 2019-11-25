@@ -157,3 +157,13 @@
         display: block;
     }
 }
+
+.notification.has-icon {
+    display: flex;
+    align-items: center;
+
+    .notification__icon {
+        margin-right: 1rem;
+    }
+
+}

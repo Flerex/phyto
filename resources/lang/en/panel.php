@@ -58,6 +58,7 @@ return [
 
         'images' => [
             'label' => 'Image|Images',
+            'normalizing_in_progress' => 'There are images currently being processed. Please come back later.',
         ],
     ],
 

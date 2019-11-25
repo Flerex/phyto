@@ -40,6 +40,7 @@ class SampleController extends Controller
     {
         $samples = Sample::withCount('images')
             ->where('project_id', $project->getKey())
+            ->latest()
             ->paginate(config('phyto.pagination_size'));
 
         return view('panel.projects.samples.index', compact('project', 'samples'));
@@ -74,7 +75,7 @@ class SampleController extends Controller
 
         $sample = $this->projectService->addSampleToProject($validated['name'], $validated['description'], $files, $project);
 
-        return redirect()->route('panel.projects.show', compact('project', 'sample'));
+        return redirect()->route('panel.projects.images.index', compact('project', 'sample'));
     }
 
     /**
