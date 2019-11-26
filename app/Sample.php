@@ -11,11 +11,14 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  */
 class Sample extends Model
 {
-    protected $fillable = ['name', 'description', 'project_id'];
+    protected $fillable = ['name', 'description', 'project_id', 'taken_on'];
+
+    protected $dates = ['created_at', 'updated_at', 'taken_on'];
 
     public const VALIDATION_RULES = [
         'name' => ['required', 'string', 'min:3', 'unique:samples'],
         'description' => ['string', 'min:3'],
+        'taken_on' => ['required', 'date'],
         'files' => ['required', 'array'],
         'files[]' => ['json'],
     ];

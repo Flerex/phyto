@@ -1,7 +1,5 @@
 import React, {Component} from 'react'
 import ReactDOM from 'react-dom'
-import TreeView from './TreeView'
-import styles from '../../sass/components/HierarchySelector.scss'
 import AsyncSelect from 'react-select/lib/Async';
 
 

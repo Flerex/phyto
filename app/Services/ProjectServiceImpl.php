@@ -8,6 +8,7 @@ use App\Image;
 use App\Jobs\NormalizeImagePreview;
 use App\Project;
 use App\Sample;
+use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
@@ -45,24 +46,27 @@ class ProjectServiceImpl implements ProjectService
         return $project;
     }
 
+
     /**
      * @param string $name
      * @param string $description
+     * @param Carbon $takenOn
      * @param Collection $files
      * @param Project $project
      * @return Sample
      * @throws Throwable
      */
-    public function addSampleToProject(string $name, string $description, Collection $files, Project $project): Sample
+    public function addSampleToProject(string $name, string $description, Carbon $takenOn, Collection $files, Project $project): Sample
     {
 
-        return DB::transaction(function () use ($project, $description, $name, $files) {
+        return DB::transaction(function () use ($takenOn, $project, $description, $name, $files) {
 
             [$packages, $files] = $this->filterFilesByType($files);
 
             $sample = Sample::create([
                 'name' => $name,
                 'description' => $description,
+                'taken_on' => $takenOn,
                 'project_id' => $project->getKey(),
             ]);
 

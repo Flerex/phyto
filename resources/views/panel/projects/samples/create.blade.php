@@ -45,6 +45,21 @@
             @endif
         </div>
 
+        {{-- Taken on --}}
+        <div class="field">
+            <label for="description" class="label">@lang('labels.samples.taken_on')</label>
+
+            <div class="control">
+                <input class="input" type="date" name="taken_on" value="{{ \Carbon\Carbon::now()->format('Y-m-d') }}">
+            </div>
+
+            @if ($errors->has('taken_on'))
+                <p class="help is-danger">
+                    {{ $errors->first('taken_on') }}
+                </p>
+            @endif
+        </div>
+
 
         {{-- Batch upload field --}}
         <div class="field">

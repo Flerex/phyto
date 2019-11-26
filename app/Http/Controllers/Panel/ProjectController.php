@@ -70,7 +70,7 @@ class ProjectController extends Controller
         $currentUser = Auth::user();
 
         $filteredUsers = collect($validated['users'])->diff(collect($currentUser->getKey()));
-        
+
         $project = $this->projectService->createProject($validated['name'], $validated['description'],
             $currentUser->getKey(), collect($validated['catalogs']), $filteredUsers);
 

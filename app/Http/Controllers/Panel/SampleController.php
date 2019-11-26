@@ -8,6 +8,7 @@ use App\Http\Requests\SampleRequest;
 use App\Project;
 use App\Sample;
 use App\Services\ProjectService;
+use Carbon\Carbon;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\JsonResponse;
@@ -73,7 +74,9 @@ class SampleController extends Controller
             return $file->path . $file->name;
         });
 
-        $sample = $this->projectService->addSampleToProject($validated['name'], $validated['description'], $files, $project);
+        $takenOn = Carbon::parse($validated['taken_on']);
+
+        $sample = $this->projectService->addSampleToProject($validated['name'], $validated['description'], $takenOn, $files, $project);
 
         return redirect()->route('panel.projects.images.index', compact('project', 'sample'));
     }

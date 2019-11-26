@@ -7,6 +7,7 @@
             <thead>
                 <th>@lang('labels.name')</th>
                 <th>@lang('labels.description')</th>
+                <th>@lang('labels.samples.taken_on')</th>
                 <th>{{ trans_choice('panel.projects.images.label', 0) }}</th>
             </thead>
 
@@ -15,6 +16,7 @@
                 <tr>
                     <td><a href="{{ route('panel.projects.images.index', compact('project', 'sample')) }}">{{ $sample->name }}</a></td>
                     <td>{{ $sample->description }}</td>
+                    <td>{{ $sample->taken_on->format(trans('general.date_format')) }}</td>
                     <td>{{ $sample->images_count }}</td>
                 </tr>
             @endforeach

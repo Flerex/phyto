@@ -17,6 +17,7 @@ class CreateSamplesTable extends Migration
             $table->bigIncrements('id');
             $table->string('name');
             $table->text('description')->nullable();
+            $table->date('taken_on');
             $table->bigInteger('project_id');
             $table->timestamps();
 

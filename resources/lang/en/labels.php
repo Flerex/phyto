@@ -35,4 +35,8 @@ return [
         'manager' => 'Manager',
         'members' => 'Members',
     ],
+
+    'samples' => [
+        'taken_on' => 'Taken on',
+    ],
 ];

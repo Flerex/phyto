@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'date_format' => 'm/d/Y',
 
     'cancel' => 'Cancel',
     'create' => 'Create',
