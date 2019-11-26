@@ -67,9 +67,12 @@ class ProjectController extends Controller
     {
         $validated = $request->validated();
 
+        $currentUser = Auth::user();
+
+        $filteredUsers = collect($validated['users'])->diff(collect($currentUser->getKey()));
+        
         $project = $this->projectService->createProject($validated['name'], $validated['description'],
-            Auth::user()->getKey(),
-            collect($validated['catalogs']), collect($validated['users']));
+            $currentUser->getKey(), collect($validated['catalogs']), $filteredUsers);
 
         return redirect()
             ->route('panel.projects.index')
@@ -150,14 +153,11 @@ class ProjectController extends Controller
             ->push($project->manager)
             ->pluck('id');
 
-        $filteredUsers = collect($validated['users'])->filter(function ($id) use ($alreadyAdded) {
-            return !$alreadyAdded->contains($id);
-        });
 
-        // fixme: filtering not working
+        $filteredUsers = collect($validated['users'])->diff($alreadyAdded);
 
         $project->users()->attach($filteredUsers);
 
-        return redirect()->route('panel.projects.show', compact('project'));
+        return redirect()->route('panel.projects.members.index', compact('project'));
     }
 }

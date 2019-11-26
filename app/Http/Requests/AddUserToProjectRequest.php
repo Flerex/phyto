@@ -23,8 +23,12 @@ class AddUserToProjectRequest extends FormRequest
      */
     public function rules()
     {
+
+        $project = $this->route('project');
+
         return [
-            'users' => ['required', 'array', 'min:1', 'exists:users,id', 'unique:project_user'],
+            'users' => ['required', 'array', 'min:1'],
+            'users[]' => ['exists:users,id', 'unique:project_user,user_id'],
         ];
     }
 }

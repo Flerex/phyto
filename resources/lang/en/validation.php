@@ -129,10 +129,14 @@ return [
     */
 
     'custom' => [
+        'users' => [
+            'unique' => 'The provided users are not new.',
+            'empty_not_manager' => 'You must provide at least a user to be a member of this project and they cannot be yourself.',
+        ],
+        'unreachable' => 'Passed data is not valid and was not expected.',
         'attribute-name' => [
             'rule-name' => 'custom-message',
         ],
-        'unreachable' => 'Passed data is not valid and was not expected.',
     ],
 
     /*
