@@ -1,6 +1,8 @@
 @extends('panel.projects.partials.layout')
 
 @section('project_content')
+    <h1 class="title is-4" style="margin-bottom: 0">{{ $sample->name }}</h1>
+    <p style="margin-bottom: 1rem;">{{ $sample->description }}</p>
     @if(count($images) !== $totalImages)
         <div class="notification is-warning has-icon">
             <div class="notification__icon">
@@ -14,8 +16,6 @@
             </div>
         </div>
     @endif
-    <h1 class="title is-4" style="margin-bottom: 0">{{ $sample->name }}</h1>
-    <p style="margin-bottom: 1rem;">{{ $sample->description }}</p>
     <div class="columns is-multiline is-3">
         @foreach($images as $image)
             <div class="column is-6">

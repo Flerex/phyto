@@ -3,8 +3,18 @@
 namespace App\Providers;
 
 use App\Catalog;
+use App\Enums\Permissions;
+use App\Enums\Roles;
+use App\Image;
 use App\Policies\CatalogPolicy;
+use App\Policies\ImagePolicy;
+use App\Policies\ProjectPolicy;
+use App\Policies\SamplePolicy;
+use App\Project;
+use App\Sample;
+use App\User;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use Illuminate\Support\Facades\Gate;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -16,6 +26,9 @@ class AuthServiceProvider extends ServiceProvider
     protected $policies = [
         // 'App\Model' => 'App\Policies\ModelPolicy',
         Catalog::class => CatalogPolicy::class,
+        Project::class => ProjectPolicy::class,
+        Sample::class => SamplePolicy::class,
+        Image::class => ImagePolicy::class,
     ];
 
     /**

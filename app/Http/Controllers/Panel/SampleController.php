@@ -2,13 +2,16 @@
 
 namespace App\Http\Controllers\Panel;
 
+use App\Enums\Permissions;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateSampleRequest;
 use App\Http\Requests\SampleRequest;
 use App\Project;
 use App\Sample;
 use App\Services\ProjectService;
+use App\User;
 use Carbon\Carbon;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\JsonResponse;
@@ -31,14 +34,25 @@ class SampleController extends Controller
         $this->projectService = $projectService;
     }
 
+    public function before(User $user, $ability)
+    {
+        if ($user->can(Permissions::MANAGE_ALL_PROJECTS)) {
+            return true;
+        }
+    }
+
     /**
      * Sample list for a project.
      *
      * @param Project $project
      * @return Factory|View
+     * @throws AuthorizationException
      */
     public function index(Project $project)
     {
+
+        $this->authorize('viewAny', [Sample::class, $project]);
+
         $samples = Sample::withCount('images')
             ->where('project_id', $project->getKey())
             ->latest()
@@ -52,9 +66,12 @@ class SampleController extends Controller
      *
      * @param Project $project
      * @return Factory|View
+     * @throws AuthorizationException
      */
     public function create(Project $project)
     {
+        $this->authorize('create', [Sample::class, $project]);
+
         return view('panel.projects.samples.create', compact('project'));
     }
 
@@ -64,9 +81,11 @@ class SampleController extends Controller
      * @param Project $project
      * @param SampleRequest $request
      * @return string
+     * @throws AuthorizationException
      */
     public function store(Project $project, SampleRequest $request)
     {
+        $this->authorize('create', [Sample::class, $project]);
 
         $validated = $request->validated();
 

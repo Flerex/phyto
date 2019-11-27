@@ -21,9 +21,7 @@ class RolesTableSeeder extends Seeder
 
         // Tagger permissions
 
-
         // Manager permissions
-        $manager->givePermissionTo(Permissions::PANEL_ACCESS);
         $manager->givePermissionTo(Permissions::PROJECT_MANAGEMENT);
 
         $manager->givePermissionTo($tagger->getAllPermissions());

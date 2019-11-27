@@ -10,7 +10,9 @@ use App\Http\Requests\AddUserToProjectRequest;
 use App\Http\Requests\CreateProjectRequest;
 use App\Project;
 use App\Services\ProjectService;
+use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 
 class ProjectController extends Controller
@@ -29,7 +31,7 @@ class ProjectController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function index()
     {
@@ -48,7 +50,7 @@ class ProjectController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function create()
     {
@@ -60,8 +62,8 @@ class ProjectController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
+     * @param CreateProjectRequest $request
+     * @return Response
      */
     public function store(CreateProjectRequest $request)
     {
@@ -85,49 +87,18 @@ class ProjectController extends Controller
      * Display the specified resource.
      *
      * @param \App\Project $project
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function show(Project $project)
     {
+
+        $this->authorize('view', $project);
+
         $stats = (object) [
             'totalMembers' => $project->users()->count(),
             'totalSamples' => $project->samples()->count(),
         ];
         return view('panel.projects.show', compact('project', 'stats'));
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param \App\Project $project
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Project $project)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @param \App\Project $project
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Project $project)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param \App\Project $project
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Project $project)
-    {
-        //
     }
 
 
@@ -136,10 +107,11 @@ class ProjectController extends Controller
      *
      * @param Project $project
      * @return string
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function add_user(Project $project)
     {
-        // Fixme: Should only be accessible by project managers.
+        $this->authorize('add_user', $project);
 
         return view('panel.projects.add-user', compact('project'));
     }
@@ -147,6 +119,8 @@ class ProjectController extends Controller
 
     public function add_user_store(Project $project, AddUserToProjectRequest $request)
     {
+        $this->authorize('view', $project);
+
         $validated = $request->validated();
 
         $alreadyAdded = $project->users
@@ -159,5 +133,12 @@ class ProjectController extends Controller
         $project->users()->attach($filteredUsers);
 
         return redirect()->route('panel.projects.members.index', compact('project'));
+    }
+
+    public function before(User $user, $ability)
+    {
+        if ($user->can(Permissions::MANAGE_ALL_PROJECTS)) {
+            return true;
+        }
     }
 }
