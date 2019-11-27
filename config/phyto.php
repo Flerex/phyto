@@ -33,7 +33,7 @@ return [
     | to resend a new email.
     |
     */
-    'email_verification_time' => 1, // days
+    'email_verification_time' => 2, // days
 
 
     /*
