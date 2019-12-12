@@ -9,9 +9,9 @@
     "license": "MIT",
     "require": {
         "php": "^7.2",
-        "ext-imagick": "*",
         "ext-json": "*",
         "ext-zip": "*",
+        "ext-imagick": "*",
         "fideloper/proxy": "^4.0",
         "guzzlehttp/guzzle": "^6.4",
         "intervention/image": "^2.5",
@@ -23,8 +23,7 @@
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.2",
-        "beyondcode/laravel-dump-server": "^1.0",
-        "filp/whoops": "^2.0",
+        "facade/ignition": "^1.13",
         "fzaninotto/faker": "^1.4",
         "mockery/mockery": "^1.0",
         "nunomaduro/collision": "^3.0",
