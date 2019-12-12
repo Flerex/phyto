@@ -11,9 +11,12 @@ use App\Http\Requests\CreateProjectRequest;
 use App\Project;
 use App\Services\ProjectService;
 use App\User;
-use Illuminate\Http\Request;
+use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\View\View;
 
 class ProjectController extends Controller
 {
@@ -31,7 +34,7 @@ class ProjectController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return Response
+     * @return Factory|View
      */
     public function index()
     {
@@ -50,7 +53,7 @@ class ProjectController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return Response
+     * @return Factory|View
      */
     public function create()
     {
@@ -63,7 +66,7 @@ class ProjectController extends Controller
      * Store a newly created resource in storage.
      *
      * @param CreateProjectRequest $request
-     * @return Response
+     * @return RedirectResponse
      */
     public function store(CreateProjectRequest $request)
     {
@@ -87,11 +90,11 @@ class ProjectController extends Controller
      * Display the specified resource.
      *
      * @param \App\Project $project
-     * @return Response
+     * @return Factory|View
+     * @throws AuthorizationException
      */
     public function show(Project $project)
     {
-
         $this->authorize('view', $project);
 
         $stats = (object) [
@@ -107,7 +110,7 @@ class ProjectController extends Controller
      *
      * @param Project $project
      * @return string
-     * @throws \Illuminate\Auth\Access\AuthorizationException
+     * @throws AuthorizationException
      */
     public function add_user(Project $project)
     {

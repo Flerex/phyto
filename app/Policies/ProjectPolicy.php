@@ -22,7 +22,7 @@ class ProjectPolicy
     }
 
 
-    public function show(User $user, Project $project)
+    public function view(User $user, Project $project)
     {
         return $user->getKey() === $project->manager->getKey();
     }
