@@ -56,14 +56,17 @@ class UserServiceTest extends TestCase
     }
 
     /**
-     * @ignore Test the creation of a user through the createUser() method
+     * @test Test the creation of a user through the createUser() method
      */
     public function user_creation()
     {
         Event::fake();
 
+        // Get the role model
+        $role = Role::findByName(Roles::TAGGER);
+
         // Create a user
-        $id = $this->userService->createUser(static::TESTING_USER_NAME, static::TESTING_USER_EMAIL, Roles::TAGGER);
+        $id = $this->userService->createUser(static::TESTING_USER_NAME, static::TESTING_USER_EMAIL, $role);
 
         Event::dispatched(Registered::class);
 
@@ -74,20 +77,6 @@ class UserServiceTest extends TestCase
         $this->assertEquals(static::TESTING_USER_NAME, $user->name);
         $this->assertEquals(static::TESTING_USER_EMAIL, $user->email);
         $this->assertTrue($user->hasRole(Roles::TAGGER));
-
-    }
-
-    /**
-     * @ignore Test the creation of a user with an invalid role name
-     */
-    public function user_creation_throws_exception_if_wrong_role_name_is_passed()
-    {
-        $this->expectException(\InvalidArgumentException::class);
-
-        Event::fake();
-
-        // Create a user
-        $id = $this->userService->createUser(static::TESTING_USER_NAME, static::TESTING_USER_EMAIL, static::INVALID_ROLE_NAME);
 
     }
 
@@ -110,7 +99,7 @@ class UserServiceTest extends TestCase
     }
 
     /**
-     * @ignore Test the reset process of a user's password
+     * @test Test the reset process of a user's password
      */
     public function reset_a_users_password()
     {
