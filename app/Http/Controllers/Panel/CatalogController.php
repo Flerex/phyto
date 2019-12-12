@@ -33,8 +33,8 @@ class CatalogController extends Controller
             'order' => ['sometimes', 'string', Rule::in('asc', 'desc')],
         ]);
 
-        $sortBy = isset($validated['sortBy']) ? $validated['sortBy'] : '';
-        $order = isset($validated['order']) ? $validated['order'] : '';
+        $sortBy = isset($validated['sortBy']) ? $validated['sortBy'] : null;
+        $order = isset($validated['order']) ? $validated['order'] : null;
 
         $catalogs = Catalog::orderBy($sortBy ?? 'id', $order ?? 'desc')->paginate(config('phyto.pagination_size'));
 

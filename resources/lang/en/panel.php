@@ -40,10 +40,41 @@ return [
         'destroy_warning' => 'Are you sure you want to destroy this catalog?',
     ],
 
+    'projects' => [
+        'management' => 'Projects management',
+        'create' => 'Start new project',
+        'no_projects' => 'There are no projects.',
+        'create_alert' => 'Project “:name“ has been created.',
+        'showing_everything_message' => 'Due to your high-ranking permissions you are currently viewing all existing projects.',
+        'add_users' => 'Add members',
+        'no_catalogs' => 'There are no catalogs. Create one before being able to start a new project.',
+
+        'samples' => [
+            'label' => 'Sample|Samples',
+            'create' => 'Add new sample',
+            'feedback' => 'Current project is “:project”',
+            'no_samples' => 'No samples',
+        ],
+
+        'images' => [
+            'label' => 'Image|Images',
+            'normalizing_in_progress' => 'There are images currently being processed. Please come back later.',
+        ],
+
+        'members' => [
+            'label' => 'Member|Members',
+            'empty' => 'There are no members in this project.',
+            'disable' => 'Disable member',
+            'enable' => 'Enable member',
+            'added_on' => 'Added on',
+        ]
+    ],
+
     'label' => [
         'users' => 'Users',
         'catalogs_species' => 'Catalogs & Species',
         'species' => 'Species',
         'catalogs' => 'Catalogs',
+        'projects' => 'Projects',
     ],
 ];

@@ -9,9 +9,6 @@
 
     <title>{{ config('app.name') }}</title>
 
-    <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}" defer></script>
-
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 </head>
@@ -24,6 +21,8 @@
     </section>
     @include('partials.flash')
 
+    <!-- Scripts -->
+    <script src="{{ asset('js/app.js') }}"></script>
     @stack('scripts')
 </body>
 </html>

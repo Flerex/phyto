@@ -11,17 +11,13 @@
 |
 */
 
-use App\Utils\Permissions;
+use App\Enums\Permissions;
 
 
 /*
  * Home
  */
-Route::get('/', function () {
-    return view('welcome');
-});
-
-Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/', 'HomeController@index')->name('home');
 
 
 /*
@@ -86,6 +82,50 @@ Route::prefix('panel')->middleware('permission:' . Permissions::PANEL_ACCESS)->g
         Route::post('{catalog}/restore', 'Panel\\CatalogController@restore')
             ->name('panel.catalogs.restore');
     });
+
+    /*
+     * Project management
+     */
+    Route::middleware('permission:' . Permissions::PROJECT_MANAGEMENT)->group(function () {
+        Route::resource('projects', 'Panel\ProjectController')
+            ->only(['index', 'create', 'store', 'show'])
+            ->names([
+                'index' => 'panel.projects.index',
+                'create' => 'panel.projects.create',
+                'store' => 'panel.projects.store',
+                'show' => 'panel.projects.show',
+            ]);
+
+        Route::get('projects/{project}/users/add', 'Panel\\ProjectController@add_user')
+            ->name('panel.projects.add_user');
+
+        Route::post('projects/{project}/users/add', 'Panel\\ProjectController@add_user_store')
+            ->name('panel.projects.add_user_store');
+
+        Route::get('projects/{project}/samples/', 'Panel\\SampleController@index')
+            ->name('panel.projects.samples.index');
+
+        Route::get('projects/{project}/samples/create', 'Panel\\SampleController@create')
+            ->name('panel.projects.samples.create');
+
+        Route::post('projects/{project}/samples/create', 'Panel\\SampleController@store')
+            ->name('panel.projects.samples.store');
+
+        Route::get('projects/{project}/samples/upload', 'Panel\\SampleController@checkChunk');
+
+        Route::post('projects/{project}/samples/upload', 'Panel\\SampleController@upload')
+            ->name('panel.projects.samples.upload');
+
+        Route::get('projects/{project}/samples/{sample}/images', 'Panel\\ImageController@index')
+            ->name('panel.projects.images.index');
+
+        Route::get('projects/{project}/members', 'Panel\\MemberController@index')
+            ->name('panel.projects.members.index');
+
+        Route::post('projects/{project}/members/{member}/change-status', 'Panel\\MemberController@change_status')
+            ->name('panel.projects.members.change_status');
+
+    });
 });
 
 
@@ -94,18 +134,26 @@ Route::prefix('panel')->middleware('permission:' . Permissions::PANEL_ACCESS)->g
  */
 
 Route::prefix('async')->group(function () {
-    Route::get('/species', 'AsynchronousController@species') // TODO: No permissions because taggers might use this API call?
-        ->name('async.species');
+    Route::get('/species',
+        'AsynchronousController@species')// TODO: No permissions because taggers might use this API call?
+    ->name('async.species');
 
 
-    Route::middleware('permission:' . Permissions::SPECIES_MANAGEMENT . ',' . Permissions::CATALOG_MANAGEMENT)->group(function () {
-        Route::post('/hierarchy/add', 'AsynchronousController@add_to_hierarchy')
-            ->name('async.add_to_hierarchy');
-        Route::post('/hierarchy/edit', 'AsynchronousController@edit_node')
-            ->name('async.edit_node');
-        Route::get('/catalogs/{catalog}/edit', 'AsynchronousController@edit_catalog')
-            ->name('async.edit_catalog');
-    });
+    Route::middleware('permission:' . Permissions::SPECIES_MANAGEMENT . ',' . Permissions::CATALOG_MANAGEMENT)
+        ->group(function () {
+            Route::post('/hierarchy/add', 'AsynchronousController@add_to_hierarchy')
+                ->name('async.add_to_hierarchy');
+            Route::post('/hierarchy/edit', 'AsynchronousController@edit_node')
+                ->name('async.edit_node');
+            Route::get('/catalogs/{catalog}/edit', 'AsynchronousController@edit_catalog')
+                ->name('async.edit_catalog');
+        });
+
+    Route::middleware('permission:' . Permissions::PANEL_ACCESS)
+        ->group(function () {
+            Route::get('/users/search', 'AsynchronousController@search_users')
+                ->name('async.search_users');
+        });
 
 
 });

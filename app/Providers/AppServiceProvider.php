@@ -4,6 +4,8 @@ namespace App\Providers;
 
 use App\Services\CatalogService;
 use App\Services\CatalogServiceImpl;
+use App\Services\ProjectService;
+use App\Services\ProjectServiceImpl;
 use App\Services\UserService;
 use App\Services\UserServiceImpl;
 use Illuminate\Pagination\Paginator;
@@ -33,5 +35,6 @@ class AppServiceProvider extends ServiceProvider
         // Bind implementation to interface in order for the kernel's IoC to work
         $this->app->bind(UserService::class, UserServiceImpl::class);
         $this->app->bind(CatalogService::class, CatalogServiceImpl::class);
+        $this->app->bind(ProjectService::class, ProjectServiceImpl::class);
     }
 }

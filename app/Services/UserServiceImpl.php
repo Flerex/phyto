@@ -4,7 +4,7 @@ namespace App\Services;
 
 
 use App\User;
-use App\Utils\Roles;
+use App\Enums\Roles;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Password;
 use Spatie\Permission\Models\Role;
@@ -22,7 +22,7 @@ class UserServiceImpl implements UserService
      */
     public function createUser(string $name, string $email, Role $role): int
     {
-        if (!Roles::isValid($role)) {
+        if (!Roles::hasValue($role->name)) {
             throw new \InvalidArgumentException();
         }
 
@@ -31,9 +31,9 @@ class UserServiceImpl implements UserService
             'email' => $email,
         ]);
 
-        event(new Registered($user));
-
         $user->assignRole($role);
+
+        event(new Registered($user));
 
         return $user->getKey();
 

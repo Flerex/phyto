@@ -4,7 +4,7 @@ namespace Tests\Feature;
 
 use App\Services\CatalogService;
 use App\User;
-use App\Utils\Roles;
+use App\Enums\Roles;
 use Tests\TestCase;
 
 class PanelCatalogTest extends TestCase
