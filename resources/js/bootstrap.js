@@ -23,3 +23,7 @@ if (token) {
 } else {
     console.error('CSRF token not found: https://laravel.com/docs/csrf#csrf-x-csrf-token');
 }
+
+window.tippy = require('tippy.js');
+
+window.Resumable = require('resumablejs')

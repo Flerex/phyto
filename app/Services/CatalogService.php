@@ -8,7 +8,7 @@ use App\Exceptions\CatalogStatusException;
 use Illuminate\Support\Collection;
 
 /**
- * Interface UserService
+ * Interface CatalogService
  * @package App\Services
  */
 interface CatalogService

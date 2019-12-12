@@ -11,7 +11,7 @@
         <div class="level-right">
             <div class="level-item">
                 <a href="{{ route('panel.catalogs.create') }}" class="button is-primary is-pulled-right">
-                    <span class="icon is-left"><i class="fas fa-user-plus"></i></span>
+                    <span class="icon is-left"><i class="fas fa-book"></i></span>
                     <span>@lang('panel.catalogs.create')</span>
                 </a>
             </div>

@@ -1,11 +1,23 @@
 @extends('panel.master')
 
 @section('panel_content')
-    <h1 class="title">@lang('panel.label.users')</h1>
-    <a href="{{ route('panel.users.create') }}" class="button is-primary is-pulled-right">
-        <span class="icon is-left"><i class="fas fa-user-plus"></i></span>
-        <span>@lang('panel.users.create')</span>
-    </a>
+    <div class="level">
+        <div class="level-left">
+            <div class="level-item">
+                <h1 class="title">@lang('panel.label.users')</h1>
+            </div>
+        </div>
+        <div class="level-right">
+            <div class="level-item">
+                <a href="{{ route('panel.users.create') }}" class="button is-primary is-pulled-right">
+                    <span class="icon is-left"><i class="fas fa-user-plus"></i></span>
+                    <span>@lang('panel.users.create')</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+
     <table class="table is-fullwidth">
         <thead>
         <th>@lang('labels.id')</th>

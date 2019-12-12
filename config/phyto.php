@@ -10,7 +10,7 @@ return [
     | The default role used when creating a new user.
     |
     */
-    'default_role' => App\Utils\Roles::TAGGER,
+    'default_role' => App\Enums\Roles::TAGGER,
 
 
     /*
@@ -33,6 +33,31 @@ return [
     | to resend a new email.
     |
     */
-    'email_verification_time' => 1, // days
+    'email_verification_time' => 2, // days
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Valid sample mimes
+    |--------------------------------------------------------------------------
+    |
+    | Valid MIMEs for the files that a user can upload. There are two types
+    | of valid MIMEs, those of type “file”, which correspond to image files
+    | (e.g. PNG, JPG, TIFF…) uploaded directly or “package” files, which are
+    | files that can contain other files (e.g. ZIP, TAR…).
+    |
+    */
+    'valid_sample_mimes' => [
+        'file' => [
+            'image/tiff',
+            'image/jpeg',
+            'image/png',
+        ],
+        'package' => [
+            'application/x-compressed',
+            'application/x-zip-compressed',
+            'application/zip',
+        ],
+    ],
 
 ];

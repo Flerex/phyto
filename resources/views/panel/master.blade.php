@@ -6,7 +6,7 @@
             <p class="menu-label">@lang('panel.label.users')</p>
             <ul class="menu-list">
                 <li>
-                    <a href="{{ route('panel.users.index') }}"@if(substr(Route::currentRouteName(), 0, 12) == 'panel.users.') class="is-active"@endif>
+                    <a href="{{ route('panel.users.index') }}"@if(Str::startsWith(Route::currentRouteName(), 'panel.users.')) class="is-active"@endif>
                         @lang('panel.users.management')
                     </a>
                 </li>
@@ -14,14 +14,12 @@
             {{-- TODO: remove harcoded translations & add routes --}}
             <p class="menu-label">@lang('panel.label.catalogs_species')</p>
             <ul class="menu-list">
-                <li><a href="{{ route('panel.catalogs.index') }}"@if(substr(Route::currentRouteName(), 0, 15) == 'panel.catalogs.') class="is-active"@endif>@lang('panel.catalogs.management')</a></li>
-                <li><a href="{{ route('panel.species.index') }}"@if(substr(Route::currentRouteName(), 0, 14) == 'panel.species.') class="is-active"@endif>@lang('panel.species.management')</a></li>
+                <li><a href="{{ route('panel.catalogs.index') }}"@if(Str::startsWith(Route::currentRouteName(), 'panel.catalogs.')) class="is-active"@endif>@lang('panel.catalogs.management')</a></li>
+                <li><a href="{{ route('panel.species.index') }}"@if(Str::startsWith(Route::currentRouteName(), 'panel.species.')) class="is-active"@endif>@lang('panel.species.management')</a></li>
             </ul>
-            <p class="menu-label">Projects</p>
+            <p class="menu-label">@lang('panel.label.projects')</p>
             <ul class="menu-list">
-                {{-- TODO: quizáis deixar aquí a lista de proxectos que o usuario manexe?? --}}
-                <li><a href="#"></a></li>
-                <li><a href="#"></a></li>
+                <li><a href="{{ route('panel.projects.index') }}"@if(Str::startsWith(Route::currentRouteName(), 'panel.projects.')) class="is-active"@endif>@lang('panel.projects.management')</a></li>
             </ul>
         </aside>
         <div class="column">

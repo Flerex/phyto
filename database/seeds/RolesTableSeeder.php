@@ -1,8 +1,8 @@
 <?php
 
 use App\Role;
-use App\Utils\Permissions;
-use App\Utils\Roles;
+use App\Enums\Permissions;
+use App\Enums\Roles;
 use Illuminate\Database\Seeder;
 
 class RolesTableSeeder extends Seeder
@@ -21,14 +21,17 @@ class RolesTableSeeder extends Seeder
 
         // Tagger permissions
 
-
         // Manager permissions
+        $manager->givePermissionTo(Permissions::PROJECT_MANAGEMENT);
+
+        $manager->givePermissionTo($tagger->getAllPermissions());
 
 
         // Supervisor permissions
         $supervisor->givePermissionTo(Permissions::PANEL_ACCESS);
         $supervisor->givePermissionTo(Permissions::SPECIES_MANAGEMENT);
         $supervisor->givePermissionTo(Permissions::CATALOG_MANAGEMENT);
+        $supervisor->givePermissionTo(Permissions::MANAGE_ALL_PROJECTS);
 
         $supervisor->givePermissionTo($manager->getAllPermissions());
         $supervisor->givePermissionTo($tagger->getAllPermissions());

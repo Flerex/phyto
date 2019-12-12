@@ -52,4 +52,26 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         $this->notify(new ResetPasswordNotification($token));
     }
+
+    /**
+     * Defines the relationship that allows to navigate from the user
+     * model to the project the user has been assigned to.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function projects()
+    {
+        return $this->belongsToMany(Project::class);
+    }
+
+    /**
+     * Defines the relationship that allows to navigate from the user
+     * model to the project the user manages.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function managedProjects()
+    {
+        return $this->hasMany(Project::class);
+    }
 }

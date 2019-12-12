@@ -4,7 +4,6 @@ import TreeView from './TreeView'
 import styles from '../../sass/components/HierarchySelector.scss'
 
 
-/* TODO: Export creating/edit modal to its own component */
 export default class HierarchySelector extends Component {
 
 
@@ -327,11 +326,7 @@ export default class HierarchySelector extends Component {
 
         axios.get(url)
             .then(r => {
-
-                console.log(url)
-
                 const data = r.data
-
 
                 this.setState({data, originalData: data})
             })

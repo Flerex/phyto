@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Catalog;
 use App\Domain;
+use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Validator;
 
@@ -13,6 +15,35 @@ class AsynchronousController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+
+    }
+
+    /**
+     * Searches users from a given query.
+     * @param Request $request
+     * @return array
+     */
+    public function search_users(Request $request)
+    {
+
+        $validated = $request->validate([
+            'query' => 'sometimes|string',
+        ]);
+
+        if (!isset($validated['query'])) {
+            return [];
+        }
+
+
+        $users = User::where(DB::raw('LOWER(name)'), 'like',
+            '%' . strtolower($validated['query']) . '%')->limit(15)->get();
+
+        return $users->map(function ($user) {
+            return [
+                'value' => $user->getKey(),
+                'label' => $user->name,
+            ];
+        });
 
     }
 
@@ -32,6 +63,13 @@ class AsynchronousController extends Controller
         ];
     }
 
+    /**
+     * Handles the modification of the data of a node.
+     *
+     * @param Request $request
+     * @return array
+     * @throws \Illuminate\Validation\ValidationException
+     */
     public function edit_node(Request $request)
     {
 
@@ -64,6 +102,13 @@ class AsynchronousController extends Controller
 
     }
 
+    /**
+     * Handles the addition of a node to the hierarchy.
+     *
+     * @param Request $request
+     * @return array
+     * @throws \Illuminate\Validation\ValidationException
+     */
     public function add_to_hierarchy(Request $request)
     {
 
@@ -196,6 +241,12 @@ class AsynchronousController extends Controller
         });
     }
 
+    /**
+     * Obtains the hierarchy tree, specifying which nodes are selected in the catalog.
+     *
+     * @param Catalog $catalog
+     * @return array
+     */
     public function edit_catalog(Catalog $catalog)
     {
 
@@ -238,5 +289,4 @@ class AsynchronousController extends Controller
 
         return $domains;
     }
-
 }
