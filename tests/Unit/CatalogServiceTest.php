@@ -180,6 +180,17 @@ class CatalogServiceTest extends TestCase
 
     }
 
+    public function test_destroy_catalog_without_nodes() {
+
+        $this->expectException(ModelNotFoundException::class);
+
+        $catalog = $this->catalogService->createCatalog(self::CATALOG_NAME, collect());
+
+        $this->catalogService->destroyCatalog($catalog->getKey());
+
+        Catalog::findOrFail($catalog->getKey());
+    }
+
     public function test_only_editing_catalogs_can_be_destroyed() {
 
         $this->expectException(CatalogStatusException::class);

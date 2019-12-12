@@ -22,10 +22,6 @@ class UserServiceImpl implements UserService
      */
     public function createUser(string $name, string $email, Role $role): int
     {
-        if (!Roles::isValid($role)) {
-            throw new \InvalidArgumentException();
-        }
-
         $user = User::create([
             'name' => $name,
             'email' => $email,
