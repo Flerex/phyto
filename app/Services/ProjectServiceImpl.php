@@ -9,16 +9,10 @@ use App\Jobs\NormalizeImagePreview;
 use App\Project;
 use App\Sample;
 use App\Utils\FileUtils;
-use App\Utils\FileUtilsImpl;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\File;
-use Exception;
-use Illuminate\Support\Facades\Storage;
-use Intervention\Image\Facades\Image as ImageManager;
 use Throwable;
-use ZipArchive;
 
 class ProjectServiceImpl implements ProjectService
 {
@@ -41,8 +35,7 @@ class ProjectServiceImpl implements ProjectService
      * @param Collection $users
      * @return Project
      */
-    public function createProject(string $name, string $description, int $manager_id, Collection $catalogs,
-        Collection $users): Project {
+    public function createProject(string $name, string $description, int $manager_id, Collection $catalogs, Collection $users): Project {
 
         $project = Project::create([
             'name' => $name,

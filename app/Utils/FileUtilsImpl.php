@@ -4,13 +4,10 @@
 namespace App\Utils;
 
 
-use App\Image;
-use App\Jobs\NormalizeImagePreview;
 use Exception;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
-use ZipArchive;
 
 class FileUtilsImpl implements FileUtils
 {
