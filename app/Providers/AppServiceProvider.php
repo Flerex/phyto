@@ -8,6 +8,10 @@ use App\Services\ProjectService;
 use App\Services\ProjectServiceImpl;
 use App\Services\UserService;
 use App\Services\UserServiceImpl;
+use App\Utils\FileUtils;
+use App\Utils\FileUtilsImpl;
+use App\Utils\PackageUtils;
+use App\Utils\PackageUtilsImpl;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\ServiceProvider;
 
@@ -36,5 +40,8 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(UserService::class, UserServiceImpl::class);
         $this->app->bind(CatalogService::class, CatalogServiceImpl::class);
         $this->app->bind(ProjectService::class, ProjectServiceImpl::class);
+
+        $this->app->bind(FileUtils::class, FileUtilsImpl::class);
+        $this->app->bind(PackageUtils::class, PackageUtilsImpl::class);
     }
 }
