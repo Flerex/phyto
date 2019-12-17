@@ -26,10 +26,10 @@ interface CatalogService
     /**
      * Updates all data of a Catalog
      *
-     * @param int $id
-     * @param string $name
-     * @param Collection $nodes
-     * @return mixed
+     * @param  int  $catalogId
+     * @param  string  $name
+     * @param  Collection  $nodes
+     * @return Catalog
      */
     public function overrideCatalog(int $catalogId, string $name, Collection $nodes) : Catalog;
 

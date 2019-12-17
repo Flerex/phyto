@@ -3,11 +3,17 @@
 namespace App\Http\Controllers\Panel;
 
 use App\Catalog;
+use App\Exceptions\CatalogStatusException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CatalogRequest;
 use App\Services\CatalogService;
+use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Validation\Rule;
+use Illuminate\View\View;
 
 class CatalogController extends Controller
 {
@@ -24,7 +30,8 @@ class CatalogController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @param  Request  $request
+     * @return Factory|View
      */
     public function index(Request $request)
     {
@@ -44,7 +51,7 @@ class CatalogController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Factory|View
      */
     public function create()
     {
@@ -61,8 +68,8 @@ class CatalogController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
+     * @param  CatalogRequest  $request
+     * @return RedirectResponse
      */
     public function store(CatalogRequest $request)
     {
@@ -84,22 +91,11 @@ class CatalogController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
      * Show the form for editing the specified resource.
      *
      * @param Catalog $catalog
-     * @return \Illuminate\Http\Response
-     * @throws \Illuminate\Auth\Access\AuthorizationException
+     * @return Factory|View
+     * @throws AuthorizationException
      */
     public function edit(Catalog $catalog)
     {
@@ -122,8 +118,8 @@ class CatalogController extends Controller
      *
      * @param CatalogRequest $request
      * @param Catalog $catalog
-     * @return void
-     * @throws \Illuminate\Auth\Access\AuthorizationException
+     * @return RedirectResponse
+     * @throws AuthorizationException
      */
     public function update(CatalogRequest $request, Catalog $catalog)
     {
@@ -142,9 +138,10 @@ class CatalogController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     * @throws \Illuminate\Auth\Access\AuthorizationException
+     * @param  Catalog  $catalog
+     * @return RedirectResponse
+     * @throws AuthorizationException
+     * @throws CatalogStatusException
      */
     public function destroy(Catalog $catalog)
     {
@@ -160,8 +157,8 @@ class CatalogController extends Controller
      * Changes the status of a Catalog to sealed, so it cannot be edited anymore.
      *
      * @param Catalog $catalog
-     * @return \Illuminate\Http\RedirectResponse
-     * @throws \Illuminate\Auth\Access\AuthorizationException
+     * @return RedirectResponse
+     * @throws AuthorizationException
      */
     public function seal(Catalog $catalog)
     {
@@ -175,9 +172,10 @@ class CatalogController extends Controller
     /**
      * Changes the status of a Catalog to obsolete, so it cannot be used anymore.
      *
-     * @param Catalog $catalog
-     * @return \Illuminate\Http\RedirectResponse
-     * @throws \Illuminate\Auth\Access\AuthorizationException
+     * @param  Catalog  $catalog
+     * @return RedirectResponse
+     * @throws AuthorizationException
+     * @throws CatalogStatusException
      */
     public function markAsObsolete(Catalog $catalog)
     {
@@ -191,9 +189,10 @@ class CatalogController extends Controller
     /**
      * Changes the status of a Catalog back to sealed.
      *
-     * @param Catalog $catalog
-     * @return \Illuminate\Http\RedirectResponse
-     * @throws \Illuminate\Auth\Access\AuthorizationException
+     * @param  Catalog  $catalog
+     * @return RedirectResponse
+     * @throws AuthorizationException
+     * @throws CatalogStatusException
      */
     public function restore(Catalog $catalog)
     {
@@ -208,8 +207,8 @@ class CatalogController extends Controller
      * Creates a catalog from a given catalog
      *
      * @param Catalog $catalog
-     * @return \Illuminate\Http\RedirectResponse
-     * @throws \Illuminate\Auth\Access\AuthorizationException
+     * @return Factory|View
+     * @throws AuthorizationException
      */
     public function create_from(Catalog $catalog)
     {

@@ -6,6 +6,7 @@ use App\Catalog;
 use App\Domain;
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Validator;
@@ -21,7 +22,7 @@ class AsynchronousController extends Controller
     /**
      * Searches users from a given query.
      * @param Request $request
-     * @return array
+     * @return Collection
      */
     public function search_users(Request $request)
     {

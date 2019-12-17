@@ -13,10 +13,10 @@ interface UserService
     /**
      * Creates a new user
      *
-     * @param string $name
-     * @param string $email
-     * @param Role $role
-     * @return string The ID of the user
+     * @param  string  $name
+     * @param  string  $email
+     * @param  Role  $role
+     * @return int The ID of the user
      */
     public function createUser(string $name, string $email, Role $role) : int;
 

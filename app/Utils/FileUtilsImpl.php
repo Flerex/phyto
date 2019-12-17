@@ -82,7 +82,7 @@ class FileUtilsImpl implements FileUtils
      * If a file is not of an allowed MIME type, it will be discarded.
      *
      * @param  string  $path
-     * @return string
+     * @return string|null
      */
     private function extractPackageImages(string $path): ?string
     {
@@ -90,11 +90,8 @@ class FileUtilsImpl implements FileUtils
         $tempDir = 'temp/' . $packageTempId . '/'; // The temporary directory where the files will be left.
 
         try {
-            if (Storage::exists(
-                $tempDir
-            )) { // We only extract the zip if it wasn't previously extracted (e.g. a repeated request)
-                $output['files'] = collect(Storage::allFiles($tempDir));
-                return $output;
+            if (Storage::exists($tempDir)) { // We only extract the zip if it wasn't previously extracted (e.g. a repeated request)
+                return $tempDir;
             }
 
             $extractionDir = $this->extractPackageInSamePath($path);

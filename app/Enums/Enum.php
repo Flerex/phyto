@@ -47,7 +47,7 @@ abstract class Enum
     /**
      * Return all valid values for this enumeration.
      *
-     * @return array
+     * @return Collection
      */
     public static function getValues() : Collection
     {
