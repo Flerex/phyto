@@ -9,6 +9,7 @@ use App\Utils\Extractors\Extractor;
 use App\Utils\Extractors\ZipExtractor;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
+use InvalidArgumentException;
 
 class PackageUtilsImpl implements PackageUtils
 {
@@ -23,6 +24,10 @@ class PackageUtilsImpl implements PackageUtils
      */
     public function extractTo(string $destinationPath, string $packagePath)
     {
+
+        if (!Storage::exists($packagePath)) {
+            throw new InvalidArgumentException;
+        }
 
         Storage::makeDirectory($destinationPath);
 

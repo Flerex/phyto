@@ -27,13 +27,8 @@ class AsynchronousController extends Controller
     {
 
         $validated = $request->validate([
-            'query' => 'sometimes|string',
+            'query' => 'required|string',
         ]);
-
-        if (!isset($validated['query'])) {
-            return [];
-        }
-
 
         $users = User::where(DB::raw('LOWER(name)'), 'like',
             '%' . strtolower($validated['query']) . '%')->limit(15)->get();
