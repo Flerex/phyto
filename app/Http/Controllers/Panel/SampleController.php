@@ -128,7 +128,7 @@ class SampleController extends Controller
      * Handle file upload
      *
      * @param FileReceiver $receiver
-     * @return JsonResponse
+     * @return ResponseFactory|JsonResponse|Response
      * @throws UploadMissingFileException
      */
     public function upload(FileReceiver $receiver)
@@ -156,7 +156,7 @@ class SampleController extends Controller
      *
      * @param UploadedFile $file
      *
-     * @return JsonResponse
+     * @return ResponseFactory|JsonResponse|Response
      */
     protected function saveFile(UploadedFile $file)
     {
@@ -198,7 +198,7 @@ class SampleController extends Controller
         $filename = str_replace("." . $extension, "", $file->getClientOriginalName()); // Filename without extension
 
         // Add timestamp hash to name of the file
-        $filename .= "_" . md5(time()) . "." . $extension;
+        $filename .= "_" . md5((string) time()) . "." . $extension;
 
         return $filename;
     }

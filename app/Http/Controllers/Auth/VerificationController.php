@@ -7,11 +7,15 @@ use App\Http\Requests\ChangePassword;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Auth\Events\Verified;
+use Illuminate\Contracts\View\Factory;
 use Illuminate\Foundation\Auth\VerifiesEmails;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\URL;
+use Illuminate\View\View;
 
 class VerificationController extends Controller
 {
@@ -52,7 +56,7 @@ class VerificationController extends Controller
      *
      * @param int $id
      * @param Request $request
-     * @return \Illuminate\Http\Response
+     * @return Factory|RedirectResponse|View
      */
     public function verify(int $id, Request $request)
     {
@@ -69,7 +73,7 @@ class VerificationController extends Controller
      *
      * @param int $id
      * @param ChangePassword $request
-     * @return \Illuminate\Http\Response
+     * @return RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function password(int $id, ChangePassword $request)
     {

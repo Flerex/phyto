@@ -3,9 +3,9 @@
 namespace Tests\Unit;
 
 use App\Catalog;
+use App\Enums\CatalogStatus;
 use App\Exceptions\CatalogStatusException;
 use App\Services\CatalogService;
-use App\Utils\CatalogStatus;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Tests\TestCase;
 
@@ -87,7 +87,6 @@ class CatalogServiceTest extends TestCase
 
         $this->catalogService->sealCatalog($catalog->getKey());
 
-
         $nodes = collect(self::NODE_OVERRIDE);
 
         $this->catalogService->overrideCatalog($catalog->getKey(), 'newName', $nodes);
@@ -100,7 +99,6 @@ class CatalogServiceTest extends TestCase
         $this->assertEquals(CatalogStatus::EDITING, $catalog->status);
 
         $this->catalogService->sealCatalog($catalog->getKey());
-
 
         $this->assertEquals(CatalogStatus::SEALED, $catalog->fresh()->status);
 

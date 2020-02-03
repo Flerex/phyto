@@ -4,6 +4,7 @@
 namespace App\Enums;
 
 
+use Illuminate\Support\Collection;
 use Spatie\Permission\Models\Role;
 
 abstract class Enum
@@ -46,10 +47,10 @@ abstract class Enum
     /**
      * Return all valid values for this enumeration.
      *
-     * @return array
+     * @return Collection
      */
-    public static function getValues() : array
+    public static function getValues() : Collection
     {
-        return array_values(self::getConstants());
+        return collect(self::getConstants())->values();
     }
 }

@@ -136,3 +136,5 @@ fabric.properties
 _ide_helper.php
 
 # End of https://www.gitignore.io/api/phpstorm
+
+infection.log
