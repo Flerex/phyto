@@ -53,6 +53,10 @@ export default class Tagger extends Component {
         this.moving = this.moving.bind(this);
         this.modifyScale = this.modifyScale.bind(this);
         this.getTaggerStyle = this.getTaggerStyle.bind(this);
+        this.updateScale = this.updateScale.bind(this);
+        this.setScaleToFit = this.setScaleToFit.bind(this);
+        this.getFitScale = this.getFitScale.bind(this);
+        this.moveTo = this.moveTo.bind(this);
     }
 
 
@@ -151,14 +155,41 @@ export default class Tagger extends Component {
 
     }
 
-    modifyScale(value) {
+    updateScale(absoluteValue) {
         this.setState(state => {
             const zoom = {...state.zoom};
 
-            zoom.scale = Math.max(Math.min(2, zoom.scale + value), .125);
+            zoom.scale = Math.max(Math.min(2, absoluteValue), .125);
 
             return {zoom};
         })
+    }
+
+    modifyScale(value) {
+        this.updateScale(this.state.zoom.scale + value)
+    }
+
+    getFitScale() {
+        if (!this.state.taggerDimensions) return null;
+
+        const greatestProperty = this.state.taggerDimensions.height > this.state.taggerDimensions.width ? 'height' : 'width';
+
+        return this.canvasSize[greatestProperty] / this.state.taggerDimensions[greatestProperty];
+    }
+
+    setScaleToFit() {
+        this.updateScale(this.getFitScale())
+    }
+
+    moveTo(x, y) {
+        this.setState(state => {
+            const zoom = {...state.zoom};
+
+            zoom.position.left = x;
+            zoom.position.top = y;
+
+            return {zoom};
+        });
     }
 
     modifyPosition(x, y) {
@@ -181,14 +212,7 @@ export default class Tagger extends Component {
     }
 
     moving(movementX, movementY) {
-        this.setState(state => {
-            const zoom = {...state.zoom};
-
-            zoom.position.left += movementX;
-            zoom.position.top += movementY;
-
-            return {zoom};
-        });
+        this.moveTo(this.state.zoom.position.left + movementX, this.state.zoom.position.top + movementY)
     }
 
     renderBoundingBoxList() {
@@ -248,6 +272,25 @@ export default class Tagger extends Component {
                     </Button>
 
                 </Button.Group>
+
+
+                {/* Sizing buttons */}
+                <Button.Group className={styles.buttonGroup} hasAddons={true}>
+                    <Button onClick={() => this.setScaleToFit()} size="small" className={styles.button}
+                            disabled={this.getFitScale() === this.state.zoom.scale}>
+                        <Icon><i className="fas fa-compress-alt"/></Icon>
+                    </Button>
+
+                    <Button onClick={() => this.updateScale(1)} size="small" className={styles.button}
+                            disabled={this.state.zoom.scale === 1}>
+                        <Icon><i className="fas fa-expand-alt"/></Icon>
+                    </Button>
+                </Button.Group>
+
+                <Button onClick={() => this.moveTo(0, 0)} size="small" className={styles.button}
+                        disabled={this.state.zoom.position.left === 0 && this.state.zoom.position.top === 0}>
+                    <Icon><i className="fas fa-crosshairs"/></Icon>
+                </Button>
 
                 {/* Mode switcher */}
                 <Button.Group className={styles.buttonGroup} hasAddons={true} style={{marginLeft: 'auto'}}>
