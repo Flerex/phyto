@@ -11,6 +11,7 @@
     position: relative;
     max-height: 100%;
     max-width: 100%;
+    user-select: none;
 }
 
 .canvas {
@@ -86,4 +87,8 @@
     transform: scale(1);
     transform-origin: top left;
     transition: all 250ms linear;
+}
+
+.taggerContainer {
+
 }

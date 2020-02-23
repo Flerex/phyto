@@ -33,26 +33,26 @@ export default class Tagger extends Component {
                     left: 0,
                 },
             },
-        }
+        };
 
         // Method bindings
-        this.getImageSize = this.getImageSize.bind(this)
-        this.getCanvasStyle = this.getCanvasStyle.bind(this)
-        this.createBoundingBox = this.createBoundingBox.bind(this)
-        this.persistBoundingBox = this.persistBoundingBox.bind(this)
-        this.highlightBox = this.highlightBox.bind(this)
-        this.unhighlightBox = this.unhighlightBox.bind(this)
-        this.renderModeArea = this.renderModeArea.bind(this)
-        this.renderBoundingBoxList = this.renderBoundingBoxList.bind(this)
-        this.renderBoundingBoxes = this.renderBoundingBoxes.bind(this)
-        this.renderToolbox = this.renderToolbox.bind(this)
-        this.renderImage = this.renderImage.bind(this)
-        this.setMode = this.setMode.bind(this)
-        this.imageStyle = this.imageStyle.bind(this)
-        this.getBoundingBoxStyle = this.getBoundingBoxStyle.bind(this)
-        this.zoomIn = this.zoomIn.bind(this)
-        this.zooming = this.zooming.bind(this)
-        this.modifyScale = this.modifyScale.bind(this)
+        this.getImageSize = this.getImageSize.bind(this);
+        this.getCanvasStyle = this.getCanvasStyle.bind(this);
+        this.createBoundingBox = this.createBoundingBox.bind(this);
+        this.persistBoundingBox = this.persistBoundingBox.bind(this);
+        this.highlightBox = this.highlightBox.bind(this);
+        this.unhighlightBox = this.unhighlightBox.bind(this);
+        this.renderModeArea = this.renderModeArea.bind(this);
+        this.renderBoundingBoxList = this.renderBoundingBoxList.bind(this);
+        this.renderBoundingBoxes = this.renderBoundingBoxes.bind(this);
+        this.renderToolbox = this.renderToolbox.bind(this);
+        this.renderImage = this.renderImage.bind(this);
+        this.setMode = this.setMode.bind(this);
+        this.imageStyle = this.imageStyle.bind(this);
+        this.getBoundingBoxStyle = this.getBoundingBoxStyle.bind(this);
+        this.zoomIn = this.zoomIn.bind(this);
+        this.zooming = this.zooming.bind(this);
+        this.modifyScale = this.modifyScale.bind(this);
     }
 
 
@@ -72,7 +72,7 @@ export default class Tagger extends Component {
                     width: this.width,
                     height: this.height,
                 });
-            }
+            };
             img.src = url;
         })
     }
@@ -99,16 +99,17 @@ export default class Tagger extends Component {
 
         if (coords.width <= 5 || coords.height <= 5) return;
 
+
         const bb = {
             persisted: false,
-            top: Math.floor(coords.top * this.state.zoom.scale),
-            left: Math.floor(coords.left * this.state.zoom.scale),
-            width: Math.floor(coords.width * this.state.zoom.scale),
-            height: Math.floor(coords.height * this.state.zoom.scale),
+            top: Math.floor(coords.top / this.state.zoom.scale),
+            left: Math.floor(coords.left / this.state.zoom.scale),
+            width: Math.floor(coords.width / this.state.zoom.scale),
+            height: Math.floor(coords.height / this.state.zoom.scale),
         };
 
         this.setState(state => {
-            const boxes = state.boxes.concat(coords)
+            const boxes = state.boxes.concat(bb);
             return {boxes}
         }, () => {
             axios.post(this.props.createBbLink, bb).then(({data}) => {
@@ -156,7 +157,7 @@ export default class Tagger extends Component {
 
     modifyScale(value) {
         this.setState(state => {
-            const zoom = {...this.state.zoom};
+            const zoom = {...state.zoom};
 
             zoom.scale = Math.max(Math.min(2, zoom.scale + value), .125);
 
@@ -205,7 +206,7 @@ export default class Tagger extends Component {
                 </Button>
                 <Button onClick={() => this.setMode('zoom')} color={this.state.mode === 'zoom' ? 'primary' : 'light'}
                         size="small" className={styles.button}>
-                    <Icon><i className="fas fa-search-plus"></i></Icon>
+                    <Icon><i className="fas fa-search"></i></Icon>
                 </Button>
             </div>
         )
