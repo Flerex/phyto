@@ -9,7 +9,6 @@ export default class SelectableArea extends Component {
         this.animationInProgress = null;
 
         this.state = {
-            areaPosition: [0, 0],
             hold: false,
             selectionBox: false,
             selectionBoxOrigin: [0, 0],
@@ -17,26 +16,18 @@ export default class SelectableArea extends Component {
             animation: ""
         };
 
-        this.area = React.createRef();
-
         this.handleTransformBox = this.handleTransformBox.bind(this);
-        this.handleMouseDown = this.handleMouseDown.bind(this);
+        this.beginSelection = this.beginSelection.bind(this);
         this.getRelativeCoordinates = this.getRelativeCoordinates.bind(this);
-        this.closeSelectionBox = this.closeSelectionBox.bind(this);
+        this.endSelection = this.endSelection.bind(this);
         this.dragging = this.dragging.bind(this);
         this.containerStyle = this.containerStyle.bind(this);
-    }
-
-    componentDidMount() {
-        const coords = this.area.current.getBoundingClientRect();
-        // We add .scrollY because .getBoundingClient() computes values with respect to the window, not the document
-        const [left, top] = [coords.left, coords.top + window.scrollY];
-        this.setState({areaPosition: [left, top]});
     }
 
     handleTransformBox() {
 
         const {selectionBoxOrigin, selectionBoxTarget} = this.state;
+
         if (selectionBoxOrigin[1] > selectionBoxTarget[1] &&
             selectionBoxOrigin[0] > selectionBoxTarget[0])
             return 'scaleY(-1) scaleX(-1)';
@@ -47,7 +38,7 @@ export default class SelectableArea extends Component {
         return null;
     }
 
-    closeSelectionBox(e) {
+    endSelection(e) {
         if (this.props.onMouseUp && this.state.selectionBox) {
             this.props.onMouseUp(e, this.getSelectionCoordinates());
         }
@@ -69,7 +60,7 @@ export default class SelectableArea extends Component {
         }, 300);
     }
 
-    handleMouseDown(e) {
+    beginSelection(e) {
 
         if (this.props.disabled) return;
 
@@ -87,8 +78,8 @@ export default class SelectableArea extends Component {
 
         this.setState({
             hold: true,
-            selectionBoxOrigin: [e.nativeEvent.pageX, e.nativeEvent.pageY],
-            selectionBoxTarget: [e.nativeEvent.pageX, e.nativeEvent.pageY]
+            selectionBoxOrigin: [e.nativeEvent.offsetX, e.nativeEvent.offsetY],
+            selectionBoxTarget: [e.nativeEvent.offsetX, e.nativeEvent.offsetY]
         });
     }
 
@@ -100,7 +91,7 @@ export default class SelectableArea extends Component {
         if (this.state.selectionBox && !this.animationInProgress) {
 
             this.setState({
-                selectionBoxTarget: [e.nativeEvent.pageX, e.nativeEvent.pageY]
+                selectionBoxTarget: [e.nativeEvent.offsetX, e.nativeEvent.offsetY]
             });
         }
 
@@ -109,11 +100,11 @@ export default class SelectableArea extends Component {
 
     getRelativeCoordinates() {
 
-        const {selectionBoxOrigin, selectionBoxTarget, areaPosition} = this.state;
+        const {selectionBoxOrigin, selectionBoxTarget} = this.state;
 
         return {
-            left: Math.abs(selectionBoxOrigin[0] - areaPosition[0]),
-            top: Math.abs(selectionBoxOrigin[1] - areaPosition[1]),
+            left: Math.abs(selectionBoxOrigin[0]),
+            top: Math.abs(selectionBoxOrigin[1]),
             height: Math.abs(selectionBoxTarget[1] - selectionBoxOrigin[1]),
             width: Math.abs(selectionBoxTarget[0] - selectionBoxOrigin[0]),
         }
@@ -158,9 +149,12 @@ export default class SelectableArea extends Component {
 
         return (
             <div
-                style={this.containerStyle()} ref={this.area}
-                onMouseLeave={this.closeSelectionBox} onMouseDown={this.handleMouseDown}
-                onMouseUp={this.closeSelectionBox} onMouseMove={this.dragging}>
+                style={this.containerStyle()}
+                onMouseMove={this.dragging}
+                onMouseUp={this.endSelection}
+                onMouseLeave={this.endSelection}
+                onMouseDown={this.beginSelection}
+            >
                 {this.state.selectionBox && (
                     <div className={`${this.state.animation} ${styles.selection}`}
                          id={'react-rectangle-selection'}

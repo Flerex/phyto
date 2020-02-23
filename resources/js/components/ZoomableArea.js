@@ -6,8 +6,16 @@ export default class ZoomableArea extends Component {
     constructor(props) {
         super(props);
 
+        this.state = {
+            dragging: false,
+        };
+
         this.zoomIn = this.zoomIn.bind(this);
         this.zooming = this.zooming.bind(this);
+
+        this.beginDrag = this.beginDrag.bind(this);
+        this.endDrag = this.endDrag.bind(this);
+        this.dragging = this.dragging.bind(this);
     }
 
     zoomIn(e) {
@@ -17,7 +25,7 @@ export default class ZoomableArea extends Component {
     zooming(e) {
         if (e.deltaY === 0) return;
 
-        e.preventDefault()
+        e.preventDefault();
 
         const mode = e.deltaY < 0 ? 'up' : 'down';
 
@@ -35,10 +43,29 @@ export default class ZoomableArea extends Component {
         }
     }
 
+    beginDrag(e) {
+        this.setState({dragging: true})
+    }
+
+    endDrag(e) {
+        this.setState({dragging: false})
+    }
+
+    dragging(e) {
+        if(!this.state.dragging) return;
+
+        this.props.onMoving(e.movementX, e.movementY)
+
+    }
+
     render() {
         return (
             <div style={this.containerStyle()}
                  onDoubleClick={this.zoomIn}
+                 onMouseLeave={this.endDrag}
+                 onMouseDown={this.beginDrag}
+                 onMouseUp={this.endDrag}
+                 onMouseMove={this.dragging}
                  onWheel={this.zooming}/>
         );
     }
