@@ -1,4 +1,4 @@
-<nav class="navbar is-link is-spaced">
+<nav id="navbar" class="navbar is-link is-spaced">
     <div class="container">
         <div class="navbar-brand">
             <a href="{{ route('home') }}" class="navbar-item">{{ config('app.name') }}</a>

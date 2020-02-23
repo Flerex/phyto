@@ -2,16 +2,5 @@
 @import 'variables';
 @import 'utils/mixins';
 
-// Bulma
-@import '~bulma/bulma.sass';
-
 @import 'general';
 @import 'sections/home';
-
-// Fontawesome
-@import '~@fortawesome/fontawesome-free/scss/solid';
-@import '~@fortawesome/fontawesome-free/scss/regular';
-@import '~@fortawesome/fontawesome-free/scss/fontawesome';
-
-// Tippy
-@import '~tippy.js/dist/tippy';

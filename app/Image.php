@@ -10,4 +10,9 @@ use Illuminate\Database\Eloquent\Model;
 class Image extends Model
 {
     protected $fillable = ['path', 'sample_id', 'preview_path'];
+
+    public function boundingBoxes()
+    {
+        return $this->hasMany(BoundingBox::class);
+    }
 }

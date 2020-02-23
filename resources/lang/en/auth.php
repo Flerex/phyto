@@ -29,7 +29,6 @@ return [
 
     // Forgot password
     'forgot_password' => 'Forgot your password?',
-    'reset_password' => 'Reset password',
     'send_password_reset' => 'Send password reset email',
 
     // Reset password
