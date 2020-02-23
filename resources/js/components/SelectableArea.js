@@ -5,7 +5,9 @@ export default class SelectableArea extends Component {
 
     constructor(props) {
         super(props);
+
         this.animationInProgress = null;
+
         this.state = {
             areaPosition: [0, 0],
             hold: false,
@@ -22,10 +24,13 @@ export default class SelectableArea extends Component {
         this.getRelativeCoordinates = this.getRelativeCoordinates.bind(this);
         this.closeSelectionBox = this.closeSelectionBox.bind(this);
         this.dragging = this.dragging.bind(this);
+        this.containerStyle = this.containerStyle.bind(this);
     }
 
     componentDidMount() {
-        const {left, top} = this.area.current.getBoundingClientRect();
+        const coords = this.area.current.getBoundingClientRect();
+        // We add .scrollY because .getBoundingClient() computes values with respect to the window, not the document
+        const [left, top] = [coords.left, coords.top + window.scrollY];
         this.setState({areaPosition: [left, top]});
     }
 
@@ -118,7 +123,7 @@ export default class SelectableArea extends Component {
     getSelectionCoordinates() {
 
         const {selectionBoxOrigin, selectionBoxTarget} = this.state,
-        coordinates = this.getRelativeCoordinates();
+            coordinates = this.getRelativeCoordinates();
 
 
         let top = coordinates.top,
@@ -133,6 +138,19 @@ export default class SelectableArea extends Component {
         return Object.assign(coordinates, {top, left})
     }
 
+
+    containerStyle() {
+        return {
+            top: 0,
+            left: 0,
+            bottom: 0,
+            right: 0,
+            position: 'absolute',
+            display: this.props.disabled ? 'none' : 'block'
+        }
+    }
+
+
     render() {
         const baseStyle = Object.assign({
             transform: this.handleTransformBox()
@@ -140,7 +158,7 @@ export default class SelectableArea extends Component {
 
         return (
             <div
-                style={{top: 0, left: 0, bottom: 0, right: 0, position: 'absolute'}} ref={this.area}
+                style={this.containerStyle()} ref={this.area}
                 onMouseLeave={this.closeSelectionBox} onMouseDown={this.handleMouseDown}
                 onMouseUp={this.closeSelectionBox} onMouseMove={this.dragging}>
                 {this.state.selectionBox && (

@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import ReactDOM from "react-dom";
 import styles from '../../sass/components/Tagger.scss'
 import SelectableArea from './SelectableArea'
+import ZoomableArea from './ZoomableArea'
 import {Button, Icon} from 'react-bulma-components'
 
 export default class Tagger extends Component {
@@ -24,6 +25,14 @@ export default class Tagger extends Component {
             boxes: props.boxes.map(b => Object.assign(b, {persisted: true})),
             highlightedBox: null,
             mode: 'draw',
+
+            zoom: {
+                scale: 1,
+                position: {
+                    top: 0,
+                    left: 0,
+                },
+            },
         }
 
         // Method bindings
@@ -36,9 +45,14 @@ export default class Tagger extends Component {
         this.renderModeArea = this.renderModeArea.bind(this)
         this.renderBoundingBoxList = this.renderBoundingBoxList.bind(this)
         this.renderBoundingBoxes = this.renderBoundingBoxes.bind(this)
-        this.renderDrawMode = this.renderDrawMode.bind(this)
         this.renderToolbox = this.renderToolbox.bind(this)
         this.renderImage = this.renderImage.bind(this)
+        this.setMode = this.setMode.bind(this)
+        this.imageStyle = this.imageStyle.bind(this)
+        this.getBoundingBoxStyle = this.getBoundingBoxStyle.bind(this)
+        this.zoomIn = this.zoomIn.bind(this)
+        this.zooming = this.zooming.bind(this)
+        this.modifyScale = this.modifyScale.bind(this)
     }
 
 
@@ -63,12 +77,13 @@ export default class Tagger extends Component {
         })
     }
 
-    static getBoundingBoxStyle(box) {
+    getBoundingBoxStyle(box) {
         return {
             width: box.width + 'px',
             height: box.height + 'px',
-            top: box.top + 'px',
-            left: box.left + 'px',
+            top: Math.floor(box.top * this.state.zoom.scale) + 'px',
+            left: Math.floor(box.left * this.state.zoom.scale) + 'px',
+            transform: 'scale(' + this.state.zoom.scale + ')',
         }
     }
 
@@ -79,20 +94,31 @@ export default class Tagger extends Component {
         }
     }
 
+
     createBoundingBox(e, coords) {
+
         if (coords.width <= 5 || coords.height <= 5) return;
 
-        const bb = Object.assign({
+        const bb = {
             persisted: false,
-        }, coords);
+            top: Math.floor(coords.top * this.state.zoom.scale),
+            left: Math.floor(coords.left * this.state.zoom.scale),
+            width: Math.floor(coords.width * this.state.zoom.scale),
+            height: Math.floor(coords.height * this.state.zoom.scale),
+        };
 
-        axios.post(this.props.createBbLink, bb).then(({data}) => {
-            this.persistBoundingBox(data);
-        });
         this.setState(state => {
             const boxes = state.boxes.concat(coords)
             return {boxes}
+        }, () => {
+            axios.post(this.props.createBbLink, bb).then(({data}) => {
+                this.persistBoundingBox(data);
+            });
         })
+
+
+
+
     }
 
     persistBoundingBox({id, top, left, width, height}) {
@@ -113,21 +139,37 @@ export default class Tagger extends Component {
         this.setState({highlightedBox: null})
     }
 
+    setMode(mode) {
+        this.setState({mode})
+    }
+
     renderModeArea() {
         if (!this.state.taggerDimensions) return;
 
-        const methodName = 'render' + this.state.mode.charAt(0).toUpperCase() + this.state.mode.slice(1) + 'Mode';
-
-        return this[methodName].call()
+        return (
+            <>
+                <SelectableArea onMouseUp={this.createBoundingBox} disabled={this.state.mode !== 'draw'}/>
+                <ZoomableArea onZoomIn={this.zoomIn} onZooming={this.zooming} disabled={this.state.mode !== 'zoom'}/>
+            </>)
 
     }
 
-    renderDrawMode() {
-        return (<SelectableArea onMouseUp={this.createBoundingBox}/>)
+    modifyScale(value) {
+        this.setState(state => {
+            const zoom = {...this.state.zoom};
+
+            zoom.scale = Math.max(Math.min(2, zoom.scale + value), .125);
+
+            return {zoom};
+        })
     }
 
-    renderZoomMode() {
-        return (<ZoomableArea onMouseUp={this.movePicture}/>)
+    zoomIn() {
+        this.modifyScale(+.4)
+    }
+
+    zooming(mode, delta) {
+        this.modifyScale(delta * -0.01)
     }
 
     renderBoundingBoxList() {
@@ -150,26 +192,34 @@ export default class Tagger extends Component {
         return this.state.boxes.map((box, i) => (
             <div
                 className={`${styles.boundingBox}  ${(box.id === this.state.highlightedBox) ? styles.highlightedBox : ''}`}
-                key={i} style={Tagger.getBoundingBoxStyle(box)}/>
+                key={i} style={this.getBoundingBoxStyle(box)}/>
         ))
     }
 
     renderToolbox() {
         return (
             <div className={styles.toolbox} style={{height: '45px'}}>
-                <Button color={this.state.mode === 'draw' ? 'primary' : 'light'} size="small" className={styles.button}>
+                <Button onClick={() => this.setMode('draw')} color={this.state.mode === 'draw' ? 'primary' : 'light'}
+                        size="small" className={styles.button}>
                     <Icon><i className="fas fa-draw-polygon"></i></Icon>
                 </Button>
-                <Button color={this.state.mode === 'zoom' ? 'primary' : 'light'} size="small" className={styles.button}>
+                <Button onClick={() => this.setMode('zoom')} color={this.state.mode === 'zoom' ? 'primary' : 'light'}
+                        size="small" className={styles.button}>
                     <Icon><i className="fas fa-search-plus"></i></Icon>
                 </Button>
             </div>
         )
     }
 
+    imageStyle() {
+        return {
+            transform: 'scale(' + this.state.zoom.scale + ')',
+        }
+    }
+
     renderImage() {
         return (
-            <img src={this.props.image} className={styles.imageBg}/>
+            <img src={this.props.image} className={styles.imageBg} style={this.imageStyle()}/>
         )
     }
 
