@@ -24,7 +24,7 @@ export default class Tagger extends Component {
             taggerDimensions: null,
             boxes: props.boxes.map(b => Object.assign(b, {persisted: true})),
             highlightedBox: null,
-            mode: 'draw',
+            mode: 'zoom',
 
             zoom: {
                 scale: 1,
