@@ -161,6 +161,17 @@ export default class Tagger extends Component {
         })
     }
 
+    modifyPosition(x, y) {
+        this.setState(state => {
+            const zoom = {...state.zoom};
+
+            zoom.position.left += x;
+            zoom.position.top += y;
+
+            return {zoom};
+        })
+    }
+
     zoomIn() {
         this.modifyScale(+.4)
     }
@@ -207,7 +218,39 @@ export default class Tagger extends Component {
     renderToolbox() {
         return (
             <div className={styles.toolbox} style={{height: '45px'}}>
-                <Button.Group hasAddons={true}>
+                {/* Zoom buttons */}
+                <Button.Group className={styles.buttonGroup} hasAddons={true}>
+                    <Button onClick={() => this.modifyScale(-.1)} size="small" className={styles.button}>
+                        <Icon><i className="fas fa-search-minus"/></Icon>
+                    </Button>
+
+                    <Button onClick={() => this.modifyScale(+.1)} size="small" className={styles.button}>
+                        <Icon><i className="fas fa-search-plus"/></Icon>
+                    </Button>
+                </Button.Group>
+
+                {/* Move buttons */}
+                <Button.Group className={styles.buttonGroup} hasAddons={true}>
+                    <Button onClick={() => this.modifyPosition(10, 0)} size="small" className={styles.button}>
+                        <Icon><i className="fas fa-arrow-left"/></Icon>
+                    </Button>
+
+                    <Button onClick={() => this.modifyPosition(0, 10)} size="small" className={styles.button}>
+                        <Icon><i className="fas fa-arrow-up"/></Icon>
+                    </Button>
+
+                    <Button onClick={() => this.modifyPosition(0, -10)} size="small" className={styles.button}>
+                        <Icon><i className="fas fa-arrow-down"/></Icon>
+                    </Button>
+
+                    <Button onClick={() => this.modifyPosition(-10, 0)} size="small" className={styles.button}>
+                        <Icon><i className="fas fa-arrow-right"/></Icon>
+                    </Button>
+
+                </Button.Group>
+
+                {/* Mode switcher */}
+                <Button.Group className={styles.buttonGroup} hasAddons={true} style={{marginLeft: 'auto'}}>
                     <Button onClick={() => this.setMode('draw')}
                             color={this.state.mode === 'draw' ? 'primary' : 'light'}
                             size="small" className={styles.button}>

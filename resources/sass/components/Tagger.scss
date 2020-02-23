@@ -62,7 +62,6 @@
 
 .toolbox {
     display: flex;
-    justify-content: flex-end;
     padding: .5rem;
     background-color: #e6e6e6;
     border-radius: 0 0 0 5px;
@@ -76,5 +75,9 @@
 .tagger {
     transform: scale(1);
     transform-origin: top left;
-    //transition: all 100ms linear;
+    transition: all 100ms linear;
+}
+
+.buttonGroup:not(:last-child) {
+    margin-right: .5rem;
 }
