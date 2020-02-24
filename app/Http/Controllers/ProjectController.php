@@ -20,7 +20,9 @@ class ProjectController extends Controller
     public function tag(Project $project, Image $image)
     {
         $boxes = $image->boundingBoxes;
-        return view('projects.tag', compact('project', 'image', 'boxes'));
+        $lang = trans('tagger');
+
+        return view('projects.tag', compact('project', 'image', 'boxes', 'lang'));
     }
 
     public function create_bounding_box(Project $project, Image $image, Request $request)

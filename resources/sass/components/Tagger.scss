@@ -57,7 +57,7 @@
 }
 
 .uploading {
-    margin-right: .25rem;
+    margin-left: .25rem;
 }
 
 .toolbox {
@@ -65,6 +65,7 @@
     padding: .5rem;
     background-color: #e6e6e6;
     border-radius: 0 0 0 5px;
+    align-items: center;
 }
 
 .button:not(:last-child) {
@@ -80,4 +81,31 @@
 
 .buttonGroup:not(:last-child) {
     margin-right: .5rem;
+}
+
+
+.wrapper {
+    :global(.buttons) {
+        margin-bottom: 0;
+
+        :global(.button) {
+            margin-bottom: 0;
+        }
+    }
+
+}
+
+.label {
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #8f8f8f;
+    font-size: .9em;
+}
+
+.author {
+    color: #a6a6a6;
+}
+
+.author strong {
+    color: #8f8f8f;
 }

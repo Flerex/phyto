@@ -15,5 +15,9 @@ class BoundingBox extends Model
 
     protected $fillable = ['left', 'top', 'width', 'height', 'user_id', 'image_id'];
 
-    protected $visible = ['id', 'left', 'top', 'width', 'height'];
+    protected $visible = ['id', 'left', 'top', 'width', 'height', 'user'];
+
+    public function user() {
+        return $this->belongsTo(User::class);
+    }
 }

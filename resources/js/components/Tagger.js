@@ -3,7 +3,8 @@ import ReactDOM from "react-dom";
 import styles from '../../sass/components/Tagger.scss'
 import SelectableArea from './SelectableArea'
 import ZoomableArea from './ZoomableArea'
-import {Button, Icon} from 'react-bulma-components'
+import {Button, Icon, Heading} from 'react-bulma-components'
+import Tippy from '@tippy.js/react'
 
 export default class Tagger extends Component {
 
@@ -102,6 +103,11 @@ export default class Tagger extends Component {
 
         if (coords.width <= 5 || coords.height <= 5) return;
 
+        const alreadyExists = this.state.boxes.find(e => e.top === coords.top && e.left === coords.left
+            && e.width === coords.width && e.height === coords.height);
+
+        if (alreadyExists) return;
+
 
         const bb = {
             persisted: false,
@@ -110,6 +116,7 @@ export default class Tagger extends Component {
             width: coords.width,
             height: coords.height,
         };
+
 
         this.setState(state => {
             const boxes = state.boxes.concat(bb);
@@ -145,15 +152,6 @@ export default class Tagger extends Component {
         this.setState({mode})
     }
 
-    renderModeArea() {
-        return (
-            <>
-                <SelectableArea onMouseUp={this.createBoundingBox} disabled={this.state.mode !== 'draw'}/>
-                <ZoomableArea onZoomIn={this.zoomIn} onZooming={this.zooming} onMoving={this.moving}
-                              disabled={this.state.mode !== 'zoom'}/>
-            </>)
-
-    }
 
     updateScale(absoluteValue) {
         this.setState(state => {
@@ -218,12 +216,22 @@ export default class Tagger extends Component {
     renderBoundingBoxList() {
         return (
             <div className={styles.bbList}>
+                <Heading className={styles.label}>{this.props.lang.box_list}</Heading>
+                {!this.state.boxes.length && (
+                    <span className="has-text-grey">{this.props.lang.no_boxes}</span>
+                )}
                 {this.state.boxes.map((box, i) => (
                     <div className={styles.boxInfo} key={i} onMouseEnter={this.highlightBox.bind(this, box.id)}
                          onMouseLeave={this.unhighlightBox}>
                         <div className={styles.boxIcon}><i className="fas fa-question"/></div>
-                        <div className={styles.boxContent}><em>Untagged species</em>
-                            {!box.persisted && (<i className={`fas fa-spinner fa-spin ${styles.uploading}`}></i>)}
+                        <div className={styles.boxContent}>
+                            <div>
+                                <em>Untagged species</em>
+                                {!box.persisted && (<i className={`fas fa-spinner fa-spin ${styles.uploading}`}></i>)}
+                            </div>
+                            <div className={styles.author}>
+                                {this.props.lang.by} <strong>{this.props.user}</strong>
+                            </div>
                         </div>
                     </div>
                 ))}
@@ -244,30 +252,35 @@ export default class Tagger extends Component {
             <div className={styles.toolbox} style={{height: '45px'}}>
                 {/* Zoom buttons */}
                 <Button.Group className={styles.buttonGroup} hasAddons={true}>
-                    <Button onClick={() => this.modifyScale(-.1)} size="small" className={styles.button}>
+                    <Button onClick={() => this.modifyScale(-.1)} size="small" className={styles.button}
+                            title={this.props.lang.zoom_out}>
                         <Icon><i className="fas fa-search-minus"/></Icon>
                     </Button>
-
-                    <Button onClick={() => this.modifyScale(+.1)} size="small" className={styles.button}>
+                    <Button onClick={() => this.modifyScale(+.1)} size="small" className={styles.button}
+                            title={this.props.lang.zoom_in}>
                         <Icon><i className="fas fa-search-plus"/></Icon>
                     </Button>
                 </Button.Group>
 
                 {/* Move buttons */}
                 <Button.Group className={styles.buttonGroup} hasAddons={true}>
-                    <Button onClick={() => this.modifyPosition(10, 0)} size="small" className={styles.button}>
+                    <Button onClick={() => this.modifyPosition(10, 0)} size="small" className={styles.button}
+                            title={this.props.lang.left}>
                         <Icon><i className="fas fa-arrow-left"/></Icon>
                     </Button>
 
-                    <Button onClick={() => this.modifyPosition(0, 10)} size="small" className={styles.button}>
+                    <Button onClick={() => this.modifyPosition(0, 10)} size="small" className={styles.button}
+                            title={this.props.lang.up}>
                         <Icon><i className="fas fa-arrow-up"/></Icon>
                     </Button>
 
-                    <Button onClick={() => this.modifyPosition(0, -10)} size="small" className={styles.button}>
+                    <Button onClick={() => this.modifyPosition(0, -10)} size="small" className={styles.button}
+                            title={this.props.lang.down}>
                         <Icon><i className="fas fa-arrow-down"/></Icon>
                     </Button>
 
-                    <Button onClick={() => this.modifyPosition(-10, 0)} size="small" className={styles.button}>
+                    <Button onClick={() => this.modifyPosition(-10, 0)} size="small" className={styles.button}
+                            title={this.props.lang.right}>
                         <Icon><i className="fas fa-arrow-right"/></Icon>
                     </Button>
 
@@ -277,31 +290,30 @@ export default class Tagger extends Component {
                 {/* Sizing buttons */}
                 <Button.Group className={styles.buttonGroup} hasAddons={true}>
                     <Button onClick={() => this.setScaleToFit()} size="small" className={styles.button}
-                            disabled={this.getFitScale() === this.state.zoom.scale}>
+                            disabled={this.getFitScale() === this.state.zoom.scale} title={this.props.lang.scale_fit}>
                         <Icon><i className="fas fa-compress-alt"/></Icon>
                     </Button>
 
                     <Button onClick={() => this.updateScale(1)} size="small" className={styles.button}
-                            disabled={this.state.zoom.scale === 1}>
+                            disabled={this.state.zoom.scale === 1} title={this.props.lang.scale_expand}>
                         <Icon><i className="fas fa-expand-alt"/></Icon>
                     </Button>
                 </Button.Group>
 
                 <Button onClick={() => this.moveTo(0, 0)} size="small" className={styles.button}
-                        disabled={this.state.zoom.position.left === 0 && this.state.zoom.position.top === 0}>
+                        disabled={this.state.zoom.position.left === 0 && this.state.zoom.position.top === 0}
+                        title={this.props.lang.restore_position}>
                     <Icon><i className="fas fa-crosshairs"/></Icon>
                 </Button>
 
                 {/* Mode switcher */}
                 <Button.Group className={styles.buttonGroup} hasAddons={true} style={{marginLeft: 'auto'}}>
-                    <Button onClick={() => this.setMode('draw')}
-                            color={this.state.mode === 'draw' ? 'primary' : 'light'}
-                            size="small" className={styles.button}>
+                    <Button onClick={() => this.setMode('draw')} size="small" className={styles.button}
+                            color={this.state.mode === 'draw' ? 'primary' : 'light'} title={this.props.lang.draw_mode}>
                         <Icon><i className="fas fa-expand"/></Icon>
                     </Button>
-                    <Button onClick={() => this.setMode('zoom')}
-                            color={this.state.mode === 'zoom' ? 'primary' : 'light'}
-                            size="small" className={styles.button}>
+                    <Button onClick={() => this.setMode('zoom')} size="small" className={styles.button}
+                            color={this.state.mode === 'zoom' ? 'primary' : 'light'} title={this.props.lang.zoom_mode}>
                         <Icon><i className="fas fa-mouse-pointer"/></Icon>
                     </Button>
                 </Button.Group>
@@ -318,6 +330,15 @@ export default class Tagger extends Component {
             height: this.state.taggerDimensions ? this.state.taggerDimensions.height : null,
             backgroundImage: 'url(' + this.props.image + ')',
         }
+    }
+
+    renderModeArea() {
+        return (
+            <>
+                <SelectableArea onMouseUp={this.createBoundingBox} disabled={this.state.mode !== 'draw'}/>
+                <ZoomableArea onZoomIn={this.zoomIn} onZooming={this.zooming} onMoving={this.moving}
+                              disabled={this.state.mode !== 'zoom'}/>
+            </>)
     }
 
     renderCanvas() {
@@ -341,14 +362,15 @@ export default class Tagger extends Component {
 
                 {this.renderBoundingBoxList()}
             </div>
+
         )
     }
 }
 
 const el = document.getElementById('tagger');
 if (el) {
-    ReactDOM.render(<Tagger image={el.dataset.image} createBbLink={el.dataset.createBbLink}
-                            boxes={JSON.parse(el.dataset.boxes)}/>, el);
+    ReactDOM.render(<Tagger image={el.dataset.image} createBbLink={el.dataset.createBbLink} user={el.dataset.user}
+                            boxes={JSON.parse(el.dataset.boxes)} lang={JSON.parse(el.dataset.lang)}/>, el);
 }
 
 
