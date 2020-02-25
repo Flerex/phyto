@@ -32,7 +32,7 @@ class ProjectController extends Controller
         $validated['user_id'] = Auth::user()->getKey();
         $validated['image_id'] = $image->getKey();
 
-        $bb = BoundingBox::create($validated);
+        $bb = BoundingBox::make($validated);
 
         return $bb;
     }

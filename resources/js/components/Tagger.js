@@ -5,6 +5,7 @@ import SelectableArea from './SelectableArea'
 import ZoomableArea from './ZoomableArea'
 import {Button, Icon, Heading} from 'react-bulma-components'
 import Tippy from '@tippy.js/react'
+import BoundingBox from "./BoundingBox";
 
 export default class Tagger extends Component {
 
@@ -241,9 +242,7 @@ export default class Tagger extends Component {
 
     renderBoundingBoxes() {
         return this.state.boxes.map((box, i) => (
-            <div
-                className={`${styles.boundingBox}  ${(box.id === this.state.highlightedBox) ? styles.highlightedBox : ''}`}
-                key={i} style={this.getBoundingBoxStyle(box)}/>
+            <BoundingBox highlighted={box.id === this.state.highlightedBox} box={box} key={i}/>
         ))
     }
 
