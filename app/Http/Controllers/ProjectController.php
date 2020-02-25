@@ -19,7 +19,11 @@ class ProjectController extends Controller
 
     public function tag(Project $project, Image $image)
     {
-        $boxes = $image->boundingBoxes;
+        $boxes = collect($image->boundingBoxes()->with('user')->get()->toArray())->map(function($bb) {
+            $bb['user'] = $bb['user']['name'];
+            return $bb;
+        });
+
         $lang = trans('tagger');
 
         return view('projects.tag', compact('project', 'image', 'boxes', 'lang'));
@@ -32,7 +36,7 @@ class ProjectController extends Controller
         $validated['user_id'] = Auth::user()->getKey();
         $validated['image_id'] = $image->getKey();
 
-        $bb = BoundingBox::make($validated);
+        $bb = BoundingBox::create($validated);
 
         return $bb;
     }

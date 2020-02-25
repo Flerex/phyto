@@ -43,7 +43,13 @@
 
 .boxInfo {
     display: flex;
-    margin: 1rem 0;
+    margin: .5rem 0;
+    padding: .5rem;
+
+    &:hover {
+        border-radius: 5px;
+        background-color: #FAFAFA;
+    }
 }
 
 .boxIcon {

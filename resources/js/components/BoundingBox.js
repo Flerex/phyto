@@ -23,7 +23,7 @@ export default class BoundingBox extends Component {
         const className = `${styles.boundingBox}  ${this.props.highlighted ? styles.highlightedBox : ''}`;
 
         return (
-            <div className={className} style={this.getBoundingBoxStyle(box)}
+            <div className={className} style={this.getBoundingBoxStyle(this.props.box)}
             />
         )
     }

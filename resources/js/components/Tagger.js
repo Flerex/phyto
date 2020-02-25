@@ -4,7 +4,6 @@ import styles from '../../sass/components/Tagger.scss'
 import SelectableArea from './SelectableArea'
 import ZoomableArea from './ZoomableArea'
 import {Button, Icon, Heading} from 'react-bulma-components'
-import Tippy from '@tippy.js/react'
 import BoundingBox from "./BoundingBox";
 
 export default class Tagger extends Component {
@@ -12,6 +11,7 @@ export default class Tagger extends Component {
     constructor(props) {
         super(props)
 
+        console.log(props.boxes)
         // Constants
         this.canvasSize = {
             width: 768,
@@ -116,6 +116,7 @@ export default class Tagger extends Component {
             left: coords.left,
             width: coords.width,
             height: coords.height,
+            user: this.props.user,
         };
 
 
@@ -135,7 +136,7 @@ export default class Tagger extends Component {
         this.setState(state => {
             const boxes = state.boxes
                 .filter(el => !(el.width === width && el.height === height && el.top === top && el.left === left))
-                .concat({id, top, left, width, height, persisted: true});
+                .concat({id, top, left, width, height, persisted: true, user: this.props.user});
 
             return {boxes};
         })
@@ -231,7 +232,7 @@ export default class Tagger extends Component {
                                 {!box.persisted && (<i className={`fas fa-spinner fa-spin ${styles.uploading}`}></i>)}
                             </div>
                             <div className={styles.author}>
-                                {this.props.lang.by} <strong>{this.props.user}</strong>
+                                {this.props.lang.by} <strong>{box.user}</strong>
                             </div>
                         </div>
                     </div>
