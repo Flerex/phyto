@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import styles from '../../sass/components/SelectableArea.scss'
+import { HotKeys } from 'react-hotkeys'
 
 export default class SelectableArea extends Component {
 
@@ -7,6 +8,14 @@ export default class SelectableArea extends Component {
         super(props);
 
         this.animationInProgress = null;
+
+        this.keymap = {
+            CANCEL_SELECTION: 'esc',
+        };
+
+        this.handlers = {
+            CANCEL_SELECTION: () => this.stopSelection(),
+        };
 
         this.state = {
             hold: false,
@@ -20,6 +29,7 @@ export default class SelectableArea extends Component {
         this.beginSelection = this.beginSelection.bind(this);
         this.getRelativeCoordinates = this.getRelativeCoordinates.bind(this);
         this.endSelection = this.endSelection.bind(this);
+        this.stopSelection = this.stopSelection.bind(this);
         this.dragging = this.dragging.bind(this);
         this.containerStyle = this.containerStyle.bind(this);
     }
@@ -43,6 +53,12 @@ export default class SelectableArea extends Component {
             this.props.onMouseUp(e, this.getSelectionCoordinates());
         }
 
+        this.stopSelection();
+
+    }
+
+
+    stopSelection() {
         this.setState({
             hold: false,
             animation: styles.selectionFadeOut
@@ -148,20 +164,22 @@ export default class SelectableArea extends Component {
         }, this.getRelativeCoordinates());
 
         return (
-            <div
-                style={this.containerStyle()}
-                onMouseMove={this.dragging}
-                onMouseUp={this.endSelection}
-                onMouseLeave={this.endSelection}
-                onMouseDown={this.beginSelection}
-            >
-                {this.state.selectionBox && (
-                    <div className={`${this.state.animation} ${styles.selection}`}
-                         id={'react-rectangle-selection'}
-                         style={Object.assign(baseStyle, this.props.style)}/>
-                )}
-                {this.props.children}
-            </div>
+            <HotKeys keyMap={this.keymap} handlers={this.handlers}>
+                <div
+                    style={this.containerStyle()}
+                    onMouseMove={this.dragging}
+                    onMouseUp={this.endSelection}
+                    onMouseLeave={this.endSelection}
+                    onMouseDown={this.beginSelection}
+                >
+                    {this.state.selectionBox && (
+                        <div className={`${this.state.animation} ${styles.selection}`}
+                             id={'react-rectangle-selection'}
+                             style={Object.assign(baseStyle, this.props.style)}/>
+                    )}
+                    {this.props.children}
+                </div>
+            </HotKeys>
         );
     }
 }
