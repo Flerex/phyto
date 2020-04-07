@@ -24,6 +24,21 @@ if (token) {
     console.error('CSRF token not found: https://laravel.com/docs/csrf#csrf-x-csrf-token');
 }
 
-window.tippy = require('tippy.js');
+/**
+ * Laravel translations
+ */
+import I18n from './vendor/I18n';
 
+window.Lang = new I18n;
+
+/**
+ * Tippy JS
+ */
+import tippy from 'tippy.js';
+
+tippy('[data-tippy-content]');
+
+/**
+ * Resumable JS
+ */
 window.Resumable = require('resumablejs')

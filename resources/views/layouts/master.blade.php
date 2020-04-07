@@ -12,6 +12,8 @@
     <!-- Styles -->
     <link href="{{ mix('css/vendors.css') }}" rel="stylesheet">
     <link href="{{ mix('css/app.css') }}" rel="stylesheet">
+
+    @translations
 </head>
 <body>
 @include('partials.navbar')
@@ -33,6 +35,9 @@
 @include('partials.footer')
 
 @include('partials.flash')
+
+<!-- React Portals -->
+<div id="portals"></div>
 
 <!-- Scripts -->
 <script src="{{ asset('js/app.js') }}"></script>

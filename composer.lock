@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "06f993b9ec5c129ad77c49a23bd125da",
+    "content-hash": "0c4eabc7b94543ad69cf98f5e7b8021f",
     "packages": [
         {
             "name": "dnoegel/php-xdg-base-dir",
@@ -3423,6 +3423,56 @@
                 "dump"
             ],
             "time": "2020-01-25T12:44:29+00:00"
+        },
+        {
+            "name": "thepinecode/i18n",
+            "version": "v0.8.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/thepinecode/i18n.git",
+                "reference": "aa7bfe1ca0efffd1297366bbd18a6ab01e26eadb"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/thepinecode/i18n/zipball/aa7bfe1ca0efffd1297366bbd18a6ab01e26eadb",
+                "reference": "aa7bfe1ca0efffd1297366bbd18a6ab01e26eadb",
+                "shasum": ""
+            },
+            "require": {
+                "laravel/framework": "^6.0|^7.0",
+                "php": "^7.2.5"
+            },
+            "require-dev": {
+                "orchestra/testbench": "~5.0.0"
+            },
+            "type": "project",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Pine\\I18n\\I18nServiceProvider"
+                    ]
+                },
+                "branch-alias": {
+                    "dev-master": "1.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Pine\\I18n\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Gergő D. Nagy",
+                    "email": "hello@iamgergo.com"
+                }
+            ],
+            "description": "Push your translations to the front-end.",
+            "time": "2020-03-09T08:50:18+00:00"
         },
         {
             "name": "tijsverkoyen/css-to-inline-styles",
@@ -6992,9 +7042,9 @@
     "prefer-lowest": false,
     "platform": {
         "php": "^7.2",
+        "ext-imagick": "*",
         "ext-json": "*",
-        "ext-zip": "*",
-        "ext-imagick": "*"
+        "ext-zip": "*"
     },
     "platform-dev": []
 }
