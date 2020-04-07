@@ -36,6 +36,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
+
         // Bind implementation to interface in order for the kernel's IoC to work
         $this->app->bind(UserService::class, UserServiceImpl::class);
         $this->app->bind(CatalogService::class, CatalogServiceImpl::class);

@@ -33,6 +33,15 @@ class User extends Authenticatable implements MustVerifyEmail
     ];
 
     /**
+     * The attributes that should be visible in JSON and array casting.
+     *
+     * @var array
+     */
+    protected $visible = [
+        'name', 'email',
+    ];
+
+    /**
      * Send the email verification notification.
      *
      * @return void
@@ -61,7 +70,7 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function projects()
     {
-        return $this->belongsToMany(Project::class);
+        return $this->belongsToMany(Project::class)->oldest();
     }
 
     /**

@@ -10,15 +10,19 @@
     <title>{{ config('app.name') }}</title>
 
     <!-- Styles -->
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link href="{{ mix('css/vendors.css') }}" rel="stylesheet">
+    <link href="{{ mix('css/app.css') }}" rel="stylesheet">
 </head>
 <body>
     @include('partials.navbar')
-    <section class="section">
-        <main id="main" class="container is-widescreen">
+    <section id="wrap" class="section">
+        <main class="container is-widescreen">
             @yield('content')
         </main>
     </section>
+
+    @include('partials.footer')
+
     @include('partials.flash')
 
     <!-- Scripts -->

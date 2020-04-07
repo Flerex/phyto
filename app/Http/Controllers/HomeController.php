@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Contracts\View\Factory;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
 class HomeController extends Controller
@@ -24,6 +25,15 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+
+        $projects = collect();
+        if (Auth::check()) {
+            $user = Auth::user();
+            $projects = $user->projects
+                ->union($user->managedProjects)
+                ->unique('id');
+        }
+
+        return view('home', compact('projects'));
     }
 }

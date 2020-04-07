@@ -53,7 +53,12 @@ class RouteServiceProvider extends ServiceProvider
     {
         Route::middleware('web')
              ->namespace($this->namespace)
-             ->group(base_path('routes/web.php'));
+             ->group(function() {
+                 foreach(array_diff(scandir(base_path('routes/web')), ['..', '.']) as $file) {
+                    require base_path('routes/web/' . $file);
+
+                 }
+             });
     }
 
     /**

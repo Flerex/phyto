@@ -1,0 +1,35 @@
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
+
+.selection {
+    background-color: rgba(50, 115, 220, .25);
+    outline: 1px dashed rgb(56, 117, 252);
+    position: absolute;
+    animation-duration: 0.2s;
+    animation-name: fadeIn;
+    user-select: none;
+    z-index: 10;
+    transform-origin: top left;
+    pointer-events: none;
+}
+
+.selectionFadeOut {
+    animation-duration: 0.3s;
+    animation-name: fadeOut;
+    animation-fill-mode: forwards;
+}
