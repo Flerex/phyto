@@ -9,7 +9,7 @@
         </div>
         <div class="level-right">
             <div class="level-item">
-                <a href="{{ route('panel.projects.create') }}" class="button is-primary is-pulled-right">
+                <a href="{{ route('panel.projects.create') }}" class="button is-link is-rounded is-pulled-right">
                     <span class="icon is-left"><i class="fas fa-briefcase"></i></span>
                     <span>@lang('panel.projects.create')</span>
                 </a>

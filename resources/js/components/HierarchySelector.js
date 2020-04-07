@@ -264,9 +264,10 @@ export default class HierarchySelector extends Component {
     render() {
         return (
             <React.Fragment>
-                <div className={styles.hierarchySelector}>
-                    <p className="panel-heading">{this.props.lang.title}</p>
-                    <div className="panel-block">
+                <div className={`box ${styles.hierarchySelector}`}>
+                    <div className={styles.header}>
+                        <p className={styles.heading}>{this.props.lang.title}</p>
+
                         <p className="control has-icons-left">
                             <input className="input is-small" placeholder={this.props.lang.search} type="text"
                                    value={this.state.query}
