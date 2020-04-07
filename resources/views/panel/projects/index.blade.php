@@ -18,35 +18,39 @@
     </div>
 
     @if($canManageEverything)
-    <article class="message is-warning">
-        <div class="message-body">@lang('panel.projects.showing_everything_message')</div>
-    </article>
+        <article class="message is-warning">
+            <div class="message-body">@lang('panel.projects.showing_everything_message')</div>
+        </article>
     @endif
 
     @if(count($projects))
-        <table class="table is-fullwidth">
-            <thead>
-            <th>@lang('labels.name')</th>
-            @if($canManageEverything)
-                <th>@lang('labels.projects.manager')</th>
-            @endif
-            <th>@lang('labels.projects.members')</th>
-            <th>@lang('labels.description')</th>
-            </thead>
+        <div class="box">
 
-            <tbody>
-            @foreach($projects as $project)
-                <tr>
-                    <td><a href="{{ route('panel.projects.show', compact('project')) }}">{{ $project->name }}</a></td>
-                    @if($canManageEverything)
-                        <td>{{ $project->manager->name }}</td>
-                    @endif
-                    <td>{{ $project->users()->count() }}</td>
-                    <td>{{ $project->description }}</td>
-                </tr>
-            @endforeach
-            </tbody>
-        </table>
+            <table class="table is-fullwidth">
+                <thead>
+                <th>@lang('labels.name')</th>
+                @if($canManageEverything)
+                    <th>@lang('labels.projects.manager')</th>
+                @endif
+                <th>@lang('labels.projects.members')</th>
+                <th>@lang('labels.description')</th>
+                </thead>
+
+                <tbody>
+                @foreach($projects as $project)
+                    <tr>
+                        <td><a href="{{ route('panel.projects.show', compact('project')) }}">{{ $project->name }}</a>
+                        </td>
+                        @if($canManageEverything)
+                            <td>{{ $project->manager->name }}</td>
+                        @endif
+                        <td>{{ $project->users()->count() }}</td>
+                        <td>{{ $project->description }}</td>
+                    </tr>
+                @endforeach
+                </tbody>
+            </table>
+        </div>
         {{ $projects->links() }}
     @else
         <div class="message is-info">
