@@ -84,6 +84,20 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Application Locale ISO
+    |--------------------------------------------------------------------------
+    |
+    | The application locale according to the ISO standard. It can contain
+    | a specific country separated by an underscore like en_US.
+    |
+    | This will be used to set PHP's locale.
+    |
+    */
+
+    'locale_iso' => 'en_US',
+
+    /*
+    |--------------------------------------------------------------------------
     | Application Fallback Locale
     |--------------------------------------------------------------------------
     |

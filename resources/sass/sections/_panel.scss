@@ -1,0 +1,15 @@
+#panel {
+    margin: 0;
+    align-items: stretch;
+    min-height: 75vh;
+
+    .container {
+        margin: 2rem 5rem;
+    }
+}
+
+#sidebar {
+    padding: 3rem;
+    background: #edeff2;
+    margin-bottom: 0;
+}

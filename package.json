@@ -10,30 +10,30 @@
         "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js"
     },
     "devDependencies": {
-        "@babel/preset-react": "^7.8.3",
-        "@fortawesome/fontawesome-free": "^5.12.0",
+        "@babel/preset-react": "^7.9.4",
+        "@fortawesome/fontawesome-free": "^5.13.0",
         "axios": "^0.19.2",
         "babel-preset-react": "^6.24.1",
-        "bulma": "^0.7.2",
+        "bulma": "^0.8.0",
         "cross-env": "^5.1",
         "laravel-mix": "^4.0.15",
         "laravel-mix-react-css-modules": "^1.3.0",
         "lodash": "^4.17.15",
+        "mimetype-to-fontawesome": "^2.0.0",
         "popper.js": "^1.16.1",
-        "react": "^16.12.0",
-        "react-dom": "^16.12.0",
+        "react": "^16.13.1",
+        "react-bulma-components": "^3.2.0",
+        "react-datepicker": "^2.14.1",
+        "react-dom": "^16.13.1",
+        "react-select": "^2.4.3",
         "resolve-url-loader": "^2.3.1",
-        "sass": "^1.25.0",
+        "resumablejs": "^1.1.0",
+        "sass": "^1.26.3",
         "sass-loader": "^7.1.0",
         "tippy.js": "^3.3.0",
         "vue-template-compiler": "^2.6.11",
-        "mimetype-to-fontawesome": "^2.0.0",
-        "react-bulma-components": "^3.1.3",
-        "react-datepicker": "^2.13.0",
-        "react-select": "^2.4.3",
-        "resumablejs": "^1.1.0"
-    },
-    "dependencies": {
-        "react-hotkeys": "^2.0.0"
+        "react-hotkeys": "^2.0.0",
+        "@dicebear/avatars": "^4.0.5",
+        "@dicebear/avatars-bottts-sprites": "^4.0.5"
     }
 }
