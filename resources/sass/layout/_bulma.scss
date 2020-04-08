@@ -1,0 +1,40 @@
+.table tbody {
+    th, td {
+        padding-top: .75em;
+        padding-bottom: .75em;
+        vertical-align: middle;
+    }
+}
+
+.table.is-boxed {
+    @extend .box;
+    display: table;
+    overflow: hidden;
+
+    td, th {
+        padding: 1em;
+        border: none;
+    }
+
+    tr > :first-child {
+        padding-left: 1.25rem;
+    }
+
+    tr > :last-child {
+        padding-right: 1.25rem;
+    }
+
+    thead tr {
+        background-color: $primary2;
+
+        th {
+            color: $gray1;
+            text-transform: uppercase;
+            font-size: .9em;
+        }
+    }
+
+    tbody tr:nth-child(even) {
+        background-color: $gray4;
+    }
+}

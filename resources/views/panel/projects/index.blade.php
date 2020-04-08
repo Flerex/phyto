@@ -24,33 +24,31 @@
     @endif
 
     @if(count($projects))
-        <div class="box">
 
-            <table class="table is-fullwidth">
-                <thead>
-                <th>@lang('labels.name')</th>
-                @if($canManageEverything)
-                    <th>@lang('labels.projects.manager')</th>
-                @endif
-                <th>@lang('labels.projects.members')</th>
-                <th>@lang('labels.description')</th>
-                </thead>
+        <table class="table is-boxed is-fullwidth">
+            <thead>
+            <th>@lang('labels.name')</th>
+            @if($canManageEverything)
+                <th>@lang('labels.projects.manager')</th>
+            @endif
+            <th>@lang('labels.projects.members')</th>
+            <th>@lang('labels.description')</th>
+            </thead>
 
-                <tbody>
-                @foreach($projects as $project)
-                    <tr>
-                        <td><a href="{{ route('panel.projects.show', compact('project')) }}">{{ $project->name }}</a>
-                        </td>
-                        @if($canManageEverything)
-                            <td>{{ $project->manager->name }}</td>
-                        @endif
-                        <td>{{ $project->users()->count() }}</td>
-                        <td>{{ $project->description }}</td>
-                    </tr>
-                @endforeach
-                </tbody>
-            </table>
-        </div>
+            <tbody>
+            @foreach($projects as $project)
+                <tr>
+                    <td><a href="{{ route('panel.projects.show', compact('project')) }}">{{ $project->name }}</a>
+                    </td>
+                    @if($canManageEverything)
+                        <td>{{ $project->manager->name }}</td>
+                    @endif
+                    <td>{{ $project->users()->count() }}</td>
+                    <td>{{ $project->description }}</td>
+                </tr>
+            @endforeach
+            </tbody>
+        </table>
         {{ $projects->links() }}
     @else
         <div class="message is-info">

@@ -1,5 +1,4 @@
-@import '~bulma/sass/utilities/all';
-@import '~bulma/sass/components/panel';
+@import '../variables';
 
 
 .checkbox {
@@ -15,7 +14,8 @@
 
 .add_new {
     color: $link;
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
     cursor: pointer;
 
     &:hover {
@@ -32,59 +32,33 @@
 
 .hierarchySelector {
     overflow: hidden;
+    padding: 0;
 
 
     :global(.control input) {
         border: none;
     }
 
-    li {
-        padding: .8rem 0 .8rem 1rem;
-
-        div {
-            display: flex;
-            align-items: center;
-        }
-
-
-        &:not(:last-child)::after {
-            content: '';
-            position: absolute;
-            left: 0;
-            right: 0;
-            border-bottom: 1px solid $grey-lighter;
-            margin-top: .5rem;
-        }
-
-
-        ul {
-            margin-top: .5rem;
-            margin-left: .75rem;
-            padding-left: 1rem;
-
-            &::before {
-                content: '';
-                position: absolute;
-                left: 0;
-                right: 0;
-                border-bottom: 1px solid $grey-lighter;
-            }
-
-            li:last-child {
-                padding-bottom: .3rem;
-            }
-
-        }
+    li div {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
     }
 
-    .panel-block + div {
-        border: 1px solid $grey-lighter;
+
+    li div,
+    .add_new {
+        height: 45px;
     }
+
+    ul {
+        margin-left: 1.25rem;
+    }
+
 }
 
 .header {
-    margin: -1.25rem;
     padding: 1.25rem;
-    margin-bottom: 1rem;
-    background-color: hsl(217.1, 70.8%, 70%);
+    margin-bottom: .75rem;
+    background-color: $primary1;
 }

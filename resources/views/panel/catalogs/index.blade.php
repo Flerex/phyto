@@ -21,34 +21,31 @@
 
 
     @if(count($catalogs))
-        <div id="tables">
-            <div class="box">
-                <table class="table is-fullwidth">
-                    <thead>
-                    <th class="has-text-right" style="width: 8%">@include('partials.sortable-link', ['attr' => 'id', 'content' => trans('labels.id') ])</th>
-                    <th>@include('partials.sortable-link', ['attr' => 'name', 'content' => trans('labels.name') ])</th>
-                    <th>@include('partials.sortable-link', ['attr' => 'status', 'content' => trans('labels.catalog.status_label') ])</th>
-                    <th>@include('partials.sortable-link', ['attr' => 'created_at', 'content' => trans('labels.created_at') ])</th>
-                    <th class="has-text-right" style="width: 20%">@lang('general.actions')</th>
-                    </thead>
+        <table class="table is-boxed is-fullwidth">
+            <thead>
+            <th class="has-text-right"
+                style="width: 8%">@include('partials.sortable-link', ['attr' => 'id', 'content' => trans('labels.id') ])</th>
+            <th>@include('partials.sortable-link', ['attr' => 'name', 'content' => trans('labels.name') ])</th>
+            <th>@include('partials.sortable-link', ['attr' => 'status', 'content' => trans('labels.catalog.status_label') ])</th>
+            <th>@include('partials.sortable-link', ['attr' => 'created_at', 'content' => trans('labels.created_at') ])</th>
+            <th class="has-text-right" style="width: 20%">@lang('general.actions')</th>
+            </thead>
 
-                    <tbody>
-                    @foreach($catalogs as $catalog)
-                        <tr>
-                            <th class="has-text-right">{{ $catalog->id }}</th>
-                            <td>{{ $catalog->name }}</td>
-                            <td>@include('panel.catalogs.partials.catalog-status', compact('catalog'))</td>
-                            <td>{{ $catalog->created_at->diffForHumans() }}</td>
-                            <td class="has-text-right">
-                                @include('panel.catalogs.partials.actions', compact('catalog'))
-                            </td>
-                        </tr>
-                    @endforeach
-                    </tbody>
-                </table>
-            </div>
-            {{ $catalogs->links() }}
-        </div>
+            <tbody>
+            @foreach($catalogs as $catalog)
+                <tr>
+                    <th class="has-text-right">{{ $catalog->id }}</th>
+                    <td>{{ $catalog->name }}</td>
+                    <td>@include('panel.catalogs.partials.catalog-status', compact('catalog'))</td>
+                    <td>{{ $catalog->created_at->diffForHumans() }}</td>
+                    <td class="has-text-right">
+                        @include('panel.catalogs.partials.actions', compact('catalog'))
+                    </td>
+                </tr>
+            @endforeach
+            </tbody>
+        </table>
+        {{ $catalogs->links() }}
     @else
         <div class="message is-info">
             <div class="message-body">@lang('panel.catalogs.no_catalogs')</div>
