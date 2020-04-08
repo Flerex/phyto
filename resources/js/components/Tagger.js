@@ -251,11 +251,11 @@ export default class Tagger extends Component {
             <div className={styles.toolbox} style={{height: '45px'}}>
                 {/* Zoom buttons */}
                 <Button.Group className={styles.buttonGroup} hasAddons={true}>
-                    <Button onClick={() => this.modifyScale(-.1)} size="small" className={styles.button}
+                    <Button rounded={true} onClick={() => this.modifyScale(-.1)} size="small" className={styles.button}
                             title={this.props.lang.zoom_out}>
                         <Icon><i className="fas fa-search-minus"/></Icon>
                     </Button>
-                    <Button onClick={() => this.modifyScale(+.1)} size="small" className={styles.button}
+                    <Button rounded={true} onClick={() => this.modifyScale(+.1)} size="small" className={styles.button}
                             title={this.props.lang.zoom_in}>
                         <Icon><i className="fas fa-search-plus"/></Icon>
                     </Button>
@@ -263,22 +263,22 @@ export default class Tagger extends Component {
 
                 {/* Move buttons */}
                 <Button.Group className={styles.buttonGroup} hasAddons={true}>
-                    <Button onClick={() => this.modifyPosition(10, 0)} size="small" className={styles.button}
+                    <Button rounded={true} onClick={() => this.modifyPosition(10, 0)} size="small" className={styles.button}
                             title={this.props.lang.left}>
                         <Icon><i className="fas fa-arrow-left"/></Icon>
                     </Button>
 
-                    <Button onClick={() => this.modifyPosition(0, 10)} size="small" className={styles.button}
+                    <Button rounded={true} onClick={() => this.modifyPosition(0, 10)} size="small" className={styles.button}
                             title={this.props.lang.up}>
                         <Icon><i className="fas fa-arrow-up"/></Icon>
                     </Button>
 
-                    <Button onClick={() => this.modifyPosition(0, -10)} size="small" className={styles.button}
+                    <Button rounded={true} onClick={() => this.modifyPosition(0, -10)} size="small" className={styles.button}
                             title={this.props.lang.down}>
                         <Icon><i className="fas fa-arrow-down"/></Icon>
                     </Button>
 
-                    <Button onClick={() => this.modifyPosition(-10, 0)} size="small" className={styles.button}
+                    <Button rounded={true} onClick={() => this.modifyPosition(-10, 0)} size="small" className={styles.button}
                             title={this.props.lang.right}>
                         <Icon><i className="fas fa-arrow-right"/></Icon>
                     </Button>
@@ -288,18 +288,18 @@ export default class Tagger extends Component {
 
                 {/* Sizing buttons */}
                 <Button.Group className={styles.buttonGroup} hasAddons={true}>
-                    <Button onClick={() => this.setScaleToFit()} size="small" className={styles.button}
+                    <Button rounded={true} onClick={() => this.setScaleToFit()} size="small" className={styles.button}
                             disabled={this.getFitScale() === this.state.zoom.scale} title={this.props.lang.scale_fit}>
                         <Icon><i className="fas fa-compress-alt"/></Icon>
                     </Button>
 
-                    <Button onClick={() => this.updateScale(1)} size="small" className={styles.button}
+                    <Button rounded={true} onClick={() => this.updateScale(1)} size="small" className={styles.button}
                             disabled={this.state.zoom.scale === 1} title={this.props.lang.scale_expand}>
                         <Icon><i className="fas fa-expand-alt"/></Icon>
                     </Button>
                 </Button.Group>
 
-                <Button onClick={() => this.moveTo(0, 0)} size="small" className={styles.button}
+                <Button rounded={true} onClick={() => this.moveTo(0, 0)} size="small" className={styles.button}
                         disabled={this.state.zoom.position.left === 0 && this.state.zoom.position.top === 0}
                         title={this.props.lang.restore_position}>
                     <Icon><i className="fas fa-crosshairs"/></Icon>
@@ -307,12 +307,12 @@ export default class Tagger extends Component {
 
                 {/* Mode switcher */}
                 <Button.Group className={styles.buttonGroup} hasAddons={true} style={{marginLeft: 'auto'}}>
-                    <Button onClick={() => this.setMode('draw')} size="small" className={styles.button}
-                            color={this.state.mode === 'draw' ? 'primary' : 'light'} title={this.props.lang.draw_mode}>
+                    <Button rounded={true} onClick={() => this.setMode('draw')} size="small" className={styles.button}
+                            color={this.state.mode === 'draw' ? 'link' : 'gray'} title={this.props.lang.draw_mode}>
                         <Icon><i className="fas fa-expand"/></Icon>
                     </Button>
-                    <Button onClick={() => this.setMode('zoom')} size="small" className={styles.button}
-                            color={this.state.mode === 'zoom' ? 'primary' : 'light'} title={this.props.lang.zoom_mode}>
+                    <Button rounded={true} onClick={() => this.setMode('zoom')} size="small" className={styles.button}
+                            color={this.state.mode === 'zoom' ? 'link' : 'gray'} title={this.props.lang.zoom_mode}>
                         <Icon><i className="fas fa-mouse-pointer"/></Icon>
                     </Button>
                 </Button.Group>
