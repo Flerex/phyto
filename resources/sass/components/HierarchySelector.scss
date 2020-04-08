@@ -1,5 +1,4 @@
-@import '~bulma/sass/utilities/all';
-@import '~bulma/sass/components/panel';
+@import '../variables';
 
 
 .checkbox {
@@ -10,18 +9,13 @@
 
 .edit_button {
     margin-left: auto;
-    color: $grey-light;
-    cursor: pointer;
-
-    &:hover {
-        color: $grey-dark;
-    }
 }
 
 
 .add_new {
     color: $link;
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
     cursor: pointer;
 
     &:hover {
@@ -29,58 +23,42 @@
     }
 }
 
+.heading {
+    font-weight: bold;
+    font-size: 1.3rem;
+    color: white;
+    margin-bottom: 1rem;
+}
+
 .hierarchySelector {
-    @extend .panel;
-    position: relative;
-
-    li {
-        padding: .5rem 0 .5rem 1rem;
-        
-        div {
-            display: flex;
-            align-items: center;
-        }
+    overflow: hidden;
+    padding: 0;
 
 
-        &:not(:last-child)::after {
-            content: '';
-            position: absolute;
-            left: 0;
-            right: 0;
-            border-bottom: 1px solid $grey-lighter;
-            margin-top: .5rem;
-        }
-
-
-        ul {
-            margin-top: .5rem;
-            margin-left: .75rem;
-            padding-left: 1rem;
-
-            &::before {
-                content: '';
-                position: absolute;
-                left: 0;
-                right: 0;
-                border-bottom: 1px solid $grey-lighter;
-            }
-
-            li:last-child {
-                padding-bottom: 0;
-            }
-
-        }
+    :global(.control input) {
+        border: none;
     }
 
-    .panel-block + div {
-        border: 1px solid $grey-lighter;
+    li div {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
     }
 
-    > div:last-child {
-        border: 1px solid $grey-lighter;
-        border-top: none;
-        border-radius: 0 0 $radius $radius;
-        padding-right: 1rem;
+
+    li div,
+    .add_new {
+        height: 45px;
     }
 
+    ul {
+        margin-left: 1.25rem;
+    }
+
+}
+
+.header {
+    padding: 1.25rem;
+    margin-bottom: .75rem;
+    background-color: $primary1;
 }

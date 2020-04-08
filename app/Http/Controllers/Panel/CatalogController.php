@@ -40,12 +40,10 @@ class CatalogController extends Controller
             'order' => ['sometimes', 'string', Rule::in('asc', 'desc')],
         ]);
 
-        $sortBy = $validated['sortBy'] ?? 'id';
-        $order = $validated['order'] ?? 'desc';
+        $catalogs = Catalog::orderBy($validated['sortBy'] ?? 'id', $validated['order'] ?? 'desc')
+            ->paginate(config('phyto.pagination_size'));
 
-        $catalogs = Catalog::orderBy($sortBy, $order)->paginate(config('phyto.pagination_size'));
-
-        return view('panel.catalogs.index', compact('catalogs', 'sortBy', 'order'));
+        return view('panel.catalogs.index', compact('catalogs'));
     }
 
     /**

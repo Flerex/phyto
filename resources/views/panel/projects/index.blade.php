@@ -9,7 +9,7 @@
         </div>
         <div class="level-right">
             <div class="level-item">
-                <a href="{{ route('panel.projects.create') }}" class="button is-primary is-pulled-right">
+                <a href="{{ route('panel.projects.create') }}" class="button is-link is-rounded is-pulled-right">
                     <span class="icon is-left"><i class="fas fa-briefcase"></i></span>
                     <span>@lang('panel.projects.create')</span>
                 </a>
@@ -18,13 +18,14 @@
     </div>
 
     @if($canManageEverything)
-    <article class="message is-warning">
-        <div class="message-body">@lang('panel.projects.showing_everything_message')</div>
-    </article>
+        <article class="message is-warning">
+            <div class="message-body">@lang('panel.projects.showing_everything_message')</div>
+        </article>
     @endif
 
     @if(count($projects))
-        <table class="table is-fullwidth">
+
+        <table class="table is-boxed is-fullwidth">
             <thead>
             <th>@lang('labels.name')</th>
             @if($canManageEverything)
@@ -37,7 +38,8 @@
             <tbody>
             @foreach($projects as $project)
                 <tr>
-                    <td><a href="{{ route('panel.projects.show', compact('project')) }}">{{ $project->name }}</a></td>
+                    <td><a href="{{ route('panel.projects.show', compact('project')) }}">{{ $project->name }}</a>
+                    </td>
                     @if($canManageEverything)
                         <td>{{ $project->manager->name }}</td>
                     @endif

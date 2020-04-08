@@ -1,0 +1,32 @@
+html {
+    background-color: $gray3;
+    height: 100%;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+}
+
+#wrap {
+    flex: 1 1 auto;
+    padding-bottom: 0;
+}
+
+#navbar {
+    flex: 0 0 auto;
+
+    &.is-fullwidth {
+        padding-left: 3rem;
+        padding-right: 3rem;
+
+        .container {
+            max-width: none;
+        }
+    }
+}
+
+main.container {
+    height: 100%;
+}

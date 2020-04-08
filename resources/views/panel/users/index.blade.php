@@ -9,7 +9,7 @@
         </div>
         <div class="level-right">
             <div class="level-item">
-                <a href="{{ route('panel.users.create') }}" class="button is-primary is-pulled-right">
+                <a href="{{ route('panel.users.create') }}" class="button is-gray is-pulled-right is-rounded">
                     <span class="icon is-left"><i class="fas fa-user-plus"></i></span>
                     <span>@lang('panel.users.create')</span>
                 </a>
@@ -17,22 +17,21 @@
         </div>
     </div>
 
-
-    <table class="table is-fullwidth">
+    <table class="table is-boxed is-fullwidth">
         <thead>
-        <th>@lang('labels.id')</th>
+        <th class="has-text-right">@lang('labels.id')</th>
         <th>@lang('labels.user.name')</th>
         <th>@lang('labels.user.email')</th>
         <th>@lang('labels.user.role')</th>
         <th class="has-text-centered">@lang('panel.users.joined')</th>
         <th>@lang('panel.users.registered')</th>
-        <th class="has-text-centered">@lang('panel.users.reset_password') @include('partials.info', ['info' => trans('panel.users.reset_password_info')])</th>
+        <th class="has-text-right">@lang('panel.users.reset_password') @include('partials.info', ['info' => trans('panel.users.reset_password_info')])</th>
         </thead>
 
         <tbody>
         @foreach($users as $user)
             <tr>
-                <th>{{ $user->id }}</th>
+                <th class="has-text-right">{{ $user->id }}</th>
                 <td>
                     @include('partials.avatar', compact('user'))<span>{{ $user->name }}</span></td>
                 <td><a href="mailto:{{ $user->email }}">{{ $user->email }}</a></td>
@@ -54,10 +53,10 @@
                 <td>
                     {{ $user->created_at->diffForHumans() }}
                 </td>
-                <td class="has-text-centered">
+                <td class="has-text-right">
                     <form method="POST" action="{{ route('panel.users.password_reset', [ 'id' => $user->id ]) }}">
                         @csrf
-                        <button type="submit" class="button is-outlined is-link is-small">
+                        <button type="submit" class="button has-text-weight-bold is-link is-rounded is-light is-small">
                             @lang('general.reset')
                         </button>
                     </form>

@@ -12,21 +12,35 @@
     <!-- Styles -->
     <link href="{{ mix('css/vendors.css') }}" rel="stylesheet">
     <link href="{{ mix('css/app.css') }}" rel="stylesheet">
+
+    @translations
 </head>
 <body>
-    @include('partials.navbar')
-    <section id="wrap" class="section">
-        <main class="container is-widescreen">
-            @yield('content')
-        </main>
+@include('partials.navbar')
+
+@hasSection('full-width')
+    <section id="wrap">
+        @yield('content')
     </section>
+@else
+    <div id="wrap" class="container">
+        <section class="section">
+            <main id="main" class="container is-widescreen">
+                @yield('content')
+            </main>
+        </section>
+    </div>
+@endif
 
-    @include('partials.footer')
+@include('partials.footer')
 
-    @include('partials.flash')
+@include('partials.flash')
 
-    <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}"></script>
-    @stack('scripts')
+<!-- React Portals -->
+<div id="portals"></div>
+
+<!-- Scripts -->
+<script src="{{ asset('js/app.js') }}"></script>
+@stack('scripts')
 </body>
 </html>
