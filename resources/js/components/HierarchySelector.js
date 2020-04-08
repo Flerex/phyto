@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import ReactDOM from 'react-dom'
 import TreeView from './TreeView'
 import styles from '../../sass/components/HierarchySelector.scss'
+import Tippy from '@tippyjs/react';
 
 
 export default class HierarchySelector extends Component {
@@ -278,7 +279,7 @@ export default class HierarchySelector extends Component {
                         </p>
                     </div>
                     <TreeView data={this.state.data} appendList={this.renderAddButton}
-                              appendNode={this.props.mode === 'select' ? this.renderCheckbox : this.renderEditButton} />
+                              appendNode={this.props.mode === 'select' ? this.renderCheckbox : this.renderEditButton}/>
                 </div>
                 {this.renderModal()}
             </React.Fragment>
@@ -398,8 +399,13 @@ class EditButton extends Component {
     }
 
     render() {
-        return (<div className={styles.edit_button} title={this.props.lang.edit_node} onClick={this.clicked}><span
-            className="icon"><i className="fas fa-edit"/></span></div>)
+        return (
+            <Tippy content={this.props.lang.edit_node}>
+                <button className={`button is-small is-light is-rounded is-link ${styles.edit_button}`} onClick={this.clicked}>
+                    <span className="icon"><i className="fas fa-edit"/></span>
+                </button>
+            </Tippy>
+        )
     }
 }
 
@@ -425,13 +431,15 @@ class Checkbox extends Component {
     }
 
     render() {
-        return (<input type="checkbox" className={'checkbox ' + styles.checkbox} onChange={this.changed} name={this.props.element.type + '[]'}
-                       value={this.props.element.id} checked={this.state.selected} />)
+        return (<input type="checkbox" className={'checkbox ' + styles.checkbox} onChange={this.changed}
+                       name={this.props.element.type + '[]'}
+                       value={this.props.element.id} checked={this.state.selected}/>)
     }
 }
 
 
 const el = document.getElementById('hierarchy_selector');
 if (el) {
-    ReactDOM.render(<HierarchySelector lang={JSON.parse(el.dataset.lang)} mode={el.dataset.mode} catalog={el.dataset.catalog} />, el);
+    ReactDOM.render(<HierarchySelector lang={JSON.parse(el.dataset.lang)} mode={el.dataset.mode}
+                                       catalog={el.dataset.catalog}/>, el);
 }
