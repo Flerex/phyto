@@ -25,7 +25,7 @@
         <th>@lang('labels.user.role')</th>
         <th class="has-text-centered">@lang('panel.users.joined')</th>
         <th>@lang('panel.users.registered')</th>
-        <th class="has-text-right">@lang('panel.users.reset_password') @include('partials.info', ['info' => trans('panel.users.reset_password_info')])</th>
+        <th class="has-text-right" style="white-space: nowrap">@lang('panel.users.reset_password') @include('partials.info', ['info' => trans('panel.users.reset_password_info')])</th>
         </thead>
 
         <tbody>
