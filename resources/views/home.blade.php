@@ -36,9 +36,7 @@
             <section class="project_list">
                 <h1 class="is-size-7 is-uppercase has-text-weight-bold project_list__label has-text-grey">@lang('projects.my_projects')</h1>
 
-                @empty($projects)
-                    <span class="is-italic">@lang('projects.no_projects')</span>
-                @else
+                @if(count($projects))
                     <ul>
                         @foreach($projects as $project)
                             <li>
@@ -53,7 +51,9 @@
                             </li>
                         @endforeach
                     </ul>
-                @endempty
+                @else
+                    <span class="is-italic">@lang('projects.no_projects')</span>
+                @endif
             </section>
         </div>
     </div>

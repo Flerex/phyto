@@ -26,13 +26,20 @@ class AsynchronousController extends Controller
      */
     public function search_users(Request $request)
     {
-
         $validated = $request->validate([
-            'query' => 'required|string',
+            'query' => ['required_without:ids', 'string'],
+            'ids' => ['required_without:query', 'array', 'min:1'],
+            'ids.*' => ['exists:users,id'],
         ]);
 
-        $users = User::where(DB::raw('LOWER(name)'), 'like',
-            '%' . strtolower($validated['query']) . '%')->limit(15)->get();
+        if (key_exists('query', $validated)) {
+            $users = User::where(DB::raw('LOWER(name)'), 'like',
+                '%' . strtolower($validated['query']) . '%')->limit(15)->get();
+        }
+
+        if (key_exists('ids', $validated)) {
+            $users = User::whereIn('id', $validated['ids'])->get();
+        }
 
         return $users->map(function ($user) {
             return [

@@ -14,6 +14,7 @@
     <link href="{{ mix('css/app.css') }}" rel="stylesheet">
 
     @translations
+    @routes
 </head>
 <body>
 @include('partials.navbar')

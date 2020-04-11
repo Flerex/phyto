@@ -45,6 +45,7 @@ return [
         'showing_everything_message' => 'Due to your high-ranking permissions you are currently viewing all existing projects.',
         'add_users' => 'Add members',
         'no_catalogs' => 'There are no catalogs. Create one before being able to start a new project.',
+        'cannot_be_a_member_yourself' => 'You cannot be a member of your own project.',
 
         'samples' => [
             'label' => 'Sample|Samples',

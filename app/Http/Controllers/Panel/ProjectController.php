@@ -76,6 +76,10 @@ class ProjectController extends Controller
 
         $filteredUsers = collect($validated['users'])->diff(collect($currentUser->getKey()));
 
+        if($filteredUsers->count() === 0) {
+            return redirect()->back()->withErrors(['users' => trans('panel.projects.cannot_be_a_member_yourself')]);
+        }
+
         $project = $this->projectService->createProject($validated['name'], $validated['description'],
             $currentUser->getKey(), collect($validated['catalogs']), $filteredUsers);
 
