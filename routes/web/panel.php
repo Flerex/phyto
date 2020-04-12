@@ -1,6 +1,7 @@
 <?php
 
 use App\Enums\Permissions;
+use Illuminate\Support\Facades\Route;
 
 Route::prefix('panel')->middleware('permission:' . Permissions::PANEL_ACCESS)->group(function () {
     Route::get('/', 'Panel\PanelController@index')->name('panel');

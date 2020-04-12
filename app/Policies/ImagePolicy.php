@@ -39,4 +39,5 @@ class ImagePolicy
     {
         return $user->getKey() === $project->manager->getKey();
     }
+
 }

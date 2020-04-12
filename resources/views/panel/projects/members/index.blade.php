@@ -8,7 +8,7 @@
                 <th>@lang('labels.name')</th>
                 <th>@lang('labels.status')</th>
                 <th>@lang('panel.projects.members.added_on')</th>
-                <th>@lang('general.actions')</th>
+                <th class="has-text-right">@lang('general.actions')</th>
                 </thead>
 
                 <tbody>
@@ -23,18 +23,18 @@
                             @endif
                         </td>
                         <td>{{ $member->pivot->created_at->diffForHumans() }}</td>
-                        <td>
+                        <td class="has-text-right">
                             <form
                                 action="{{ route('panel.projects.members.change_status', compact('project', 'member')) }}"
                                 method="POST">
                                 <input type="hidden" name="active" value="{{ (int) !$member->pivot->active }}">
                                 @if($member->pivot->active)
-                                    <button type="submit" class="button is-danger is-small"
+                                    <button type="submit" class="button is-rounded is-light is-danger is-small"
                                             title="{{ trans('panel.projects.members.disable') }}">
                                         <span class="icon"><i class="fas fa-user-minus"></i></span>
                                     </button>
                                 @else
-                                    <button type="submit" class="button is-small"
+                                    <button type="submit" class="button is-rounded is-light is-small"
                                             title="{{ trans('panel.projects.members.enable') }}">
                                         <span class="icon"><i class="fas fa-user-plus"></i></span>
                                     </button>
