@@ -24,11 +24,10 @@ export default class UserSelector extends Component {
     }
 
     componentDidMount() {
-
-        const ids = this.props.old.map(i => parseInt(i)),
+        const ids = this.props.old ? this.props.old.map(i => parseInt(i)) : null,
             enabled = true;
 
-        if (ids.length)
+        if (ids && ids.length)
             axios.get(route('async.search_users'), {params: {ids}})
                 .then(({data}) => this.setState({data, enabled}));
         else
@@ -55,5 +54,6 @@ export default class UserSelector extends Component {
 
 const el = document.getElementById('user_selector')
 if (el) {
-    ReactDOM.render(<UserSelector old={JSON.parse(el.dataset.old)}/>, el)
+    const old = el.dataset.old ? JSON.parse(el.dataset.old) : null;
+    ReactDOM.render(<UserSelector old={old}/>, el)
 }
