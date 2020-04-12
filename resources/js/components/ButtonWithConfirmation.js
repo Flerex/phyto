@@ -62,14 +62,30 @@ export default class ButtonWithConfirmation extends Component {
 
     }
 
-    render() {
-        return (
-            <>
+    renderButton() {
+
+        const className = `button is-rounded is-small is-${this.props.type} is-light ${this.props.class}`;
+        if(this.props.icon) {
+            return (
                 <Tippy content={this.props.action}>
-                    <button onClick={this.toggleModal} className={`button is-rounded is-small is-${this.props.type} is-light`}>
+                    <button onClick={this.toggleModal} className={className}>
                         <span className="icon"><i className={this.props.icon}/></span>
                     </button>
                 </Tippy>
+            )
+        }
+
+        return (
+            <button onClick={this.toggleModal} className={className}>
+                {this.props.action}
+            </button>
+        )
+    }
+
+    render() {
+        return (
+            <>
+                {this.renderButton()}
                 {this.renderModal()}
             </>
         );
@@ -79,5 +95,5 @@ export default class ButtonWithConfirmation extends Component {
 document.querySelectorAll('.button-confirmation').forEach(el => {
     ReactDOM.render(<ButtonWithConfirmation type={el.dataset.type} route={el.dataset.route}
                                             action={el.dataset.action} icon={el.dataset.icon}
-                                            method={el.dataset.method}/>, el);
+                                            method={el.dataset.method} class={el.dataset.class}/>, el);
 });
