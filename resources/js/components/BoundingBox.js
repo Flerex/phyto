@@ -53,6 +53,7 @@ export default class BoundingBox extends Component {
 
     saveResizing() {
         this.props.updateBox(this.state.resizing);
+        this.setState({resizing: false, options: false});
     }
 
     updateOptions(options) {
