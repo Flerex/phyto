@@ -1,11 +1,14 @@
 .boundingBox {
     position: absolute;
     box-shadow: 0 0 0 3px rgb(56, 117, 252);
-    pointer-events: none;
     border-radius: 1px;
     transform: scale(1);
     transform-origin: top left;
     transition: all 100ms linear;
+
+    &:not(.hoverable) {
+        pointer-events: none;
+    }
 
     &.highlightedBox {
         box-shadow: 0 0 0 3px hsl(48, 100%, 67%);

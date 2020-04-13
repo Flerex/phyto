@@ -1,10 +1,12 @@
 import React, {Component} from 'react'
 import styles from '../../sass/components/BoundingBox.scss'
+import BoundingBoxOptions from './BoundingBoxOptions';
+import Tippy from '@tippyjs/react';
 
 export default class BoundingBox extends Component {
 
     constructor(props) {
-        super(props)
+        super(props);
 
         this.getBoundingBoxStyle = this.getBoundingBoxStyle.bind(this);
     }
@@ -20,11 +22,15 @@ export default class BoundingBox extends Component {
     }
 
     render() {
-        const className = `${styles.boundingBox}  ${this.props.highlighted ? styles.highlightedBox : ''}`;
+        const className = styles.boundingBox + (this.props.highlighted ? ' ' + styles.highlightedBox : '')
+            + (this.props.hoverable ? ' ' + styles.hoverable : '');
 
         return (
-            <div className={className} style={this.getBoundingBoxStyle(this.props.box)}
-            />
+            <Tippy content={<BoundingBoxOptions box={this.props.box} enableResizing={this.props.enableResizing}/>} appendTo={document.body} animation="fade"
+                   interactive={true} visible={true} arrow={true}>
+                <div className={className} style={this.getBoundingBoxStyle(this.props.box)}
+                />
+            </Tippy>
         )
     }
 

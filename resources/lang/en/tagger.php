@@ -12,6 +12,7 @@ return [
     'restore_position' => 'Restore position',
     'zoom_mode' => 'Move tool',
     'draw_mode' => 'Tagging tool',
+    'edit_mode' => 'Edit tool',
     'box_list' => 'Tags',
     'by' => 'by',
     'on' => 'on',

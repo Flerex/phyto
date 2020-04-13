@@ -1,15 +1,16 @@
 import React, {Component} from 'react'
-import ReactDOM from "react-dom";
+import ReactDOM from 'react-dom';
 import styles from '../../sass/components/Tagger.scss'
 import SelectableArea from './SelectableArea'
 import ZoomableArea from './ZoomableArea'
 import {Button, Icon, Heading} from 'react-bulma-components'
-import BoundingBox from "./BoundingBox";
+import BoundingBox from './BoundingBox';
+import EditableArea from './EditableArea';
 
 export default class Tagger extends Component {
 
     constructor(props) {
-        super(props)
+        super(props);
 
         // Constants
         this.canvasSize = {
@@ -25,7 +26,9 @@ export default class Tagger extends Component {
             taggerDimensions: null,
             boxes: props.boxes.map(b => Object.assign(b, {persisted: true})),
             highlightedBox: null,
-            mode: 'zoom',
+            mode: 'edit',
+
+            resizing: null,
 
             zoom: {
                 scale: 1,
@@ -58,6 +61,7 @@ export default class Tagger extends Component {
         this.setScaleToFit = this.setScaleToFit.bind(this);
         this.getFitScale = this.getFitScale.bind(this);
         this.moveTo = this.moveTo.bind(this);
+        this.enableResizing = this.enableResizing.bind(this);
     }
 
 
@@ -228,7 +232,7 @@ export default class Tagger extends Component {
                         <div className={styles.boxContent}>
                             <div>
                                 <em>Untagged species</em>
-                                {!box.persisted && (<i className={`fas fa-spinner fa-spin ${styles.uploading}`}></i>)}
+                                {!box.persisted && (<i className={`fas fa-spinner fa-spin ${styles.uploading}`}/>)}
                             </div>
                             <div className={styles.author}>
                                 {this.props.lang.by} <strong>{box.user}</strong>
@@ -240,9 +244,16 @@ export default class Tagger extends Component {
         )
     }
 
+
+    enableResizing(id) {
+        this.setState({resizing: this.state.boxes.find(b => b.id === id)});
+    }
+
+
     renderBoundingBoxes() {
         return this.state.boxes.map((box, i) => (
-            <BoundingBox highlighted={box.id === this.state.highlightedBox} box={box} key={i}/>
+            <BoundingBox key={i} enableResizing={this.enableResizing} highlighted={box.id === this.state.highlightedBox}
+                         box={box} hoverable={this.state.mode === 'edit'}/>
         ))
     }
 
@@ -263,22 +274,26 @@ export default class Tagger extends Component {
 
                 {/* Move buttons */}
                 <Button.Group className={styles.buttonGroup} hasAddons={true}>
-                    <Button rounded={true} onClick={() => this.modifyPosition(10, 0)} size="small" className={styles.button}
+                    <Button rounded={true} onClick={() => this.modifyPosition(10, 0)} size="small"
+                            className={styles.button}
                             title={this.props.lang.left}>
                         <Icon><i className="fas fa-arrow-left"/></Icon>
                     </Button>
 
-                    <Button rounded={true} onClick={() => this.modifyPosition(0, 10)} size="small" className={styles.button}
+                    <Button rounded={true} onClick={() => this.modifyPosition(0, 10)} size="small"
+                            className={styles.button}
                             title={this.props.lang.up}>
                         <Icon><i className="fas fa-arrow-up"/></Icon>
                     </Button>
 
-                    <Button rounded={true} onClick={() => this.modifyPosition(0, -10)} size="small" className={styles.button}
+                    <Button rounded={true} onClick={() => this.modifyPosition(0, -10)} size="small"
+                            className={styles.button}
                             title={this.props.lang.down}>
                         <Icon><i className="fas fa-arrow-down"/></Icon>
                     </Button>
 
-                    <Button rounded={true} onClick={() => this.modifyPosition(-10, 0)} size="small" className={styles.button}
+                    <Button rounded={true} onClick={() => this.modifyPosition(-10, 0)} size="small"
+                            className={styles.button}
                             title={this.props.lang.right}>
                         <Icon><i className="fas fa-arrow-right"/></Icon>
                     </Button>
@@ -308,11 +323,15 @@ export default class Tagger extends Component {
                 {/* Mode switcher */}
                 <Button.Group className={styles.buttonGroup} hasAddons={true} style={{marginLeft: 'auto'}}>
                     <Button rounded={true} onClick={() => this.setMode('draw')} size="small" className={styles.button}
-                            color={this.state.mode === 'draw' ? 'link' : 'gray'} title={this.props.lang.draw_mode}>
+                            color={this.state.mode === 'draw' ? 'link' : null} title={this.props.lang.draw_mode}>
                         <Icon><i className="fas fa-expand"/></Icon>
                     </Button>
+                    <Button rounded={true} onClick={() => this.setMode('edit')} size="small" className={styles.button}
+                            color={this.state.mode === 'edit' ? 'link' : null} title={this.props.lang.edit_mode}>
+                        <Icon><i className="fas fa-pen"/></Icon>
+                    </Button>
                     <Button rounded={true} onClick={() => this.setMode('zoom')} size="small" className={styles.button}
-                            color={this.state.mode === 'zoom' ? 'link' : 'gray'} title={this.props.lang.zoom_mode}>
+                            color={this.state.mode === 'zoom' ? 'link' : null} title={this.props.lang.zoom_mode}>
                         <Icon><i className="fas fa-mouse-pointer"/></Icon>
                     </Button>
                 </Button.Group>
@@ -334,7 +353,9 @@ export default class Tagger extends Component {
     renderModeArea() {
         return (
             <>
-                <SelectableArea onMouseUp={this.createBoundingBox} disabled={this.state.mode !== 'draw'}/>
+                {this.state.resizing && (<EditableArea resizing={this.state.resizing}/>)}
+                {this.state.mode === 'draw' && (<SelectableArea onMouseUp={this.createBoundingBox} disabled={this.state.mode !== 'draw'}/>)}
+
                 <ZoomableArea onZoomIn={this.zoomIn} onZooming={this.zooming} onMoving={this.moving}
                               disabled={this.state.mode !== 'zoom'}/>
             </>)
