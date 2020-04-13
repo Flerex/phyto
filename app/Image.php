@@ -15,4 +15,8 @@ class Image extends Model
     {
         return $this->hasMany(BoundingBox::class);
     }
+
+    public function sample() {
+        return $this->belongsTo(Sample::class);
+    }
 }

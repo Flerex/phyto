@@ -5,7 +5,6 @@ import SelectableArea from './SelectableArea'
 import ZoomableArea from './ZoomableArea'
 import {Button, Icon, Heading} from 'react-bulma-components'
 import BoundingBox from './BoundingBox';
-import EditableArea from './EditableArea';
 
 export default class Tagger extends Component {
 
@@ -28,8 +27,6 @@ export default class Tagger extends Component {
             highlightedBox: null,
             mode: 'edit',
 
-            resizing: null,
-
             zoom: {
                 scale: 1,
                 position: {
@@ -51,6 +48,7 @@ export default class Tagger extends Component {
         this.renderBoundingBoxes = this.renderBoundingBoxes.bind(this);
         this.renderToolbox = this.renderToolbox.bind(this);
         this.setMode = this.setMode.bind(this);
+        this.updateBox = this.updateBox.bind(this);
         this.getBoundingBoxStyle = this.getBoundingBoxStyle.bind(this);
         this.zoomIn = this.zoomIn.bind(this);
         this.zooming = this.zooming.bind(this);
@@ -61,7 +59,6 @@ export default class Tagger extends Component {
         this.setScaleToFit = this.setScaleToFit.bind(this);
         this.getFitScale = this.getFitScale.bind(this);
         this.moveTo = this.moveTo.bind(this);
-        this.enableResizing = this.enableResizing.bind(this);
     }
 
 
@@ -127,7 +124,7 @@ export default class Tagger extends Component {
             const boxes = state.boxes.concat(bb);
             return {boxes}
         }, () => {
-            axios.post(this.props.createBbLink, bb).then(({data}) => {
+            axios.post(route('async.bounding_boxes.store', {image: this.props.imageKey}), bb).then(({data}) => {
                 this.persistBoundingBox(data);
             });
         })
@@ -218,6 +215,26 @@ export default class Tagger extends Component {
         this.moveTo(this.state.zoom.position.left + movementX, this.state.zoom.position.top + movementY)
     }
 
+    updateBox(id, newBox) {
+
+        this.setState(state => {
+            const boxes = state.boxes
+                .filter(el => !(el.id === id))
+                .concat({id, ...newBox, persisted: false, user: this.props.user});
+
+            return {boxes};
+        }, () => {
+            axios.post(route('async.bounding_boxes.update', {boundingBox: id}), {
+                ...newBox,
+                _method: 'PATCH'
+            }).then(({data}) => {
+                const {top, left, width, height} = data;
+                this.persistBoundingBox({id, top, left, width, height});
+            });
+        });
+
+    }
+
     renderBoundingBoxList() {
         return (
             <div className={styles.bbList}>
@@ -245,15 +262,10 @@ export default class Tagger extends Component {
     }
 
 
-    enableResizing(id) {
-        this.setState({resizing: this.state.boxes.find(b => b.id === id)});
-    }
-
-
     renderBoundingBoxes() {
         return this.state.boxes.map((box, i) => (
-            <BoundingBox key={i} enableResizing={this.enableResizing} highlighted={box.id === this.state.highlightedBox}
-                         box={box} hoverable={this.state.mode === 'edit'}/>
+            <BoundingBox key={i} highlighted={box.id === this.state.highlightedBox} box={box}
+                         editable={this.state.mode === 'edit'} updateBox={(newBox) => this.updateBox(box.id, newBox)}/>
         ))
     }
 
@@ -353,9 +365,8 @@ export default class Tagger extends Component {
     renderModeArea() {
         return (
             <>
-                {this.state.resizing && (<EditableArea resizing={this.state.resizing}/>)}
-                {this.state.mode === 'draw' && (<SelectableArea onMouseUp={this.createBoundingBox} disabled={this.state.mode !== 'draw'}/>)}
 
+                <SelectableArea onMouseUp={this.createBoundingBox} disabled={this.state.mode !== 'draw'}/>
                 <ZoomableArea onZoomIn={this.zoomIn} onZooming={this.zooming} onMoving={this.moving}
                               disabled={this.state.mode !== 'zoom'}/>
             </>)
@@ -389,7 +400,8 @@ export default class Tagger extends Component {
 
 const el = document.getElementById('tagger');
 if (el) {
-    ReactDOM.render(<Tagger image={el.dataset.image} createBbLink={el.dataset.createBbLink} user={el.dataset.user}
+    ReactDOM.render(<Tagger image={el.dataset.image} imageKey={el.dataset.imageKey}
+                            createBbLink={el.dataset.createBbLink} user={el.dataset.user}
                             boxes={JSON.parse(el.dataset.boxes)} lang={JSON.parse(el.dataset.lang)}/>, el);
 }
 

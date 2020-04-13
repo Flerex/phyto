@@ -1,16 +1,24 @@
 import React, {Component} from 'react';
 import styles from '../../sass/components/EditableArea.scss'
-import {HotKeys} from 'react-hotkeys'
+import {pascalCase} from 'pascal-case';
 
 export default class EditableArea extends Component {
 
     constructor(props) {
         super(props);
 
+        this.minimumSize = 5;
+
+        this.initialState = {
+            mode: null,
+            selectionBoxOrigin: [props.box.left, props.box.top],
+            selectionBoxTarget: [+props.box.left + +props.box.width, +props.box.top + +props.box.height],
+        };
+
         this.state = {
             mode: null,
-            selectionBoxOrigin: [props.resizing.left, props.resizing.top],
-            selectionBoxTarget: [+props.resizing.left + +props.resizing.width, +props.resizing.top + +props.resizing.height],
+            selectionBoxOrigin: [props.box.left, props.box.top],
+            selectionBoxTarget: [+props.box.left + +props.box.width, +props.box.top + +props.box.height],
         };
 
         this.startEditing = this.startEditing.bind(this);
@@ -18,42 +26,79 @@ export default class EditableArea extends Component {
         this.getSelectionCoordinates = this.getSelectionCoordinates.bind(this);
         this.dragging = this.dragging.bind(this);
         this.endDrag = this.endDrag.bind(this);
+
+        this.manageBottomLeftResizing = this.manageBottomLeftResizing.bind(this);
+        this.manageBottomRightResizing = this.manageBottomRightResizing.bind(this);
+        this.manageTopLeftResizing = this.manageTopLeftResizing.bind(this);
+        this.manageTopRightResizing = this.manageTopRightResizing.bind(this);
     }
 
     endDrag(e) {
         this.setState({mode: null});
+        this.props.updateResizing(this.getRelativeCoordinates());
     }
 
     startEditing(y, x) {
         this.setState({mode: {y, x}});
     }
 
+    manageBottomRightResizing(newX, newY) {
+
+        if (newX < (this.state.selectionBoxOrigin[0] - this.minimumSize)
+            || newY < (this.state.selectionBoxOrigin[1] - this.minimumSize))
+            return;
+
+        this.setState({
+            selectionBoxTarget: [newX, newY],
+        });
+
+    }
+
+    manageBottomLeftResizing(newX, newY) {
+
+        if (newX > (this.state.selectionBoxTarget[0] - this.minimumSize)
+            || newY < (this.state.selectionBoxOrigin[1] - this.minimumSize))
+            return;
+
+        this.setState({
+            selectionBoxTarget: [this.state.selectionBoxTarget[0], newY],
+            selectionBoxOrigin: [newX, this.state.selectionBoxOrigin[1]],
+        });
+
+
+    }
+
+    manageTopRightResizing(newX, newY) {
+        if (newX < (this.state.selectionBoxOrigin[0] - this.minimumSize)
+            || newY > (this.state.selectionBoxTarget[1] - this.minimumSize))
+            return;
+
+        this.setState({
+            selectionBoxTarget: [newX, this.state.selectionBoxTarget[1]],
+            selectionBoxOrigin: [this.state.selectionBoxOrigin[0], newY],
+        });
+
+    }
+
+    manageTopLeftResizing(newX, newY) {
+        if (newX > (this.state.selectionBoxTarget[0] - this.minimumSize)
+            || newY > (this.state.selectionBoxTarget[1] - this.minimumSize))
+            return;
+
+        this.setState({
+            selectionBoxOrigin: [newX, newY],
+        });
+
+    }
+
     dragging(e) {
         if (!this.state.mode) return;
 
-        const re = e.currentTarget.getBoundingClientRect();
+        const re = e.currentTarget.getBoundingClientRect(),
+            methodName = 'manage' + pascalCase(this.state.mode.y + '.' + this.state.mode.x) + 'Resizing';
 
-
-        if (this.state.mode.x === 'right' && this.state.mode.y === 'bottom') {
-            this.setState({
-                selectionBoxTarget: [e.nativeEvent.clientX - re.left, e.nativeEvent.clientY - re.top],
-            });
-        } else if (this.state.mode.x === 'left' && this.state.mode.y === 'bottom') {
-            this.setState({
-                selectionBoxTarget: [this.state.selectionBoxTarget[0], e.nativeEvent.clientY - re.top],
-                selectionBoxOrigin: [e.nativeEvent.clientX - re.left, this.state.selectionBoxOrigin[1]],
-            });
-        } else if (this.state.mode.x === 'right' && this.state.mode.y === 'top') {
-            this.setState({
-                selectionBoxTarget: [e.nativeEvent.clientX - re.left, this.state.selectionBoxTarget[1]],
-                selectionBoxOrigin: [this.state.selectionBoxOrigin[0], e.nativeEvent.clientY - re.top],
-            });
-        } else if (this.state.mode.x === 'left' && this.state.mode.y === 'top') {
-            this.setState({
-                selectionBoxOrigin: [e.nativeEvent.clientX - re.left, e.nativeEvent.clientY - re.top],
-            });
-        }
-
+        // Call the corresponding manageYXResizing event handler
+        this[methodName](e.nativeEvent.clientX - re.left, e.nativeEvent.clientY - re.top);
     }
 
 
