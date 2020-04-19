@@ -53,14 +53,7 @@ class CatalogController extends Controller
      */
     public function create()
     {
-        $hierarchySelectorLang = array_merge([
-            'title' => trans('panel.species.hierarchy_selector'),
-            'search' => trans('general.search'),
-            'cancel' => trans('general.cancel'),
-            'name' => trans('labels.name'),
-        ], trans('hierarchy_selector'));
-
-        return view('panel.catalogs.create', compact('hierarchySelectorLang'));
+        return view('panel.catalogs.create');
     }
 
     /**
@@ -99,16 +92,9 @@ class CatalogController extends Controller
     {
         $this->authorize('edit', $catalog);
 
-        $hierarchySelectorLang = array_merge([
-            'title' => trans('panel.species.hierarchy_selector'),
-            'search' => trans('general.search'),
-            'cancel' => trans('general.cancel'),
-            'name' => trans('labels.name'),
-        ], trans('hierarchy_selector'));
-
         $nodes = $catalog->nodes();
 
-        return view('panel.catalogs.edit', compact('catalog', 'nodes', 'hierarchySelectorLang'));
+        return view('panel.catalogs.edit', compact('catalog', 'nodes'));
     }
 
     /**
@@ -213,16 +199,9 @@ class CatalogController extends Controller
 
         $this->authorize('create_from', $catalog);
 
-        $hierarchySelectorLang = array_merge([
-            'title' => trans('panel.species.hierarchy_selector'),
-            'search' => trans('general.search'),
-            'cancel' => trans('general.cancel'),
-            'name' => trans('labels.name'),
-        ], trans('hierarchy_selector'));
-
         $nodes = $catalog->nodes();
 
-        return view('panel.catalogs.create_from', compact('catalog', 'nodes', 'hierarchySelectorLang'));
+        return view('panel.catalogs.create_from', compact('catalog', 'nodes'));
 
     }
 }

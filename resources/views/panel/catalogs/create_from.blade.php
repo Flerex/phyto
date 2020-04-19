@@ -42,8 +42,7 @@
                 </p>
             @endif
         </div>
-        <div id="hierarchy_selector" data-lang="{{ json_encode($hierarchySelectorLang) }}" data-mode="select"
-             data-catalog="{{ $catalog->getKey() }}"></div>
+        <div id="hierarchy_selector" data-mode="select" data-catalog="{{ $catalog->getKey() }}"></div>
 
         {{-- Actions --}}
         <div class="has-text-centered">

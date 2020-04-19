@@ -16,15 +16,7 @@ class SpeciesController extends Controller
      */
     public function index()
     {
-
-        $hierarchySelectorLang = array_merge([
-            'title' => trans('panel.species.hierarchy_selector'),
-            'search' => trans('general.search'),
-            'cancel' => trans('general.cancel'),
-            'name' => trans('labels.name'),
-        ], trans('hierarchy_selector'));
-
-        return view('panel.species.index', compact('hierarchySelectorLang'));
+        return view('panel.species.index');
     }
 
 }

@@ -16,7 +16,6 @@ return [
 
     'species' => [
         'management' => 'Species management',
-        'hierarchy_selector' => 'Hierarchy',
     ],
 
     'catalogs' => [
