@@ -16,7 +16,7 @@
                 <a href="{{ route('projects.images.tag', compact('project', 'image')) }}">
                     <div class="box">
                         <figure class="image">
-                            <img src="{{ asset($image->preview_path) }}">
+                            <img src="{{ asset($image->path) }}">
                         </figure>
                     </div>
                 </a>

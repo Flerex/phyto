@@ -21,7 +21,7 @@
             <div class="column is-6">
                 <div class="box">
                     <figure class="image">
-                        <img src="{{ asset($image->preview_path) }}">
+                        <img src="{{ asset($image->thumbnail_path) }}">
                     </figure>
                 </div>
             </div>

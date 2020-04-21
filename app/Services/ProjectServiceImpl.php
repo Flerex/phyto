@@ -62,7 +62,7 @@ class ProjectServiceImpl implements ProjectService
     public function addSampleToProject(string $name, string $description, Carbon $takenOn, Collection $files, Project $project): Sample
     {
 
-        return DB::transaction(function () use ($takenOn, $project, $description, $name, $files) {
+        return DB::transaction(function() use ($takenOn, $project, $description, $name, $files) {
 
             $sample = Sample::create([
                 'name' => $name,
@@ -76,7 +76,7 @@ class ProjectServiceImpl implements ProjectService
             foreach($files as $file) {
                 $image = Image::create([
                     'sample_id' => $sample->getKey(),
-                    'path' => $file,
+                    'original_path' => $file,
                 ]);
 
                 NormalizeImagePreview::dispatch($image);

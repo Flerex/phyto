@@ -34,17 +34,33 @@ class NormalizeImagePreview implements ShouldQueue
      */
     public function handle()
     {
-        $path = $this->image->path;
-        $newFileFullPath = local_path('public/' . $path);
-        $mimeType = File::mimeType($newFileFullPath);
+        $originalPath = $this->image->original_path;
+        $originalFullPath = local_path('public/' . $originalPath);
 
-        $previewPath = $path;
-        if(!in_array($mimeType, ['image/jpeg', 'image/png'])) {
-            ImageManager::make($newFileFullPath)->encode('png')->save($newFileFullPath . '_preview.png');
-            $previewPath = $path . '_preview.png';
-        }
+        $basename = basename($originalPath);
 
-        $this->image->preview_path = $previewPath;
+        $basePath = str_replace($basename, '', $originalPath);
+        $baseFullPath = str_replace($basename, '', $originalFullPath);
+
+        preg_match('/(.*?)(?:\..*)?$/', $basename, $matches);
+        $basePath .= $matches[1];
+        $baseFullPath .= $matches[1];
+
+
+        // Thumbnail
+        $thumbnailPath = $basePath . '_thumbnail.png';
+        $thumbnailFullPath = $baseFullPath . '_thumbnail.png';
+        ImageManager::make($originalFullPath)->resize(500, null, function ($constraint) {
+            $constraint->aspectRatio();
+        })->encode('png')->save($thumbnailFullPath);
+        $this->image->thumbnail_path = $thumbnailPath;
+
+        // Compressed
+        $compressedPath = $basePath . '_compressed.png';
+        $compressedFullPath = $baseFullPath . '_compressed.png';
+        ImageManager::make($originalFullPath)->encode('png')->save($compressedFullPath);
+        $this->image->path = $compressedPath;
+
         $this->image->save();
     }
 }

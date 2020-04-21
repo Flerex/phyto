@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\BoundingBox;
 use App\Image;
 use App\Project;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -15,8 +16,8 @@ class ProjectController extends Controller
     {
         $this->authorize('access', $project);
 
-        $images = $project->samples->pluck('images')->flatten();
-
+        $images = $project->samples->pluck('images')->flatten()->filter(fn (Image $img) => !is_null($img->path));
+        
         return view('projects.show', compact('project', 'images'));
     }
 
