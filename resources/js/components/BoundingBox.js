@@ -67,7 +67,8 @@ export default class BoundingBox extends Component {
 
             options = (<BoundingBoxOptions enableResizing={this.enableResizing} box={this.props.box}
                                            cancelResizing={this.cancelResizing}
-                                           saveResizing={this.saveResizing}/>);
+                                           saveResizing={this.saveResizing}
+                                           handleRemove={this.props.handleRemove}/>);
 
         return (
             <>

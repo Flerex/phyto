@@ -26,4 +26,10 @@ class BoundingBoxPolicy
         $users = $boundingBox->image->sample->project->users->pluck('id');
         return $users->contains($user->getKey());
     }
+
+    public function destroy(User $user, BoundingBox $boundingBox)
+    {
+        $users = $boundingBox->image->sample->project->users->pluck('id');
+        return $users->contains($user->getKey());
+    }
 }

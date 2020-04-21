@@ -59,6 +59,8 @@ export default class Tagger extends Component {
         this.setScaleToFit = this.setScaleToFit.bind(this);
         this.getFitScale = this.getFitScale.bind(this);
         this.moveTo = this.moveTo.bind(this);
+        this.deleteBox = this.deleteBox.bind(this);
+        this.handleRemove = this.handleRemove.bind(this);
     }
 
 
@@ -235,6 +237,21 @@ export default class Tagger extends Component {
 
     }
 
+    deleteBox(id) {
+        this.setState(state => {
+            const boxes = state.boxes.filter(el => !(el.id === id));
+            return {boxes};
+        });
+
+    }
+
+    handleRemove(id) {
+        axios.post(route('async.bounding_boxes.destroy', {boundingBox: id}), {_method: 'DELETE'})
+            .then(_ => {
+                this.deleteBox(id)
+            })
+    }
+
     renderBoundingBoxList() {
         return (
             <div className={styles.bbList}>
@@ -265,6 +282,7 @@ export default class Tagger extends Component {
     renderBoundingBoxes() {
         return this.state.boxes.map((box, i) => (
             <BoundingBox key={i} highlighted={box.id === this.state.highlightedBox} box={box}
+                         handleRemove={this.handleRemove}
                          editable={this.state.mode === 'edit'} updateBox={(newBox) => this.updateBox(box.id, newBox)}/>
         ))
     }

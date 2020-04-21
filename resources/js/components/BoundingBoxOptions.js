@@ -12,6 +12,7 @@ export default class BoundingBoxOptions extends Component {
         };
 
         this.handleEdit = this.handleEdit.bind(this);
+        this.renderDefaultButtons = this.renderDefaultButtons.bind(this);
     }
 
     handleEdit() {
@@ -25,17 +26,42 @@ export default class BoundingBoxOptions extends Component {
         this.setState({resizing});
     }
 
+    renderDefaultButtons() {
+        if (this.state.resizing) return;
+
+        return (
+            <>
+                <Button onClick={this.handleEdit} color="black" size="small" className={styles.button}>
+                    <Icon><i className="fas fa-expand"/></Icon>
+                </Button>
+
+                <Button onClick={() => this.props.handleRemove(this.props.box.id)} color="black" size="small" className={styles.button}>
+                    <Icon><i className="fas fa-trash-alt"/></Icon>
+                </Button>
+            </>
+        )
+    }
+
+    renderResizingButtons() {
+        if (!this.state.resizing) return;
+
+        return (
+            <>
+                <Button onClick={this.props.saveResizing} color="black" size="small" className={styles.button}>
+                    <Icon><i className="fas fa-save"/></Icon>
+                </Button>
+                <Button onClick={this.handleEdit} color="black" size="small" className={styles.button}>
+                    <Icon><i className="fas fa-times"/></Icon>
+                </Button>
+            </>
+        )
+    }
+
     render() {
         return (
             <>
-                {this.state.resizing && (
-                    <Button onClick={this.props.saveResizing} color="black" size="small" className={styles.button}>
-                        <Icon><i className="fas fa-save"/></Icon>
-                    </Button>
-                )}
-                <Button onClick={this.handleEdit} color="black" size="small" className={styles.button}>
-                    <Icon><i className={`fas ${this.state.resizing ? 'fa-times' : 'fa-expand'}`}/></Icon>
-                </Button>
+                {this.renderDefaultButtons()}
+                {this.renderResizingButtons()}
             </>
         )
     }

@@ -35,4 +35,13 @@ class BoundingBoxController extends Controller
 
         return $boundingBox;
     }
+
+    public function destroy(BoundingBox $boundingBox)
+    {
+        $this->authorize('destroy', $boundingBox);
+
+        $boundingBox->delete();
+
+        return ['success' => true];
+    }
 }
