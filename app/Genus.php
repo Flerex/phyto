@@ -23,4 +23,9 @@ class Genus extends Model
     {
         return $this->hasMany(Species::class);
     }
+
+    public function boundingBoxes()
+    {
+        return $this->morphMany(BoundingBox::class, 'taggable');
+    }
 }

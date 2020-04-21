@@ -25,4 +25,8 @@ class Classis extends Model
         return $this->hasMany(Genus::class);
     }
 
+    public function boundingBoxes()
+    {
+        return $this->morphMany(BoundingBox::class, 'taggable');
+    }
 }

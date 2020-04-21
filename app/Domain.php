@@ -19,5 +19,9 @@ class Domain extends Model
         return $this->hasMany(Classis::class);
     }
 
+    public function boundingBoxes()
+    {
+        return $this->morphMany(BoundingBox::class, 'taggable');
+    }
 
 }

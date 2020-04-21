@@ -10,3 +10,5 @@ Route::post('/projects/images/{image}/bounding-boxes', 'BoundingBoxController@st
     ->name('async.bounding_boxes.store');
 Route::patch('/projects/images/bounding-boxes/{boundingBox}/update', 'BoundingBoxController@update')
     ->name('async.bounding_boxes.update');
+Route::post('/bounding-boxes/{boundingBox}/tag', 'BoundingBoxController@tag')
+    ->name('async.bounding_boxes.tag');

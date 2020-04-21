@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\BoundingBox;
+use App\Domain;
 use App\Image;
 use App\Project;
 use Illuminate\Http\Request;
@@ -24,7 +25,7 @@ class ProjectController extends Controller
     {
         $this->authorize('access', $project);
 
-        $boxes = collect($image->boundingBoxes()->with('user')->get()->toArray())->map(function($bb) {
+        $boxes = collect($image->boundingBoxes()->with('user', 'taggable')->get()->toArray())->map(function($bb) {
             $bb['user'] = $bb['user']['name'];
             return $bb;
         });

@@ -62,3 +62,19 @@
     margin-bottom: .75rem;
     background-color: $primary1;
 }
+
+.selectionButton {
+    background-color: $link;
+    color: $white;
+    padding: 1rem;
+    display: block;
+    cursor: pointer;
+    border: none;
+    text-align: center;
+    width: 100%;
+    font-size: 1rem;
+
+    &:hover {
+        background-color: lighten($link, 5%);
+    }
+}

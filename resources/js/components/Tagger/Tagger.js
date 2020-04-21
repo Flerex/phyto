@@ -1,10 +1,11 @@
 import React, {Component} from 'react'
 import ReactDOM from 'react-dom';
-import styles from '../../sass/components/Tagger.scss'
+import styles from '../../../sass/components/Tagger.scss'
 import SelectableArea from './SelectableArea'
-import ZoomableArea from './ZoomableArea'
+import ZoomableArea from '../ZoomableArea'
 import {Button, Icon, Heading} from 'react-bulma-components'
 import BoundingBox from './BoundingBox';
+import HierarchySelector from '../HierarchySelector';
 
 export default class Tagger extends Component {
 
@@ -25,7 +26,11 @@ export default class Tagger extends Component {
             taggerDimensions: null,
             boxes: props.boxes.map(b => Object.assign(b, {persisted: true})),
             highlightedBox: null,
-            mode: 'edit',
+            mode: 'zoom',
+
+            modal: false,
+
+            tagging: null,
 
             zoom: {
                 scale: 1,
@@ -35,6 +40,8 @@ export default class Tagger extends Component {
                 },
             },
         };
+
+        this.portals = document.getElementById('portals');
 
         // Method bindings
         this.getImageSize = this.getImageSize.bind(this);
@@ -59,8 +66,15 @@ export default class Tagger extends Component {
         this.setScaleToFit = this.setScaleToFit.bind(this);
         this.getFitScale = this.getFitScale.bind(this);
         this.moveTo = this.moveTo.bind(this);
+        this.toggleModal = this.toggleModal.bind(this);
+        this.handleTagging = this.handleTagging.bind(this);
+        this.tagSelected = this.tagSelected.bind(this);
+        this.updateBoxTaggable = this.updateBoxTaggable.bind(this);
     }
 
+    toggleModal() {
+        this.setState({modal: !this.state.modal})
+    }
 
     componentDidMount() {
         this.getImageSize(this.props.image).then(res => {
@@ -235,6 +249,20 @@ export default class Tagger extends Component {
 
     }
 
+
+    handleTagging(tagging) {
+        this.setState({tagging})
+        this.toggleModal()
+    }
+
+    renderBoxName(box) {
+
+        if(!box.taggable) {
+            return (<em>{Lang.trans('tagger.untagged')}</em>)
+        }
+        return box.taggable.name;
+    }
+
     renderBoundingBoxList() {
         return (
             <div className={styles.bbList}>
@@ -248,7 +276,7 @@ export default class Tagger extends Component {
                         <div className={styles.boxIcon}><i className="fas fa-question"/></div>
                         <div className={styles.boxContent}>
                             <div>
-                                <em>Untagged species</em>
+                                {this.renderBoxName(box)}
                                 {!box.persisted && (<i className={`fas fa-spinner fa-spin ${styles.uploading}`}/>)}
                             </div>
                             <div className={styles.author}>
@@ -265,6 +293,7 @@ export default class Tagger extends Component {
     renderBoundingBoxes() {
         return this.state.boxes.map((box, i) => (
             <BoundingBox key={i} highlighted={box.id === this.state.highlightedBox} box={box}
+                         handleTagging={this.handleTagging}
                          editable={this.state.mode === 'edit'} updateBox={(newBox) => this.updateBox(box.id, newBox)}/>
         ))
     }
@@ -351,6 +380,32 @@ export default class Tagger extends Component {
         )
     }
 
+    updateBoxTaggable(id, taggable) {
+        this.setState(state => {
+            const box = state.boxes.find(box => box.id === id);
+
+            const boxes = state.boxes
+                .filter(el => !(el.id === id))
+                .concat({...box, taggable});
+
+            return {boxes};
+        });
+
+    }
+
+    tagSelected(taggable) {
+        const requestData = {
+            id: taggable.id,
+            type: taggable.type,
+        }
+        axios.post(route('async.bounding_boxes.tag', {boundingBox: this.state.tagging}), requestData)
+            .then(_ => {
+                this.updateBoxTaggable(this.state.tagging, taggable)
+            })
+        this.toggleModal()
+
+    }
+
     getTaggerStyle() {
         return {
             transform: 'scale(' + this.state.zoom.scale + ')',
@@ -365,7 +420,6 @@ export default class Tagger extends Component {
     renderModeArea() {
         return (
             <>
-
                 <SelectableArea onMouseUp={this.createBoundingBox} disabled={this.state.mode !== 'draw'}/>
                 <ZoomableArea onZoomIn={this.zoomIn} onZooming={this.zooming} onMoving={this.moving}
                               disabled={this.state.mode !== 'zoom'}/>
@@ -385,16 +439,30 @@ export default class Tagger extends Component {
 
     render() {
         return (
-            <div className={styles.wrapper} style={{height: this.canvasSize.height + 45 + 'px'}}>
-                <div>
-                    {this.renderCanvas()}
-                    {this.renderToolbox()}
+            <>
+                <div className={styles.wrapper} style={{height: this.canvasSize.height + 45 + 'px'}}>
+                    <div>
+                        {this.renderCanvas()}
+                        {this.renderToolbox()}
+                    </div>
+
+                    {this.renderBoundingBoxList()}
                 </div>
-
-                {this.renderBoundingBoxList()}
-            </div>
-
+                {this.renderModal()}
+            </>
         )
+    }
+
+    renderModal() {
+        return ReactDOM.createPortal((
+            <div className={`modal${this.state.modal ? ' is-active' : ''}`}>
+                <div className="modal-background" onClick={this.toggleModal}/>
+                <div className="modal-content">
+                   <HierarchySelector mode="tagging" onSelection={this.tagSelected}/>
+                </div>
+                <button className="modal-close is-large" aria-label="close" onClick={this.toggleModal}/>
+            </div>
+        ), this.portals)
     }
 }
 

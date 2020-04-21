@@ -24,4 +24,9 @@ class Species extends Model
             ->belongsToMany(Catalog::class, 'catalogs_nodes', 'catalog_id', 'node_id')
             ->withTimestamps();
     }
+
+    public function boundingBoxes()
+    {
+        return $this->morphMany(BoundingBox::class, 'taggable');
+    }
 }

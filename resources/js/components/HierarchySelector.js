@@ -14,6 +14,7 @@ export default class HierarchySelector extends Component {
         this.escFunction = this.escFunction.bind(this)
         this.renderAddButton = this.renderAddButton.bind(this)
         this.renderEditButton = this.renderEditButton.bind(this)
+        this.renderRadioButton = this.renderRadioButton.bind(this)
         this.renderCheckbox = this.renderCheckbox.bind(this)
         this.renderError = this.renderError.bind(this)
         this.hideModal = this.hideModal.bind(this)
@@ -22,6 +23,7 @@ export default class HierarchySelector extends Component {
         this.onCreating = this.onCreating.bind(this)
         this.onEditing = this.onEditing.bind(this)
         this.handleSearch = this.handleSearch.bind(this)
+        this.handleRadioSelection = this.handleRadioSelection.bind(this)
 
         this.state = {
             data: [],
@@ -33,6 +35,8 @@ export default class HierarchySelector extends Component {
             editing: false,
             parent: null,
             sending: false,
+
+            selection: null,
         }
     }
 
@@ -255,6 +259,17 @@ export default class HierarchySelector extends Component {
         }
     }
 
+    getAppendable() {
+        switch (this.props.mode) {
+            case 'tagging':
+                return this.renderRadioButton;
+            case 'select':
+                return this.renderCheckbox;
+            default:
+                return this.renderEditButton;
+        }
+    }
+
     /**
      * Removes the event listener for the escape key when unmounting the component.
      */
@@ -265,7 +280,8 @@ export default class HierarchySelector extends Component {
     render() {
         return (
             <React.Fragment>
-                <div className={`box ${styles.hierarchySelector}`}>
+                <div
+                    className={`box ${styles.hierarchySelector} ${this.props.mode === 'tagging' ? 'selector-in-modal' : ''}`}>
                     <div className={styles.header}>
                         <p className={styles.heading}>{Lang.trans('hierarchy_selector.hierarchy_selector')}</p>
 
@@ -278,8 +294,11 @@ export default class HierarchySelector extends Component {
                         </span>
                         </p>
                     </div>
-                    <TreeView data={this.state.data} appendList={this.renderAddButton}
-                              appendNode={this.props.mode === 'select' ? this.renderCheckbox : this.renderEditButton}/>
+                    <div>
+                        <TreeView data={this.state.data} appendList={this.renderAddButton}
+                                  appendNode={this.getAppendable()}/>
+                    </div>
+                    {this.renderSelectButton()}
                 </div>
                 {this.renderModal()}
             </React.Fragment>
@@ -293,6 +312,16 @@ export default class HierarchySelector extends Component {
         return (<span className="has-text-danger">{this.state.error}</span>);
     }
 
+    renderSelectButton() {
+        if (this.props.mode !== 'tagging') return;
+
+        return (
+            <div>
+                <button className={styles.selectionButton} onClick={() => this.props.onSelection(this.state.selection)}>{Lang.trans('general.select')}</button>
+            </div>
+        )
+    }
+
     renderModal() {
         return (
             <div className={this.state.creating || this.state.editing ? 'modal is-active' : 'modal'}>
@@ -303,7 +332,8 @@ export default class HierarchySelector extends Component {
                         <button className="delete" aria-label="close" onClick={this.hideModal}/>
                     </header>
                     <section className="modal-card-body">
-                        <input className="input" type="text" placeholder={Lang.trans('labels.name')} value={this.state.name}
+                        <input className="input" type="text" placeholder={Lang.trans('labels.name')}
+                               value={this.state.name}
                                onChange={e => this.setState({name: e.target.value})}/>
                     </section>
                     <footer className="modal-card-foot">
@@ -356,6 +386,20 @@ export default class HierarchySelector extends Component {
 
         return (<Checkbox element={element}/>)
     }
+
+    handleRadioSelection(selection) {
+        this.setState({selection})
+    }
+
+    renderRadioButton(element) {
+        if (this.props.mode !== 'tagging')
+            return;
+
+        const active = this.state.selection && this.state.selection.id === element.id
+            && this.state.selection.type === element.type;
+
+        return (<RadioButton element={element} active={active} handleChange={this.handleRadioSelection}/>)
+    }
 }
 
 /**
@@ -401,7 +445,8 @@ class EditButton extends Component {
     render() {
         return (
             <Tippy content={Lang.trans('hierarchy_selector.edit_node')}>
-                <button className={`button is-small is-light is-rounded is-link ${styles.edit_button}`} onClick={this.clicked}>
+                <button className={`button is-small is-light is-rounded is-link ${styles.edit_button}`}
+                        onClick={this.clicked}>
                     <span className="icon"><i className="fas fa-edit"/></span>
                 </button>
             </Tippy>
@@ -434,6 +479,30 @@ class Checkbox extends Component {
         return (<input type="checkbox" className={'checkbox ' + styles.checkbox} onChange={this.changed}
                        name={this.props.element.type + '[]'}
                        value={this.props.element.id} checked={this.state.selected}/>)
+    }
+}
+
+
+/**
+ * The RadioButton component.
+ */
+class RadioButton extends Component {
+
+    constructor(props) {
+        super(props)
+
+    }
+
+    render() {
+        return (
+            <>
+                {this.props.active && (
+                    <input type="hidden" name="taggable_type" value={this.props.element.type}/>
+                )}
+                <input type="radio" className="radio" onChange={() => this.props.handleChange(this.props.element)}
+                       name="taggable_id" value={this.props.element.id}/>
+            </>
+        )
     }
 }
 

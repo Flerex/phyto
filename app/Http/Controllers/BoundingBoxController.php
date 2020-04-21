@@ -3,10 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\BoundingBox;
+use App\Classis;
+use App\Domain;
+use App\Genus;
 use App\Image;
 use App\Project;
+use App\Species;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 
 class BoundingBoxController extends Controller
 {
@@ -34,5 +40,23 @@ class BoundingBoxController extends Controller
         $boundingBox->save();
 
         return $boundingBox;
+    }
+
+    public function tag(BoundingBox $boundingBox, Request $request)
+    {
+
+        $validated = $request->validate([
+            'type' => ['required', Rule::in([morph_class(Domain::class), morph_class(Genus::class),
+                morph_class(Classis::class), morph_class(Species::class),])],
+            'id' => ['required'],
+        ]);
+
+        $model = Model::getActualClassNameForMorph($validated['type']);
+        $model = $model::findOrFail((int) $validated['id']);
+
+        $boundingBox->taggable()->associate($model);
+        $boundingBox->save();
+
+        return ['success' => true];
     }
 }

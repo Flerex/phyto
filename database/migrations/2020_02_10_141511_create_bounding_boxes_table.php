@@ -21,6 +21,8 @@ class CreateBoundingBoxesTable extends Migration
             $table->unsignedInteger('height');
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('image_id');
+            $table->unsignedBigInteger('taggable_id')->nullable();
+            $table->string('taggable_type')->nullable();
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users');

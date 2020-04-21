@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import styles from '../../sass/components/BoundingBox.scss'
+import styles from '../../../sass/components/BoundingBox.scss'
 import BoundingBoxOptions from './BoundingBoxOptions';
 import Tippy from '@tippyjs/react';
 import EditableArea from './EditableArea';
@@ -67,12 +67,13 @@ export default class BoundingBox extends Component {
 
             options = (<BoundingBoxOptions enableResizing={this.enableResizing} box={this.props.box}
                                            cancelResizing={this.cancelResizing}
-                                           saveResizing={this.saveResizing}/>);
+                                           saveResizing={this.saveResizing}
+                                            handleTagging={this.props.handleTagging}/>);
 
         return (
             <>
                 {this.renderResizing()}
-                <Tippy content={options} visible={this.state.options} hideOnClick={false} appendTo={document.body}
+                <Tippy content={options} visible={this.state.options && this.props.editable} appendTo={document.body}
                        animation="fade" interactive={true} arrow={true}>
                     <div className={className} style={this.getBoundingBoxStyle()}
                          onClick={() => this.updateOptions(!this.state.options)}/>
