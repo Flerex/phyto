@@ -22,6 +22,7 @@ export default class BoundingBox extends Component {
         this.saveResizing = this.saveResizing.bind(this);
         this.updateOptions = this.updateOptions.bind(this);
         this.handleClick = this.handleClick.bind(this);
+        this.handleRemove = this.handleRemove.bind(this);
     }
 
     handleClick() {
@@ -67,6 +68,11 @@ export default class BoundingBox extends Component {
         this.setState({options});
     }
 
+    handleRemove(id) {
+        this.updateOptions(false);
+        this.props.handleRemove(id);
+    }
+
     render() {
         const className = styles.boundingBox + (this.props.highlighted ? ' ' + styles.highlightedBox : '')
             + (this.props.editable ? ' ' + styles.hoverable : '') + (this.state.resizing ? ' ' + styles.resizing : ''),
@@ -74,7 +80,7 @@ export default class BoundingBox extends Component {
             options = (<BoundingBoxOptions enableResizing={this.enableResizing} box={this.props.box}
                                            cancelResizing={this.cancelResizing}
                                            saveResizing={this.saveResizing}
-                                           handleRemove={this.props.handleRemove}/>);
+                                           handleRemove={this.handleRemove}/>);
 
         return (
             <>

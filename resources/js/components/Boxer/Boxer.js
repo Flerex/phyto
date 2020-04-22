@@ -9,19 +9,19 @@ import BoundingBoxList from './BoundingBoxList';
 
 // Constants
 const CANVAS_SIZE = {
-        width: 768,
-        height: 600,
+    width: 768,
+    height: 600,
+};
+
+const INITIAL_MODE = 'zoom';
+
+const DEFAULT_ZOOM = {
+    scale: 1,
+    position: {
+        top: 0,
+        left: 0,
     },
-
-    INITIAL_MODE = 'zoom',
-
-    DEFAULT_ZOOM = {
-        scale: 1,
-        position: {
-            top: 0,
-            left: 0,
-        },
-    };
+};
 
 
 export default function Boxer(props) {
@@ -29,7 +29,6 @@ export default function Boxer(props) {
     const tagger = React.createRef();
 
     // State
-
     const [taggerDimensions, setTaggerDimensions] = useState(null);
     const [boxes, setBoxes] = useState(props.boxes.map(b => Object.assign(b, {persisted: true})));
     const [highlightedBox, setHighlightedBox] = useState(null);
