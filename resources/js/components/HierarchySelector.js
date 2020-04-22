@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import ReactDOM from 'react-dom'
-import TreeView from './TreeView'
-import styles from '../../sass/components/HierarchySelector.scss'
+import TreeView from './Boxer/TreeView'
+import styles from '../../sass/components/Boxer/HierarchySelector.scss'
 import Tippy from '@tippyjs/react';
 
 

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import styles from '../../sass/components/SelectableArea.scss'
+import styles from '../../../sass/components/Boxer/SelectableArea.scss'
 import { HotKeys } from 'react-hotkeys'
 
 export default class SelectableArea extends Component {

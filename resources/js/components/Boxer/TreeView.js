@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import styles from '../../sass/components/TreeView.scss'
+import styles from '../../../sass/components/TreeView.scss'
 
 export default class TreeView extends Component {
 

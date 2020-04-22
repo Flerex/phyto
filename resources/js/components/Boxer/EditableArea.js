@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import styles from '../../sass/components/EditableArea.scss'
+import styles from '../../../sass/components/Boxer/EditableArea.scss'
 import {pascalCase} from 'pascal-case';
 
 export default class EditableArea extends Component {

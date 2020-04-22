@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import styles from '../../sass/components/BoundingBoxOptions.scss'
+import styles from '../../../sass/components/Boxer/BoundingBoxOptions.scss'
 import {Button, Icon} from 'react-bulma-components'
 
 export default class BoundingBoxOptions extends Component {

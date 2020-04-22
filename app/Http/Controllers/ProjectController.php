@@ -30,9 +30,7 @@ class ProjectController extends Controller
             return $bb;
         });
 
-        $lang = trans('tagger');
-
-        return view('projects.tag', compact('project', 'image', 'boxes', 'lang'));
+        return view('projects.tag', compact('project', 'image', 'boxes'));
     }
 
 }

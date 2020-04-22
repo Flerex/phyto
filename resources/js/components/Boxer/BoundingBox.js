@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import styles from '../../sass/components/BoundingBox.scss'
+import styles from '../../../sass/components/Boxer/BoundingBox.scss'
 import BoundingBoxOptions from './BoundingBoxOptions';
 import Tippy from '@tippyjs/react';
 import EditableArea from './EditableArea';
@@ -21,10 +21,16 @@ export default class BoundingBox extends Component {
         this.renderResizing = this.renderResizing.bind(this);
         this.saveResizing = this.saveResizing.bind(this);
         this.updateOptions = this.updateOptions.bind(this);
+        this.handleClick = this.handleClick.bind(this);
+    }
+
+    handleClick() {
+        this.updateOptions(!this.state.options);
+        this.props.onClick(this.props.box, this.state.options);
     }
 
 
-    getBoundingBoxStyle(box) {
+    getBoundingBoxStyle() {
         return {
             width: this.props.box.width + 'px',
             height: this.props.box.height + 'px',
@@ -73,10 +79,10 @@ export default class BoundingBox extends Component {
         return (
             <>
                 {this.renderResizing()}
-                <Tippy content={options} visible={this.state.options} hideOnClick={false} appendTo={document.body}
-                       animation="fade" interactive={true} arrow={true}>
+                <Tippy content={options} visible={this.state.options} appendTo={document.body} animation="fade"
+                       interactive={true} arrow={true}>
                     <div className={className} style={this.getBoundingBoxStyle()}
-                         onClick={() => this.updateOptions(!this.state.options)}/>
+                         onClick={this.handleClick}/>
                 </Tippy>
             </>
         )

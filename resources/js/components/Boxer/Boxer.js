@@ -1,12 +1,13 @@
 import React, {Component} from 'react'
 import ReactDOM from 'react-dom';
-import styles from '../../sass/components/Tagger.scss'
+import styles from '../../../sass/components/Boxer/Boxer.scss'
 import SelectableArea from './SelectableArea'
 import ZoomableArea from './ZoomableArea'
-import {Button, Icon, Heading} from 'react-bulma-components'
+import {Button, Icon} from 'react-bulma-components'
 import BoundingBox from './BoundingBox';
+import BoundingBoxList from './BoundingBoxList';
 
-export default class Tagger extends Component {
+export default class Boxer extends Component {
 
     constructor(props) {
         super(props);
@@ -25,7 +26,7 @@ export default class Tagger extends Component {
             taggerDimensions: null,
             boxes: props.boxes.map(b => Object.assign(b, {persisted: true})),
             highlightedBox: null,
-            mode: 'edit',
+            mode: 'zoom',
 
             zoom: {
                 scale: 1,
@@ -44,7 +45,6 @@ export default class Tagger extends Component {
         this.highlightBox = this.highlightBox.bind(this);
         this.unhighlightBox = this.unhighlightBox.bind(this);
         this.renderModeArea = this.renderModeArea.bind(this);
-        this.renderBoundingBoxList = this.renderBoundingBoxList.bind(this);
         this.renderBoundingBoxes = this.renderBoundingBoxes.bind(this);
         this.renderToolbox = this.renderToolbox.bind(this);
         this.setMode = this.setMode.bind(this);
@@ -61,6 +61,7 @@ export default class Tagger extends Component {
         this.moveTo = this.moveTo.bind(this);
         this.deleteBox = this.deleteBox.bind(this);
         this.handleRemove = this.handleRemove.bind(this);
+        this.onTarget = this.onTarget.bind(this);
     }
 
 
@@ -70,6 +71,10 @@ export default class Tagger extends Component {
                 taggerDimensions = Object.assign({x, y}, res);
             this.setState({taggerDimensions})
         })
+    }
+
+    onTarget(box, visible) {
+        console.log(box)
     }
 
     getImageSize(url) {
@@ -242,7 +247,6 @@ export default class Tagger extends Component {
             const boxes = state.boxes.filter(el => !(el.id === id));
             return {boxes};
         });
-
     }
 
     handleRemove(id) {
@@ -252,37 +256,10 @@ export default class Tagger extends Component {
             })
     }
 
-    renderBoundingBoxList() {
-        return (
-            <div className={styles.bbList}>
-                <Heading className={styles.label}>{this.props.lang.box_list}</Heading>
-                {!this.state.boxes.length && (
-                    <span className="has-text-grey">{this.props.lang.no_boxes}</span>
-                )}
-                {this.state.boxes.map((box, i) => (
-                    <div className={styles.boxInfo} key={i} onMouseEnter={this.highlightBox.bind(this, box.id)}
-                         onMouseLeave={this.unhighlightBox}>
-                        <div className={styles.boxIcon}><i className="fas fa-question"/></div>
-                        <div className={styles.boxContent}>
-                            <div>
-                                <em>Untagged species</em>
-                                {!box.persisted && (<i className={`fas fa-spinner fa-spin ${styles.uploading}`}/>)}
-                            </div>
-                            <div className={styles.author}>
-                                {this.props.lang.by} <strong>{box.user}</strong>
-                            </div>
-                        </div>
-                    </div>
-                ))}
-            </div>
-        )
-    }
-
-
     renderBoundingBoxes() {
         return this.state.boxes.map((box, i) => (
             <BoundingBox key={i} highlighted={box.id === this.state.highlightedBox} box={box}
-                         handleRemove={this.handleRemove}
+                         handleRemove={this.handleRemove} onClick={this.onTarget}
                          editable={this.state.mode === 'edit'} updateBox={(newBox) => this.updateBox(box.id, newBox)}/>
         ))
     }
@@ -293,11 +270,11 @@ export default class Tagger extends Component {
                 {/* Zoom buttons */}
                 <Button.Group className={styles.buttonGroup} hasAddons={true}>
                     <Button rounded={true} onClick={() => this.modifyScale(-.1)} size="small" className={styles.button}
-                            title={this.props.lang.zoom_out}>
+                            title={Lang.trans('boxer.zoom_out')}>
                         <Icon><i className="fas fa-search-minus"/></Icon>
                     </Button>
                     <Button rounded={true} onClick={() => this.modifyScale(+.1)} size="small" className={styles.button}
-                            title={this.props.lang.zoom_in}>
+                            title={Lang.trans('boxer.zoom_in')}>
                         <Icon><i className="fas fa-search-plus"/></Icon>
                     </Button>
                 </Button.Group>
@@ -306,25 +283,25 @@ export default class Tagger extends Component {
                 <Button.Group className={styles.buttonGroup} hasAddons={true}>
                     <Button rounded={true} onClick={() => this.modifyPosition(10, 0)} size="small"
                             className={styles.button}
-                            title={this.props.lang.left}>
+                            title={Lang.trans('boxer.left')}>
                         <Icon><i className="fas fa-arrow-left"/></Icon>
                     </Button>
 
                     <Button rounded={true} onClick={() => this.modifyPosition(0, 10)} size="small"
                             className={styles.button}
-                            title={this.props.lang.up}>
+                            title={Lang.trans('boxer.up')}>
                         <Icon><i className="fas fa-arrow-up"/></Icon>
                     </Button>
 
                     <Button rounded={true} onClick={() => this.modifyPosition(0, -10)} size="small"
                             className={styles.button}
-                            title={this.props.lang.down}>
+                            title={Lang.trans('boxer.down')}>
                         <Icon><i className="fas fa-arrow-down"/></Icon>
                     </Button>
 
                     <Button rounded={true} onClick={() => this.modifyPosition(-10, 0)} size="small"
                             className={styles.button}
-                            title={this.props.lang.right}>
+                            title={Lang.trans('boxer.right')}>
                         <Icon><i className="fas fa-arrow-right"/></Icon>
                     </Button>
 
@@ -334,34 +311,35 @@ export default class Tagger extends Component {
                 {/* Sizing buttons */}
                 <Button.Group className={styles.buttonGroup} hasAddons={true}>
                     <Button rounded={true} onClick={() => this.setScaleToFit()} size="small" className={styles.button}
-                            disabled={this.getFitScale() === this.state.zoom.scale} title={this.props.lang.scale_fit}>
+                            disabled={this.getFitScale() === this.state.zoom.scale}
+                            title={Lang.trans('boxer.scale_fit')}>
                         <Icon><i className="fas fa-compress-alt"/></Icon>
                     </Button>
 
                     <Button rounded={true} onClick={() => this.updateScale(1)} size="small" className={styles.button}
-                            disabled={this.state.zoom.scale === 1} title={this.props.lang.scale_expand}>
+                            disabled={this.state.zoom.scale === 1} title={Lang.trans('boxer.scale_expand')}>
                         <Icon><i className="fas fa-expand-alt"/></Icon>
                     </Button>
                 </Button.Group>
 
                 <Button rounded={true} onClick={() => this.moveTo(0, 0)} size="small" className={styles.button}
                         disabled={this.state.zoom.position.left === 0 && this.state.zoom.position.top === 0}
-                        title={this.props.lang.restore_position}>
+                        title={Lang.trans('boxer.restore_position')}>
                     <Icon><i className="fas fa-crosshairs"/></Icon>
                 </Button>
 
                 {/* Mode switcher */}
                 <Button.Group className={styles.buttonGroup} hasAddons={true} style={{marginLeft: 'auto'}}>
                     <Button rounded={true} onClick={() => this.setMode('draw')} size="small" className={styles.button}
-                            color={this.state.mode === 'draw' ? 'link' : null} title={this.props.lang.draw_mode}>
+                            color={this.state.mode === 'draw' ? 'link' : null} title={Lang.trans('boxer.draw_mode')}>
                         <Icon><i className="fas fa-expand"/></Icon>
                     </Button>
                     <Button rounded={true} onClick={() => this.setMode('edit')} size="small" className={styles.button}
-                            color={this.state.mode === 'edit' ? 'link' : null} title={this.props.lang.edit_mode}>
+                            color={this.state.mode === 'edit' ? 'link' : null} title={Lang.trans('boxer.edit_mode')}>
                         <Icon><i className="fas fa-pen"/></Icon>
                     </Button>
                     <Button rounded={true} onClick={() => this.setMode('zoom')} size="small" className={styles.button}
-                            color={this.state.mode === 'zoom' ? 'link' : null} title={this.props.lang.zoom_mode}>
+                            color={this.state.mode === 'zoom' ? 'link' : null} title={Lang.trans('boxer.zoom_mode')}>
                         <Icon><i className="fas fa-mouse-pointer"/></Icon>
                     </Button>
                 </Button.Group>
@@ -408,19 +386,19 @@ export default class Tagger extends Component {
                     {this.renderCanvas()}
                     {this.renderToolbox()}
                 </div>
-
-                {this.renderBoundingBoxList()}
+                <BoundingBoxList highlighted={2} boxes={[...this.state.boxes]} highlightBox={this.highlightBox}
+                                 unhighlightBox={this.unhighlightBox}/>
             </div>
 
         )
     }
 }
 
-const el = document.getElementById('tagger');
+const el = document.getElementById('boxer');
 if (el) {
-    ReactDOM.render(<Tagger image={el.dataset.image} imageKey={el.dataset.imageKey}
-                            createBbLink={el.dataset.createBbLink} user={el.dataset.user}
-                            boxes={JSON.parse(el.dataset.boxes)} lang={JSON.parse(el.dataset.lang)}/>, el);
+    ReactDOM.render(<Boxer image={el.dataset.image} imageKey={el.dataset.imageKey}
+                           createBbLink={el.dataset.createBbLink} user={el.dataset.user}
+                           boxes={JSON.parse(el.dataset.boxes)}/>, el);
 }
 
 

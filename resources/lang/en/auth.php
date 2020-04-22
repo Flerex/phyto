@@ -40,7 +40,7 @@ return [
         Roles::ADMIN => 'Administrator',
         Roles::SUPERVISOR => 'Supervisor',
         Roles::MANAGER => 'Manager',
-        Roles::TAGGER => 'Tagger',
+        Roles::TAGGER => 'Boxer',
     ],
 
     'flash' => [
