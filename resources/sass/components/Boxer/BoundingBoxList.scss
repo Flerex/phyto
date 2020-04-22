@@ -8,42 +8,9 @@
     overflow-y: auto;
 }
 
-.boxInfo {
-    display: flex;
-    margin: .5rem 0;
-    padding: .5rem;
-
-    &:hover {
-        border-radius: 5px;
-        background-color: #FAFAFA;
-    }
-}
-
-.boxIcon {
-    background-color: rgba(0, 0, 0, .15);
-    width: 50px;
-    height: 50px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-right: .5rem;
-}
-
-.uploading {
-    margin-left: .25rem;
-}
-
 .label {
     font-weight: bold;
     text-transform: uppercase;
     color: #8f8f8f;
     font-size: .9em;
-}
-
-.author {
-    color: #a6a6a6;
-}
-
-.author strong {
-    color: #8f8f8f;
 }
