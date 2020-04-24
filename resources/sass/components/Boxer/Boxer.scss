@@ -5,19 +5,10 @@
     padding: 0;
     display: flex;
     justify-content: center;
-    margin: 2rem 0;
     overflow: hidden;
     width: min-content;
     margin: 0 auto;
-}
-
-.tagger {
-    background-position: 0 0;
-    background-repeat: no-repeat;
-    position: relative;
-    user-select: none;
-    transform-origin: top left;
-    background-size: 100% 100%;
+    height: 600px + 45px;
 }
 
 .canvas {
@@ -32,6 +23,9 @@
     box-shadow: 0 0 0 3px rgb(56, 117, 252);
     pointer-events: none;
     border-radius: 1px;
+    transform: scale(1);
+    transform-origin: top left;
+    transition: all 100ms linear;
 
     &.highlightedBox {
         box-shadow: 0 0 0 3px hsl(48, 100%, 67%);
@@ -40,29 +34,6 @@
 
 .uploading {
     margin-left: .25rem;
-}
-
-.toolbox {
-    display: flex;
-    padding: .5rem;
-    background-color: $gray2;
-    border-radius: 0 0 0 5px;
-    align-items: center;
-}
-
-.button:not(:last-child) {
-    margin-right: .5rem;
-}
-
-.boundingBox,
-.tagger {
-    transform: scale(1);
-    transform-origin: top left;
-    transition: all 100ms linear;
-}
-
-.buttonGroup:not(:last-child) {
-    margin-right: .5rem;
 }
 
 

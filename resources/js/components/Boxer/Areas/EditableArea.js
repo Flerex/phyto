@@ -1,8 +1,10 @@
 import React, {Component} from 'react';
-import styles from '../../../sass/components/Boxer/EditableArea.scss'
+import styles from '../../../../sass/components/Boxer/EditableArea.scss'
 import {pascalCase} from 'pascal-case';
+import {setEditingBox} from '../store/actions/boxes';
+import connect from 'react-redux/lib/connect/connect';
 
-export default class EditableArea extends Component {
+class EditableArea extends Component {
 
     constructor(props) {
         super(props);
@@ -33,9 +35,9 @@ export default class EditableArea extends Component {
         this.manageTopRightResizing = this.manageTopRightResizing.bind(this);
     }
 
-    endDrag(e) {
+    endDrag() {
         this.setState({mode: null});
-        this.props.updateResizing(this.getRelativeCoordinates());
+        this.props.dispatch(setEditingBox(this.props.box.id, true, this.getRelativeCoordinates()));
     }
 
     startEditing(y, x) {
@@ -147,13 +149,8 @@ export default class EditableArea extends Component {
 
     render() {
         return (
-            <div
-                className={styles.wrapper}
-                style={this.containerStyle()}
-                onMouseMove={this.dragging}
-                onMouseUp={this.endDrag}
-                //onMouseLeave={this.endDrag}
-            >
+            <div className={styles.wrapper} style={this.containerStyle()} onMouseMove={this.dragging}
+                 onMouseUp={this.endDrag}>
                 <div className={styles.selection}
                      style={this.getRelativeCoordinates()}>
                     <div
@@ -173,3 +170,6 @@ export default class EditableArea extends Component {
         );
     }
 }
+
+
+export default connect()(EditableArea);
