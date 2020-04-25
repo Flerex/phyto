@@ -27,7 +27,7 @@ class ImageController extends Controller
 
         $this->authorize('viewAny', [Image::class, $project, $sample]);
 
-        $images = $sample->images()->whereNotNull('preview_path')->get();
+        $images = $sample->images()->whereNotNull('path')->get();
 
         $totalImages = $sample->images()->count();
 

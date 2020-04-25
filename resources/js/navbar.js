@@ -23,10 +23,10 @@ document.addEventListener('DOMContentLoaded', e => {
 
         if(!navbar || !items) return;
 
-        document.addEventListener('click', e => {
+        navbar.addEventListener('click', e => {
             const item = e.target.parentNode;
 
-            if(!item.classList.contains('navbar-item') || !item.classList.contains('has-dropdown')) return;
+            if(!item, !item.classList.contains('navbar-item') || !item.classList.contains('has-dropdown')) return;
 
             item.classList.toggle('is-active');
 

@@ -29,31 +29,27 @@ class FileUtilsImpl implements FileUtils
         $tempDirs = collect();
 
         $files = $files
-            ->map(
-                function (string $file) use ($tempDirs) {
-                    if (!$this->isPackage($file)) {
-                        return $file;
-                    }
-
-                    // Directory images were extracted to
-                    $packDir = $this->extractPackageImages($file);
-
-                    $tempDirs->push($packDir);
-
-                    return Storage::allFiles($packDir);
+            ->map(function (string $file) use ($tempDirs) {
+                if (!$this->isPackage($file)) {
+                    return $file;
                 }
-            )
+
+                // Directory images were extracted to
+                $packDir = $this->extractPackageImages($file);
+
+                $tempDirs->push($packDir);
+
+                return Storage::allFiles($packDir);
+            })
             ->flatten()
-            ->map(
-                function ($path, $i) use ($finalPath) {
-                    $extension = File::extension(storage_path($path));
+            ->map(function ($path, $i) use ($finalPath) {
+                $extension = File::extension(storage_path($path));
 
-                    $newPath = $finalPath . '/' . $i . '.' . $extension;
-                    Storage::move($path, 'public/' . $newPath);
+                $newPath = $finalPath . '/' . $i . '.' . $extension;
+                Storage::move($path, 'public/' . $newPath);
 
-                    return $newPath;
-                }
-            );
+                return $newPath;
+            });
 
         foreach ($tempDirs as $dir) {
             Storage::deleteDirectory($dir);
@@ -65,7 +61,7 @@ class FileUtilsImpl implements FileUtils
     /**
      * Checks whether a file is considered of type package (e.g. a ZIP file).
      *
-     * @param  string  $file
+     * @param string $file
      * @return bool
      */
     private function isPackage(string $file)
@@ -81,7 +77,7 @@ class FileUtilsImpl implements FileUtils
      *
      * If a file is not of an allowed MIME type, it will be discarded.
      *
-     * @param  string  $path
+     * @param string $path
      * @return string|null
      */
     private function extractPackageImages(string $path): ?string
@@ -120,7 +116,7 @@ class FileUtilsImpl implements FileUtils
     /**
      * Returns a list with the valid file types.
      *
-     * @param  Collection  $files
+     * @param Collection $files
      * @return Collection
      */
     private function filterValidFiles(Collection $files): Collection
@@ -140,7 +136,7 @@ class FileUtilsImpl implements FileUtils
      * Extracts the package to a directory in the
      * same place as the package.
      *
-     * @param  string  $packagePath
+     * @param string $packagePath
      * @return string The extraction directory.
      * @throws Exceptions\ExtractionException
      */

@@ -1,0 +1,19 @@
+@import '../../variables';
+
+.toolbox {
+    display: flex;
+    padding: .5rem;
+    background-color: $gray2;
+    border-radius: 0 0 0 5px;
+    align-items: center;
+    height: 45px;
+}
+
+.button:not(:last-child) {
+    margin-right: .5rem;
+}
+
+.buttonGroup:not(:last-child) {
+    margin-right: .5rem;
+}
+

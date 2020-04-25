@@ -79,7 +79,7 @@
                 <label class="label">@lang('labels.projects.members')</label>
 
                 <div class="control">
-                    <div id="user_selector"></div>
+                    <div id="user_selector" data-old="{{ json_encode(old('users')) }}"></div>
                 </div>
 
                 @if ($errors->has('users'))

@@ -34,13 +34,6 @@ class SampleController extends Controller
         $this->projectService = $projectService;
     }
 
-    public function before(User $user, $ability)
-    {
-        if ($user->can(Permissions::MANAGE_ALL_PROJECTS)) {
-            return true;
-        }
-    }
-
     /**
      * Sample list for a project.
      *

@@ -2,10 +2,12 @@
 
 namespace App\Providers;
 
+use App\BoundingBox;
 use App\Catalog;
 use App\Enums\Permissions;
 use App\Enums\Roles;
 use App\Image;
+use App\Policies\BoundingBoxPolicy;
 use App\Policies\CatalogPolicy;
 use App\Policies\ImagePolicy;
 use App\Policies\ProjectPolicy;
@@ -29,6 +31,7 @@ class AuthServiceProvider extends ServiceProvider
         Project::class => ProjectPolicy::class,
         Sample::class => SamplePolicy::class,
         Image::class => ImagePolicy::class,
+        BoundingBox::class => BoundingBoxPolicy::class,
     ];
 
     /**

@@ -14,6 +14,7 @@
     <link href="{{ mix('css/app.css') }}" rel="stylesheet">
 
     @translations
+    @routes
 </head>
 <body>
 @include('partials.navbar')
@@ -23,7 +24,7 @@
         @yield('content')
     </section>
 @else
-    <div id="wrap" class="container">
+    <div id="wrap">
         <section class="section">
             <main id="main" class="container is-widescreen">
                 @yield('content')

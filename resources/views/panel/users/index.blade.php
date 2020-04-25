@@ -25,7 +25,7 @@
         <th>@lang('labels.user.role')</th>
         <th class="has-text-centered">@lang('panel.users.joined')</th>
         <th>@lang('panel.users.registered')</th>
-        <th class="has-text-right">@lang('panel.users.reset_password') @include('partials.info', ['info' => trans('panel.users.reset_password_info')])</th>
+        <th class="has-text-right" style="white-space: nowrap">@lang('panel.users.reset_password') @include('partials.info', ['info' => trans('panel.users.reset_password_info')])</th>
         </thead>
 
         <tbody>
@@ -54,12 +54,9 @@
                     {{ $user->created_at->diffForHumans() }}
                 </td>
                 <td class="has-text-right">
-                    <form method="POST" action="{{ route('panel.users.password_reset', [ 'id' => $user->id ]) }}">
-                        @csrf
-                        <button type="submit" class="button has-text-weight-bold is-link is-rounded is-light is-small">
-                            @lang('general.reset')
-                        </button>
-                    </form>
+                    <div class="button-confirmation" data-type="link"
+                         data-route="{{ route('panel.users.password_reset', [ 'id' => $user->id ]) }}"
+                         data-action="@lang('general.reset')" data-class="has-text-weight-bold"></div>
                 </td>
             </tr>
         @endforeach

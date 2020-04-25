@@ -3,10 +3,10 @@
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 
 use App\Catalog;
+use App\Domain;
 use App\Enums\CatalogStatus;
-use App\User;
+use App\Species;
 use Faker\Generator as Faker;
-use Illuminate\Support\Str;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,7 +21,8 @@ use Illuminate\Support\Str;
 
 $factory->define(Catalog::class, function (Faker $faker) {
     return [
-        'name' => $faker->name,
+        'name' => $faker->sentence(3, true),
         'status' => CatalogStatus::getValues()->random(1)->first()
     ];
 });
+

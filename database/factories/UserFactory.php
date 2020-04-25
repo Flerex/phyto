@@ -2,6 +2,7 @@
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 
+use App\Enums\Roles;
 use App\User;
 use Faker\Generator as Faker;
 use Illuminate\Support\Str;
@@ -26,3 +27,13 @@ $factory->define(User::class, function (Faker $faker) {
         'remember_token' => Str::random(10),
     ];
 });
+
+$factory->afterCreating(User::class, function (User $user) {
+    $role = Roles::getValues()->random(1)->first();
+    $user->assignRole($role);
+});
+
+$factory->afterMakingState(User::class, 'manager', function (User $user) {
+    $user->assignRole(Roles::MANAGER);
+});
+

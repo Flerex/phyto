@@ -1,0 +1,53 @@
+.selection {
+    position: absolute;
+    box-shadow: 0 0 0 3px rgb(56, 117, 252);
+    border-radius: 1px;
+    transform-origin: top left;
+    user-select: none;
+    z-index: 10;
+    pointer-events: none;
+}
+
+.wrapper ~ * {
+    pointer-events: none;
+}
+
+
+.resizer {
+    width: 14px;
+    height: 14px;
+    background-color: white;
+    border: 3px solid rgb(56, 117, 252);
+    position: absolute;
+    border-radius: 100%;
+    pointer-events: auto;
+
+    &.top.left,
+    &.bottom.right {
+        cursor: nwse-resize;
+    }
+
+    &.bottom.left,
+    &.top.right {
+        cursor: nesw-resize;
+    }
+
+
+    $dist: -7px;
+
+    &.top {
+        top: $dist;
+    }
+
+    &.bottom {
+        bottom: $dist;
+    }
+
+    &.right {
+        right: $dist;
+    }
+
+    &.left {
+        left: $dist;
+    }
+}

@@ -15,8 +15,9 @@ require('./bootstrap');
 
 require('./components/HierarchySelector');
 require('./components/UserSelector');
-require('./components/Tagger');
+require('./components/Boxer');
 require('./components/Avatar');
 require('./components/ButtonWithConfirmation');
+require('./components/ImageScroll');
 
 require('./navbar');

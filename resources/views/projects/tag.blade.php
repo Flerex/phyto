@@ -1,11 +1,12 @@
 @extends('layouts.master')
 
 @section('content')
-    <div id="tagger"
-         data-image="{{ asset($image->preview_path) }}"
-         data-create-bb-link="{{ route('projects.images.bounding_boxes.create', compact('project', 'image')) }}"
-         data-boxes="{{ json_encode($boxes) }}"
-         data-lang="{{ json_encode($lang) }}"
+    <div id="boxer"
+         data-image-key="{{ $image->getKey() }}"
+         data-image="{{ asset($image->path) }}"
+         data-boxes="{{ $boxes->toJson() }}"
          data-user="{{ Auth::user()->name }}"
     ></div>
+
+    <div class="image-scroll" data-images="{{ $images->toJson() }}"></div>
 @endsection

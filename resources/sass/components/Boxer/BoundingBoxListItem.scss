@@ -1,0 +1,42 @@
+@import '../../variables';
+
+.boxInfo {
+    display: flex;
+    margin: .5rem 0;
+    padding: .5rem;
+    border-radius: 5px;
+
+    &.focused {
+        background-color: $gray3;
+    }
+    &:hover {
+        background-color: #FAFAFA;
+    }
+}
+
+.boxPreview {
+    background-color: rgba(0, 0, 0, .15);
+    width: 50px;
+    height: 50px;
+    margin-right: .5rem;
+    border-radius: 3px;
+    position: relative;
+    overflow: hidden;
+
+    .previewBoundingBox {
+        background-repeat: no-repeat;
+        transform-origin: top left;
+    }
+}
+
+.uploading {
+    margin-left: .25rem;
+}
+
+.author {
+    color: #a6a6a6;
+}
+
+.author strong {
+    color: #8f8f8f;
+}

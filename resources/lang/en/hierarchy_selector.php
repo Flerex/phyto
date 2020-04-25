@@ -1,7 +1,7 @@
 <?php
 
 return [
-
+    'hierarchy_selector' => 'Hierarchy',
     'add_modal_title' => 'Add new node',
     'edit_modal_title' => 'Edit node',
 

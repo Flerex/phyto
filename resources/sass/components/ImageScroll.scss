@@ -1,0 +1,35 @@
+@import '../variables';
+
+.pagination {
+    background-color: $gray2;
+    border-radius: $radius;
+    padding: 1rem;
+    margin-top: 2rem;
+
+    .scroll {
+        display: flex;
+        overflow-x: auto;
+        align-items: flex-start;
+    }
+
+    .item {
+        flex: 0 0 auto;
+
+        &:not(:last-child) {
+            margin-right: .5rem;
+        }
+
+        &.active img {
+            border-color: $link;
+        }
+
+        img {
+            width: 400px;
+            height: 200px;
+            border-radius: $radius;
+            border: 3px solid transparent;
+            object-fit: cover;
+        }
+    }
+
+}

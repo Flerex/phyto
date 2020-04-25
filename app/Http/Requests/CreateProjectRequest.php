@@ -28,8 +28,8 @@ class CreateProjectRequest extends FormRequest
             'name' => ['required', 'unique:projects', 'min:5', 'string'],
             'description' => ['required', 'min:5', 'string'],
             'catalogs' => ['required', 'array', 'min:1', 'exists:catalogs,id'],
-            'users' => ['required', 'array', 'min:1', 'exists:users,id'],
-
+            'users' => ['required', 'array', 'min:1'],
+            'users.*' => ['exists:users,id'],
         ];
     }
 }

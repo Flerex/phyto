@@ -94,7 +94,7 @@ class ProjectServiceTest extends TestCase
 
         foreach ($files as $file) {
             $this->assertTrue($projectImages->contains(function (Image $image) use ($file) {
-                return $image->path == $file;
+                return $image->original_path == $file;
             }));
         }
 
