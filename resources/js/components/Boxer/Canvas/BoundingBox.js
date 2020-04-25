@@ -42,8 +42,8 @@ function BoundingBox({box, mode, dispatch}) {
 
     return (
         <>
-            {box.editing && (<EditableArea box={box} />)}
-            <Tippy content={boxOptions} visible={box.focused || false}
+            {box.editing && mode === BoxerModes.EDIT && (<EditableArea box={box} />)}
+            <Tippy content={boxOptions} visible={(box.focused || false) && mode === BoxerModes.EDIT}
                    appendTo={document.body} animation="fade" interactive={true} arrow={true}>
                 <div className={className()} style={getBoundingBoxStyle()} onClick={() => toggleFocus()}/>
             </Tippy>
