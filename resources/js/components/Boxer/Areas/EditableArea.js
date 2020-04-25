@@ -87,9 +87,7 @@ class EditableArea extends Component {
             || newY > (this.state.selectionBoxTarget[1] - this.minimumSize))
             return;
 
-        this.setState({
-            selectionBoxOrigin: [newX, newY],
-        });
+        this.setState({selectionBoxOrigin: [newX, newY],});
 
     }
 
@@ -100,7 +98,7 @@ class EditableArea extends Component {
             methodName = 'manage' + pascalCase(this.state.mode.y + '.' + this.state.mode.x) + 'Resizing';
 
         // Call the corresponding manageYXResizing event handler
-        this[methodName](e.nativeEvent.clientX - re.left, e.nativeEvent.clientY - re.top);
+        this[methodName](e.nativeEvent.offsetX, e.nativeEvent.offsetY);
     }
 
 
@@ -149,21 +147,20 @@ class EditableArea extends Component {
 
     render() {
         return (
-            <div className={styles.wrapper} style={this.containerStyle()} onMouseMove={this.dragging}
-                 onMouseUp={this.endDrag}>
+            <div className={styles.wrapper} style={this.containerStyle()} onMouseMove={this.dragging} onMouseUp={this.endDrag}>
                 <div className={styles.selection}
                      style={this.getRelativeCoordinates()}>
                     <div
-                        className={`${styles.resizer} ${this.state.mode ? styles.disabled : ''} ${styles.top} ${styles.left}`}
+                        className={`${styles.resizer} ${styles.top} ${styles.left}`}
                         onMouseDown={() => this.startEditing('top', 'left')}/>
                     <div
-                        className={`${styles.resizer} ${this.state.mode ? styles.disabled : ''} ${styles.bottom} ${styles.left}`}
+                        className={`${styles.resizer} ${styles.bottom} ${styles.left}`}
                         onMouseDown={() => this.startEditing('bottom', 'left')}/>
                     <div
-                        className={`${styles.resizer} ${this.state.mode ? styles.disabled : ''} ${styles.top} ${styles.right}`}
+                        className={`${styles.resizer} ${styles.top} ${styles.right}`}
                         onMouseDown={() => this.startEditing('top', 'right')}/>
                     <div
-                        className={`${styles.resizer} ${this.state.mode ? styles.disabled : ''} ${styles.bottom} ${styles.right}`}
+                        className={`${styles.resizer} ${styles.bottom} ${styles.right}`}
                         onMouseDown={() => this.startEditing('bottom', 'right')}/>
                 </div>
             </div>
