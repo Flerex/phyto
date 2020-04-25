@@ -29,12 +29,17 @@ const mode = (state = [], action) => {
  */
 function persistBox(state, boxOrId) {
     return state.map(box => {
-        if (!box.persisted) return box;
+        if (box.persisted) return box;
 
         const objectAndEqualCoordinates = (typeof boxOrId === 'object' && boxesAreEquivalent(boxOrId, box));
 
         // boxOrId can be either an object with the exact coordinates of the box or a id of an already persisted box.
-        if (objectAndEqualCoordinates || box.id === boxOrId) {
+        if (objectAndEqualCoordinates) {
+            return {...box, id: boxOrId.id, persisted: true}
+
+        }
+
+        if(box.id === boxOrId) {
             return {...box, persisted: true}
         }
 

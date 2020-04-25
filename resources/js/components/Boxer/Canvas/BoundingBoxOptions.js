@@ -57,7 +57,9 @@ function BoundingBoxOptions({box, dispatch}) {
         )
     }
 
-    if (!box.persisted) return null;
+    if (!box.persisted) return (
+        <span className="icon"><i className="fas fa-spinner fa-pulse"/></span>
+    );
 
     return (<>
         {renderDefaultButtons()}
