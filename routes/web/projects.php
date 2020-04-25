@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
+
 Route::get('/projects/{project}', 'ProjectController@show')->name('projects.show');
 Route::get('/projects/{project}/images/{image}', 'ProjectController@tag')->name('projects.images.tag');
 

@@ -18,5 +18,6 @@ require('./components/UserSelector');
 require('./components/Boxer');
 require('./components/Avatar');
 require('./components/ButtonWithConfirmation');
+require('./components/ImageScroll');
 
 require('./navbar');
