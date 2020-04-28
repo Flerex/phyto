@@ -5,6 +5,33 @@
     border-radius: $radius;
     padding: 1rem;
     margin-top: 2rem;
+    position: relative;
+
+    &:before,
+    &:after {
+        content: '';
+        top: 0;
+        bottom: 0;
+        width: 30px;
+        position: absolute;
+        pointer-events: none;
+    }
+
+    &:before {
+        left: 1rem;
+    }
+
+    &:after {
+        right: 1rem;
+    }
+
+    &.left:before {
+        background: linear-gradient(to right, $gray2, rgba($gray2, 0));
+    }
+
+    &.right:after {
+        background: linear-gradient(to left, $gray2, rgba($gray2, 0));
+    }
 
     .scroll {
         display: flex;
@@ -21,13 +48,15 @@
 
         &.active img {
             border-color: $link;
+            border-radius: $radius;
         }
 
         img {
+            $borderWidth: 3px;
             width: 400px;
             height: 200px;
-            border-radius: $radius;
-            border: 3px solid transparent;
+            border-radius: $radius + $borderWidth;
+            border: $borderWidth solid transparent;
             object-fit: cover;
         }
     }
