@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Panel;
 
 use App\Domain\Models\Catalog;
-use App\Enums\CatalogStatus;
-use App\Enums\Permissions;
+use App\Domain\Enums\CatalogStatus;
+use App\Domain\Enums\Permissions;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AddUserToProjectRequest;
 use App\Http\Requests\CreateProjectRequest;

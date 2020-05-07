@@ -2,7 +2,7 @@
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 
-use App\Enums\Roles;
+use App\Domain\Enums\Roles;
 use App\Domain\Models\User;
 use Faker\Generator as Faker;
 use Illuminate\Support\Str;

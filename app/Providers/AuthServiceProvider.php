@@ -4,8 +4,8 @@ namespace App\Providers;
 
 use App\Domain\Models\BoundingBox;
 use App\Domain\Models\Catalog;
-use App\Enums\Permissions;
-use App\Enums\Roles;
+use App\Domain\Enums\Permissions;
+use App\Domain\Enums\Roles;
 use App\Domain\Models\Image;
 use App\Policies\BoundingBoxPolicy;
 use App\Policies\CatalogPolicy;

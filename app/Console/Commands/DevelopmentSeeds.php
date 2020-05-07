@@ -3,7 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Domain\Models\User;
-use App\Enums\Roles;
+use App\Domain\Enums\Roles;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 

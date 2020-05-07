@@ -2,7 +2,7 @@
 
 use App\Domain\Models\Catalog;
 use App\Domain\Models\Domain;
-use App\Enums\CatalogStatus;
+use App\Domain\Enums\CatalogStatus;
 use Illuminate\Database\Seeder;
 
 class CatalogTableSeeder extends Seeder

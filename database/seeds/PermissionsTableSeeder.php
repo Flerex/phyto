@@ -1,6 +1,6 @@
 <?php
 
-use App\Enums\Permissions;
+use App\Domain\Enums\Permissions;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Permission;
 

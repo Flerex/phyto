@@ -1,6 +1,6 @@
 <?php
 
-use App\Enums\Permissions;
+use App\Domain\Enums\Permissions;
 
 Route::prefix('async')->group(function () {
     Route::get('/species',

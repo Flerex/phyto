@@ -7,7 +7,7 @@ use App\Notifications\ResetPassword as ResetPasswordNotification;
 use App\Domain\Models\Role;
 use App\Domain\Services\UserService;
 use App\Domain\Models\User;
-use App\Enums\Roles;
+use App\Domain\Enums\Roles;
 use Carbon\Carbon;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Database\Eloquent\ModelNotFoundException;

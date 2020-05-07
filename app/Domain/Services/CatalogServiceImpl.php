@@ -6,7 +6,7 @@ namespace App\Domain\Services;
 
 use App\Domain\Models\Catalog;
 use App\Exceptions\CatalogStatusException;
-use App\Enums\CatalogStatus;
+use App\Domain\Enums\CatalogStatus;
 use Illuminate\Support\Collection;
 
 class CatalogServiceImpl implements CatalogService

@@ -241,8 +241,8 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
-        'Permissions' => \App\Enums\Permissions::class,
-        'Roles' => \App\Enums\Roles::class,
+        'Permissions' => \App\Domain\Enums\Permissions::class,
+        'Roles' => \App\Domain\Enums\Roles::class,
 
     ],
 

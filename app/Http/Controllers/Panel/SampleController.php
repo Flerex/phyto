@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Panel;
 
-use App\Enums\Permissions;
+use App\Domain\Enums\Permissions;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateSampleRequest;
 use App\Http\Requests\SampleRequest;

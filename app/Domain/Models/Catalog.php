@@ -2,7 +2,7 @@
 
 namespace App\Domain\Models;
 
-use App\Enums\CatalogStatus;
+use App\Domain\Enums\CatalogStatus;
 use Illuminate\Database\Eloquent\Model;
 
 class Catalog extends Model

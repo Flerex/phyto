@@ -1,6 +1,6 @@
 <?php
 
-use App\Enums\Roles;
+use App\Domain\Enums\Roles;
 
 return [
 
