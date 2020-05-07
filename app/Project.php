@@ -16,19 +16,28 @@ class Project extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-    public function users() {
+    public function users()
+    {
         return $this->belongsToMany(User::class)->withPivot('active')->withTimestamps();
     }
 
-    public function catalogs() {
+    public function catalogs()
+    {
         return $this->belongsToMany(Catalog::class)->withTimestamps();
     }
 
-    public function manager() {
+    public function manager()
+    {
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function samples() {
+    public function samples()
+    {
         return $this->hasMany(Sample::class);
+    }
+
+    public function tasks()
+    {
+        return $this->hasMany(Task::class)->latest();
     }
 }

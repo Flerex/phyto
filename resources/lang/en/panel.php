@@ -64,8 +64,14 @@ return [
             'disable' => 'Disable member',
             'enable' => 'Enable member',
             'added_on' => 'Added on',
-        ]
+        ],
+
+        'tasks' => [
+            'label' => 'Tarea|Tareas',
+            'empty' => 'There are no tasks created.',
+        ],
     ],
+
 
     'label' => [
         'users' => 'Users',

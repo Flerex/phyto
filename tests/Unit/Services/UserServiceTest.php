@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit;
+namespace Tests\Unit\Services;
 
 use App\Notifications\ActivateAccount;
 use App\Notifications\ResetPassword as ResetPasswordNotification;
