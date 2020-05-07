@@ -107,45 +107,4 @@ class ProjectController extends Controller
         ];
         return view('panel.projects.show', compact('project', 'stats'));
     }
-
-
-    /**
-     * Add new user to project page.
-     *
-     * @param Project $project
-     * @return string
-     * @throws AuthorizationException
-     */
-    public function add_user(Project $project)
-    {
-        $this->authorize('add_user', $project);
-
-        return view('panel.projects.add-user', compact('project'));
-    }
-
-
-    public function add_user_store(Project $project, AddUserToProjectRequest $request)
-    {
-        $this->authorize('view', $project);
-
-        $validated = $request->validated();
-
-        $alreadyAdded = $project->users
-            ->push($project->manager)
-            ->pluck('id');
-
-
-        $filteredUsers = collect($validated['users'])->diff($alreadyAdded);
-
-        $project->users()->attach($filteredUsers);
-
-        return redirect()->route('panel.projects.members.index', compact('project'));
-    }
-
-    public function before(User $user, $ability)
-    {
-        if ($user->can(Permissions::MANAGE_ALL_PROJECTS)) {
-            return true;
-        }
-    }
 }

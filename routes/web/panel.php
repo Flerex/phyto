@@ -68,11 +68,11 @@ Route::prefix('panel')->middleware('permission:' . Permissions::PANEL_ACCESS)->g
                 'show' => 'panel.projects.show',
             ]);
 
-        Route::get('projects/{project}/users/add', 'Panel\\ProjectController@add_user')
-            ->name('panel.projects.add_user');
+        Route::get('projects/{project}/users/add', 'Panel\\MemberController@create')
+            ->name('panel.projects.members.create');
 
-        Route::post('projects/{project}/users/add', 'Panel\\ProjectController@add_user_store')
-            ->name('panel.projects.add_user_store');
+        Route::post('projects/{project}/users/add', 'Panel\\MemberController@store')
+            ->name('panel.projects.members.store');
 
         Route::get('projects/{project}/samples/', 'Panel\\SampleController@index')
             ->name('panel.projects.samples.index');

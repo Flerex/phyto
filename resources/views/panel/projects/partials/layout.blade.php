@@ -15,7 +15,7 @@
                 </a>
             </div>
             <div class="level-item">
-                <a href="{{ route('panel.projects.add_user', compact('project')) }}" class="button is-rounded is-pulled-right">
+                <a href="{{ route('panel.projects.members.create', compact('project')) }}" class="button is-rounded is-pulled-right">
                     <span class="icon is-left"><i class="fas fa-user-plus"></i></span>
                     <span>@lang('panel.projects.add_users')</span>
                 </a>
