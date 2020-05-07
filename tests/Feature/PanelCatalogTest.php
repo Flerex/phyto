@@ -2,7 +2,7 @@
 
 namespace Tests\Feature;
 
-use App\Services\CatalogService;
+use App\Domain\Services\CatalogService;
 use App\Domain\Models\User;
 use App\Enums\Roles;
 use Tests\TestCase;

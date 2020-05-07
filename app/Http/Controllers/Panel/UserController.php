@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Panel;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateUser;
 use App\Domain\Models\Role;
-use App\Services\UserService;
+use App\Domain\Services\UserService;
 use App\Domain\Models\User;
 
 class UserController extends Controller

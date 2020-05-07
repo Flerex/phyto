@@ -2,12 +2,12 @@
 
 namespace App\Providers;
 
-use App\Services\CatalogService;
-use App\Services\CatalogServiceImpl;
-use App\Services\ProjectService;
-use App\Services\ProjectServiceImpl;
-use App\Services\UserService;
-use App\Services\UserServiceImpl;
+use App\Domain\Services\CatalogService;
+use App\Domain\Services\CatalogServiceImpl;
+use App\Domain\Services\ProjectService;
+use App\Domain\Services\ProjectServiceImpl;
+use App\Domain\Services\UserService;
+use App\Domain\Services\UserServiceImpl;
 use App\Utils\FileUtils;
 use App\Utils\FileUtilsImpl;
 use App\Utils\PackageUtils;

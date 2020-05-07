@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Services;
+namespace App\Domain\Services;
 
 use App\Domain\Models\Catalog;
 use App\Exceptions\CatalogStatusException;

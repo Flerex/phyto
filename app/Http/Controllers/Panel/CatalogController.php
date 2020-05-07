@@ -6,7 +6,7 @@ use App\Domain\Models\Catalog;
 use App\Exceptions\CatalogStatusException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CatalogRequest;
-use App\Services\CatalogService;
+use App\Domain\Services\CatalogService;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;

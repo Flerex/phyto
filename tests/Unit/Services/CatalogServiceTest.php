@@ -5,7 +5,7 @@ namespace Tests\Unit\Services;
 use App\Domain\Models\Catalog;
 use App\Enums\CatalogStatus;
 use App\Exceptions\CatalogStatusException;
-use App\Services\CatalogService;
+use App\Domain\Services\CatalogService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Tests\TestCase;
 

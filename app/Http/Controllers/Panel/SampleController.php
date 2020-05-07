@@ -8,7 +8,7 @@ use App\Http\Requests\CreateSampleRequest;
 use App\Http\Requests\SampleRequest;
 use App\Domain\Models\Project;
 use App\Domain\Models\Sample;
-use App\Services\ProjectService;
+use App\Domain\Services\ProjectService;
 use App\Domain\Models\User;
 use Carbon\Carbon;
 use Illuminate\Auth\Access\AuthorizationException;

@@ -9,7 +9,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\AddUserToProjectRequest;
 use App\Http\Requests\CreateProjectRequest;
 use App\Domain\Models\Project;
-use App\Services\ProjectService;
+use App\Domain\Services\ProjectService;
 use App\Domain\Models\User;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\View\Factory;
