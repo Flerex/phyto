@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests;
 
-use App\Sample;
+use App\Domain\Models\Sample;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Validator;

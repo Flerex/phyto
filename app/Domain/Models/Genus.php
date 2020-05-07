@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Domain\Models;
 
 use App\Traits\HierarchyNavigators;
 use Illuminate\Database\Eloquent\Model;

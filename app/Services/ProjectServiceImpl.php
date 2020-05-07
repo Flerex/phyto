@@ -4,10 +4,10 @@
 namespace App\Services;
 
 
-use App\Image;
+use App\Domain\Models\Image;
 use App\Jobs\NormalizeImagePreview;
-use App\Project;
-use App\Sample;
+use App\Domain\Models\Project;
+use App\Domain\Models\Sample;
 use App\Utils\FileUtils;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;

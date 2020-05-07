@@ -3,7 +3,7 @@
 namespace App\Notifications;
 
 use App\Mail\ActivateAccount as ActivateAccountMail;
-use App\User;
+use App\Domain\Models\User;
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Mail\Mailable;

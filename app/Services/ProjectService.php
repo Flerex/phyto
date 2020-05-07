@@ -3,10 +3,10 @@
 
 namespace App\Services;
 
-use App\Catalog;
+use App\Domain\Models\Catalog;
 use App\Exceptions\CatalogStatusException;
-use App\Project;
-use App\Sample;
+use App\Domain\Models\Project;
+use App\Domain\Models\Sample;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 

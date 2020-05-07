@@ -3,7 +3,7 @@
 namespace App\Services;
 
 
-use App\User;
+use App\Domain\Models\User;
 use App\Enums\Roles;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Password;

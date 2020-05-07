@@ -3,8 +3,8 @@
 namespace App\Policies;
 
 use App\Enums\Permissions;
-use App\Project;
-use App\User;
+use App\Domain\Models\Project;
+use App\Domain\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class SamplePolicy

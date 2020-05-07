@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Panel;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AddUserToProjectRequest;
-use App\Project;
-use App\User;
+use App\Domain\Models\Project;
+use App\Domain\Models\User;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
 

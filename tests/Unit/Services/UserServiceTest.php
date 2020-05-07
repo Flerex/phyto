@@ -4,9 +4,9 @@ namespace Tests\Unit\Services;
 
 use App\Notifications\ActivateAccount;
 use App\Notifications\ResetPassword as ResetPasswordNotification;
-use App\Role;
+use App\Domain\Models\Role;
 use App\Services\UserService;
-use App\User;
+use App\Domain\Models\User;
 use App\Enums\Roles;
 use Carbon\Carbon;
 use Illuminate\Auth\Events\Registered;

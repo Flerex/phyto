@@ -2,7 +2,7 @@
 
 namespace Tests\Unit\Services;
 
-use App\Catalog;
+use App\Domain\Models\Catalog;
 use App\Enums\CatalogStatus;
 use App\Exceptions\CatalogStatusException;
 use App\Services\CatalogService;

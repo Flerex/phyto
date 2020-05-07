@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ChangePassword;
-use App\User;
+use App\Domain\Models\User;
 use Carbon\Carbon;
 use Illuminate\Auth\Events\Verified;
 use Illuminate\Contracts\View\Factory;

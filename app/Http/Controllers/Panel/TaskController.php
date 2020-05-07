@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Panel;
 
 use App\Http\Controllers\Controller;
-use App\Project;
+use App\Domain\Models\Project;
 use Illuminate\Http\Request;
 
 class TaskController extends Controller

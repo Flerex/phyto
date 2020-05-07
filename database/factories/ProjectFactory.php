@@ -1,9 +1,9 @@
 <?php
 
-use App\Catalog;
+use App\Domain\Models\Catalog;
 use App\Enums\CatalogStatus;
-use App\Project;
-use App\User;
+use App\Domain\Models\Project;
+use App\Domain\Models\User;
 use Faker\Generator as Faker;
 
 $factory->define(Project::class, function (Faker $faker) {

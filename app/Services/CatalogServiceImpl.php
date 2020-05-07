@@ -4,7 +4,7 @@
 namespace App\Services;
 
 
-use App\Catalog;
+use App\Domain\Models\Catalog;
 use App\Exceptions\CatalogStatusException;
 use App\Enums\CatalogStatus;
 use Illuminate\Support\Collection;

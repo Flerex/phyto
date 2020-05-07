@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Catalog;
-use App\Domain;
-use App\User;
+use App\Domain\Models\Catalog;
+use App\Domain\Models\Domain;
+use App\Domain\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;

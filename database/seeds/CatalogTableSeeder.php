@@ -1,7 +1,7 @@
 <?php
 
-use App\Catalog;
-use App\Domain;
+use App\Domain\Models\Catalog;
+use App\Domain\Models\Domain;
 use App\Enums\CatalogStatus;
 use Illuminate\Database\Seeder;
 

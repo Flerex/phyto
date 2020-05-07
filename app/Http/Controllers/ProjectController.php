@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\BoundingBox;
-use App\Image;
-use App\Project;
+use App\Domain\Models\BoundingBox;
+use App\Domain\Models\Image;
+use App\Domain\Models\Project;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;

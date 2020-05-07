@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers\Panel;
 
-use App\Catalog;
+use App\Domain\Models\Catalog;
 use App\Enums\CatalogStatus;
 use App\Enums\Permissions;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AddUserToProjectRequest;
 use App\Http\Requests\CreateProjectRequest;
-use App\Project;
+use App\Domain\Models\Project;
 use App\Services\ProjectService;
-use App\User;
+use App\Domain\Models\User;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;

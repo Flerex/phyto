@@ -2,19 +2,19 @@
 
 namespace App\Providers;
 
-use App\BoundingBox;
-use App\Catalog;
+use App\Domain\Models\BoundingBox;
+use App\Domain\Models\Catalog;
 use App\Enums\Permissions;
 use App\Enums\Roles;
-use App\Image;
+use App\Domain\Models\Image;
 use App\Policies\BoundingBoxPolicy;
 use App\Policies\CatalogPolicy;
 use App\Policies\ImagePolicy;
 use App\Policies\ProjectPolicy;
 use App\Policies\SamplePolicy;
-use App\Project;
-use App\Sample;
-use App\User;
+use App\Domain\Models\Project;
+use App\Domain\Models\Sample;
+use App\Domain\Models\User;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
 

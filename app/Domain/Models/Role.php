@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Domain\Models;
 
 
 use Spatie\Permission\Models\Role as RoleModel;

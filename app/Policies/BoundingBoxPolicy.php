@@ -2,8 +2,8 @@
 
 namespace App\Policies;
 
-use App\BoundingBox;
-use App\User;
+use App\Domain\Models\BoundingBox;
+use App\Domain\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class BoundingBoxPolicy

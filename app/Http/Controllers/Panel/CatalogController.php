@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Panel;
 
-use App\Catalog;
+use App\Domain\Models\Catalog;
 use App\Exceptions\CatalogStatusException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CatalogRequest;

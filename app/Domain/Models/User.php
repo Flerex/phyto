@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Domain\Models;
 
 use App\Notifications\ActivateAccount;
 use App\Notifications\ResetPassword as ResetPasswordNotification;

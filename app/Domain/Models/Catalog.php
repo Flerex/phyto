@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Domain\Models;
 
 use App\Enums\CatalogStatus;
 use Illuminate\Database\Eloquent\Model;

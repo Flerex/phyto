@@ -3,7 +3,7 @@
 
 namespace App\Services;
 
-use App\Catalog;
+use App\Domain\Models\Catalog;
 use App\Exceptions\CatalogStatusException;
 use Illuminate\Support\Collection;
 
