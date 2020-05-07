@@ -5,8 +5,8 @@ import styles from '../../sass/components/ImageScroll.scss'
 
 export default function ImageScroll({images}) {
 
-    const scroll = useRef(React.createRef())
-    const active = useRef(React.createRef())
+    const scroll = useRef()
+    const active = useRef()
 
     const [isLeft, setIsLeft] = useState(false)
     const [isRight, setIsRight] = useState(false)
