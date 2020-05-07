@@ -29,11 +29,11 @@ $factory->define(User::class, function (Faker $faker) {
 });
 
 $factory->afterCreating(User::class, function (User $user) {
-    $role = Roles::getValues()->random(1)->first();
+    $role = collect(Roles::toArray())->random(1)->first();
     $user->assignRole($role);
 });
 
 $factory->afterMakingState(User::class, 'manager', function (User $user) {
-    $user->assignRole(Roles::MANAGER);
+    $user->assignRole(Roles::MANAGER()->getValue());
 });
 

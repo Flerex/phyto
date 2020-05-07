@@ -2,11 +2,16 @@
 
 namespace App\Enums;
 
-use Spatie\Permission\Models\Role;
+use MyCLabs\Enum\Enum;
 
+/**
+ * @method static CatalogStatus EDITING()
+ * @method static CatalogStatus SEALED()
+ * @method static CatalogStatus OBSOLETE()
+ */
 final class CatalogStatus extends Enum
 {
-    public const EDITING = 'editing';
-    public const SEALED = 'sealed';
-    public const OBSOLETE = 'obsolete';
+    private const EDITING = 'editing';
+    private const SEALED = 'sealed';
+    private const OBSOLETE = 'obsolete';
 }

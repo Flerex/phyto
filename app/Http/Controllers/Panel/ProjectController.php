@@ -41,7 +41,7 @@ class ProjectController extends Controller
 
         $user = Auth::user();
 
-        $canManageEverything = $user->hasPermissionTo(Permissions::MANAGE_ALL_PROJECTS);
+        $canManageEverything = $user->hasPermissionTo(Permissions::MANAGE_ALL_PROJECTS()->getValue());
 
         $projects = $canManageEverything
             ? Project::orderBy('id')->paginate(config('phyto.pagination_size'))
@@ -57,7 +57,7 @@ class ProjectController extends Controller
      */
     public function create()
     {
-        $catalogs = Catalog::where('status', CatalogStatus::SEALED)->get();
+        $catalogs = Catalog::where('status', CatalogStatus::SEALED()->getValue())->get();
 
         return view('panel.projects.create', compact('catalogs'));
     }

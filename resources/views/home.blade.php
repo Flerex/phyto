@@ -2,28 +2,28 @@
 
 @section('content')
     <div id="home-grid" class="columns is-centered">
-        @can(Permissions::PANEL_ACCESS)
+        @can(Permissions::PANEL_ACCESS()->getValue())
             <div class="column is-two-fifths">
                 <section class="home_buttons">
-                    @can(Permissions::USER_MANAGEMENT)
+                    @can(Permissions::USER_MANAGEMENT()->getValue())
                         <a class="home_button has-background-primary" href="{{ route('panel.users.index') }}">
                             <span class="icon is-size-1"><i class="fas fa-users"></i></span>
                             <div class="home_button__label">@lang('panel.users.management')</div>
                         </a>
                     @endcan
-                    @can(Permissions::CATALOG_MANAGEMENT)
+                    @can(Permissions::CATALOG_MANAGEMENT()->getValue())
                         <a class="home_button has-background-warning" href="{{ route('panel.catalogs.index') }}">
                             <span class="icon is-size-1"><i class="fas fa-book"></i></span>
                             <div class="home_button__label">@lang('panel.catalogs.management')</div>
                         </a>
                     @endcan
-                    @can(Permissions::SPECIES_MANAGEMENT)
+                    @can(Permissions::SPECIES_MANAGEMENT()->getValue())
                         <a class="home_button has-background-info" href="{{ route('panel.species.index') }}">
                             <span class="icon is-size-1"><i class="fas fa-paw"></i></span>
                             <div class="home_button__label">@lang('panel.species.management')</div>
                         </a>
                     @endcan
-                    @can(Permissions::PROJECT_MANAGEMENT)
+                    @can(Permissions::PROJECT_MANAGEMENT()->getValue())
                         <a class="home_button has-background-danger" href="{{ route('panel.projects.index') }}">
                             <span class="icon is-size-1"><i class="fas fa-briefcase"></i></span>
                             <div class="home_button__label">@lang('panel.projects.management')</div>

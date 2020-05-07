@@ -14,32 +14,32 @@ class RolesTableSeeder extends Seeder
      */
     public function run()
     {
-        $admin = Role::create(['name' => Roles::ADMIN]);
-        $supervisor = Role::create(['name' => Roles::SUPERVISOR]);
-        $manager = Role::create(['name' => Roles::MANAGER]);
-        $tagger = Role::create(['name' => Roles::TAGGER]);
+        $admin = Role::create(['name' => Roles::ADMIN()->getValue()]);
+        $supervisor = Role::create(['name' => Roles::SUPERVISOR()->getValue()]);
+        $manager = Role::create(['name' => Roles::MANAGER()->getValue()]);
+        $tagger = Role::create(['name' => Roles::TAGGER()->getValue()]);
 
         // Boxer permissions
 
         // Manager permissions
-        $manager->givePermissionTo(Permissions::PROJECT_MANAGEMENT);
+        $manager->givePermissionTo(Permissions::PROJECT_MANAGEMENT()->getValue());
 
         $manager->givePermissionTo($tagger->getAllPermissions());
 
 
         // Supervisor permissions
-        $supervisor->givePermissionTo(Permissions::PANEL_ACCESS);
-        $supervisor->givePermissionTo(Permissions::SPECIES_MANAGEMENT);
-        $supervisor->givePermissionTo(Permissions::CATALOG_MANAGEMENT);
-        $supervisor->givePermissionTo(Permissions::MANAGE_ALL_PROJECTS);
+        $supervisor->givePermissionTo(Permissions::PANEL_ACCESS()->getValue());
+        $supervisor->givePermissionTo(Permissions::SPECIES_MANAGEMENT()->getValue());
+        $supervisor->givePermissionTo(Permissions::CATALOG_MANAGEMENT()->getValue());
+        $supervisor->givePermissionTo(Permissions::MANAGE_ALL_PROJECTS()->getValue());
 
         $supervisor->givePermissionTo($manager->getAllPermissions());
         $supervisor->givePermissionTo($tagger->getAllPermissions());
 
 
         // Permission definition
-        $admin->givePermissionTo(Permissions::PANEL_ACCESS);
-        $admin->givePermissionTo(Permissions::USER_MANAGEMENT);
+        $admin->givePermissionTo(Permissions::PANEL_ACCESS()->getValue());
+        $admin->givePermissionTo(Permissions::USER_MANAGEMENT()->getValue());
 
         $admin->givePermissionTo($supervisor->getAllPermissions());
         $admin->givePermissionTo($manager->getAllPermissions());

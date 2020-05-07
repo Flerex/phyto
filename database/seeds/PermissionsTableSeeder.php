@@ -13,7 +13,7 @@ class PermissionsTableSeeder extends Seeder
      */
     public function run()
     {
-        foreach (Permissions::getValues() as $name) {
+        foreach (Permissions::toArray() as $name) {
             Permission::create(compact('name'));
         }
     }

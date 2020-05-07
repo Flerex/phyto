@@ -2,12 +2,19 @@
 
 namespace App\Enums;
 
-use Spatie\Permission\Models\Role;
+use MyCLabs\Enum\Enum;
 
+
+/**
+ * @method static Roles ADMIN()
+ * @method static Roles SUPERVISOR()
+ * @method static Roles MANAGER()
+ * @method static Roles TAGGER()
+ */
 final class Roles extends Enum
 {
-    public const ADMIN = 'admin';
-    public const SUPERVISOR = 'supervisor';
-    public const MANAGER = 'manager';
-    public const TAGGER = 'tagger';
+    private const ADMIN = 'admin';
+    private const SUPERVISOR = 'supervisor';
+    private const MANAGER = 'manager';
+    private const TAGGER = 'tagger';
 }

@@ -17,7 +17,7 @@ class CatalogServiceImpl implements CatalogService
     {
         $catalog = Catalog::create([
             'name' => $name,
-            'status' => CatalogStatus::EDITING,
+            'status' => CatalogStatus::EDITING()->getValue(),
         ]);
 
         foreach ($nodes as $nodeType => $list) {
@@ -39,8 +39,8 @@ class CatalogServiceImpl implements CatalogService
 
         $catalog = Catalog::findOrFail($catalogId);
 
-        if ($catalog->status != CatalogStatus::EDITING) {
-            throw new CatalogStatusException($catalog, CatalogStatus::EDITING);
+        if ($catalog->status != CatalogStatus::EDITING()->getValue()) {
+            throw new CatalogStatusException($catalog, CatalogStatus::EDITING()->getValue());
         }
 
         $catalog->name = $name;
@@ -75,11 +75,11 @@ class CatalogServiceImpl implements CatalogService
     {
         $catalog = Catalog::findOrFail($catalogId);
 
-        if ($catalog->status != CatalogStatus::EDITING) {
-            throw new CatalogStatusException($catalog, CatalogStatus::EDITING);
+        if ($catalog->status != CatalogStatus::EDITING()->getValue()) {
+            throw new CatalogStatusException($catalog, CatalogStatus::EDITING()->getValue());
         }
 
-        $catalog->status = CatalogStatus::SEALED;
+        $catalog->status = CatalogStatus::SEALED()->getValue();
         $catalog->save();
     }
 
@@ -94,11 +94,11 @@ class CatalogServiceImpl implements CatalogService
     {
         $catalog = Catalog::findOrFail($catalogId);
 
-        if ($catalog->status != CatalogStatus::SEALED) {
-            throw new CatalogStatusException($catalog, CatalogStatus::SEALED);
+        if ($catalog->status != CatalogStatus::SEALED()->getValue()) {
+            throw new CatalogStatusException($catalog, CatalogStatus::SEALED()->getValue());
         }
 
-        $catalog->status = CatalogStatus::OBSOLETE;
+        $catalog->status = CatalogStatus::OBSOLETE()->getValue();
         $catalog->save();
     }
 
@@ -113,11 +113,11 @@ class CatalogServiceImpl implements CatalogService
     {
         $catalog = Catalog::findOrFail($catalogId);
 
-        if ($catalog->status != CatalogStatus::OBSOLETE) {
-            throw new CatalogStatusException($catalog, CatalogStatus::OBSOLETE);
+        if ($catalog->status != CatalogStatus::OBSOLETE()->getValue()) {
+            throw new CatalogStatusException($catalog, CatalogStatus::OBSOLETE()->getValue());
         }
 
-        $catalog->status = CatalogStatus::SEALED;
+        $catalog->status = CatalogStatus::SEALED()->getValue();
         $catalog->save();
     }
 
@@ -132,8 +132,8 @@ class CatalogServiceImpl implements CatalogService
     {
         $catalog = Catalog::findOrFail($catalogId);
 
-        if ($catalog->status != CatalogStatus::EDITING) {
-            throw new CatalogStatusException($catalog, CatalogStatus::EDITING);
+        if ($catalog->status != CatalogStatus::EDITING()->getValue()) {
+            throw new CatalogStatusException($catalog, CatalogStatus::EDITING()->getValue());
         }
 
         $nodes = $catalog->nodes();

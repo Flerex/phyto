@@ -22,7 +22,7 @@ use Faker\Generator as Faker;
 $factory->define(Catalog::class, function (Faker $faker) {
     return [
         'name' => $faker->sentence(3, true),
-        'status' => CatalogStatus::getValues()->random(1)->first()
+        'status' => collect(CatalogStatus::toArray())->random(1)->first()
     ];
 });
 

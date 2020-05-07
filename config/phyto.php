@@ -10,7 +10,7 @@ return [
     | The default role used when creating a new user.
     |
     */
-    'default_role' => App\Enums\Roles::TAGGER,
+    'default_role' => App\Enums\Roles::TAGGER()->getValue(),
 
 
     /*

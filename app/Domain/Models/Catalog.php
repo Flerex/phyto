@@ -11,17 +11,17 @@ class Catalog extends Model
 
     public function isEditable()
     {
-        return $this->status === CatalogStatus::EDITING;
+        return $this->status === CatalogStatus::EDITING()->getValue();
     }
 
     public function isSealed()
     {
-        return $this->status === CatalogStatus::SEALED;
+        return $this->status === CatalogStatus::SEALED()->getValue();
     }
 
     public function isObsolete()
     {
-        return $this->status === CatalogStatus::OBSOLETE;
+        return $this->status === CatalogStatus::OBSOLETE()->getValue();
     }
 
     public function species()

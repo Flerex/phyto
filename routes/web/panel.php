@@ -3,14 +3,14 @@
 use App\Enums\Permissions;
 use Illuminate\Support\Facades\Route;
 
-Route::prefix('panel')->middleware('permission:'.Permissions::PANEL_ACCESS)->group(function () {
+Route::prefix('panel')->middleware('permission:'.Permissions::PANEL_ACCESS()->getValue())->group(function () {
     Route::get('/', 'Panel\PanelController@index')->name('panel');
 
 
     /*
     * User Management
     */
-    Route::prefix('users')->middleware('permission:'.Permissions::USER_MANAGEMENT)->group(function () {
+    Route::prefix('users')->middleware('permission:'.Permissions::USER_MANAGEMENT()->getValue())->group(function () {
         Route::get('/', 'Panel\UserController@index')->name('panel.users.index');
         Route::get('/create', 'Panel\UserController@create')->name('panel.users.create');
         Route::post('/store', 'Panel\UserController@store')->name('panel.users.store');
@@ -20,7 +20,7 @@ Route::prefix('panel')->middleware('permission:'.Permissions::PANEL_ACCESS)->gro
     /*
     * Species management
     */
-    Route::middleware('permission:'.Permissions::SPECIES_MANAGEMENT)->group(function () {
+    Route::middleware('permission:'.Permissions::SPECIES_MANAGEMENT()->getValue())->group(function () {
         Route::resource('species', 'Panel\\SpeciesController')
             ->only(['index'])
             ->names([
@@ -31,7 +31,7 @@ Route::prefix('panel')->middleware('permission:'.Permissions::PANEL_ACCESS)->gro
     /*
     * Catalog management
     */
-    Route::middleware('permission:'.Permissions::CATALOG_MANAGEMENT)->group(function () {
+    Route::middleware('permission:'.Permissions::CATALOG_MANAGEMENT()->getValue())->group(function () {
         Route::resource('catalogs', 'Panel\\CatalogController')
             ->names([
                 'index' => 'panel.catalogs.index',
@@ -58,7 +58,7 @@ Route::prefix('panel')->middleware('permission:'.Permissions::PANEL_ACCESS)->gro
     /*
     * Project management
     */
-    Route::middleware('permission:'.Permissions::PROJECT_MANAGEMENT)->group(function () {
+    Route::middleware('permission:'.Permissions::PROJECT_MANAGEMENT()->getValue())->group(function () {
         Route::resource('projects', 'Panel\ProjectController')
             ->only(['index', 'create', 'store', 'show'])
             ->names([

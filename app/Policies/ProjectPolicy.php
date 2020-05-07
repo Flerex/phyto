@@ -35,7 +35,7 @@ class ProjectPolicy
 
     public function before(User $user, $ability)
     {
-        if ($user->hasPermissionTo(Permissions::MANAGE_ALL_PROJECTS)) {
+        if ($user->hasPermissionTo(Permissions::MANAGE_ALL_PROJECTS()->getValue())) {
             return true;
         }
     }

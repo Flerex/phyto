@@ -19,7 +19,7 @@ class CatalogTableSeeder extends Seeder
         foreach(Domain::all() as $domain) {
             $catalog = factory(Catalog::class)->create([
                 'name' => $domain->name . ' catalog',
-                'status' => CatalogStatus::SEALED,
+                'status' => CatalogStatus::SEALED()->getValue(),
             ]);
             $catalog->domains()->attach($domain);
         }

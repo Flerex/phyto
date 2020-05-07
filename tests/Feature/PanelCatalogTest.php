@@ -28,7 +28,7 @@ class PanelCatalogTest extends TestCase
     {
         $user = factory(User::class)->create();
 
-        $user->assignRole(Roles::SUPERVISOR);
+        $user->assignRole(Roles::SUPERVISOR()->getValue());
 
         $user->save();
 

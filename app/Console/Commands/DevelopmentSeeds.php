@@ -49,7 +49,7 @@ class DevelopmentSeeds extends Command
         $user->email_verified_at = Carbon::now();
         $user->save();
 
-        $user->assignRole(Roles::ADMIN);
+        $user->assignRole(Roles::ADMIN()->getValue());
 
         $this->info('Development seeding completed successfully.');
     }
