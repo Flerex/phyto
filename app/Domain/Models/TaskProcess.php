@@ -50,6 +50,6 @@ class TaskProcess extends Model
 
         $total = $this->assignments->count();
 
-        return round($finished / $total, 2);
+        return round($finished / $total, 2) * 100;
     }
 }

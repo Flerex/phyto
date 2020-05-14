@@ -118,7 +118,7 @@ class TaskController extends Controller
             ->map(function (Collection $group) {
                 $images = count($group);
                 $finished = $group->filter(fn(TaskAssignment $assignment) => $assignment->finished);
-                $percentage = round($finished->count() / $images, 2);
+                $percentage = round($finished->count() / $images, 2) * 100;
                 return (object) [
                     'user' => $group[0]->user->name,
                     'images' => $images,

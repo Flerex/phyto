@@ -60,13 +60,13 @@ class Task extends Model
 
 
         $finished = TaskAssignment::whereHas('process', function(Builder $query) {
-            $query->where('task_id', $this->getKey())->where('finished', true);
-        })->count();
+            $query->where('task_id', $this->getKey());
+        })->where('finished', true)->count();
 
         $total = TaskAssignment::whereHas('process', function(Builder $query) {
             $query->where('task_id', $this->getKey());
         })->count();
 
-        return round($finished / $total, 2);
+        return round($finished / $total, 2) * 100;
     }
 }
