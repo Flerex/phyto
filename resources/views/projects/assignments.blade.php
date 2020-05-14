@@ -1,6 +1,7 @@
 @extends('projects.partials.layout')
 
 @section('project-content')
+    @if(count($assignments))
     <div class="box">
         <table class="table is-fullwidth">
             <thead>
@@ -25,4 +26,7 @@
             </tbody>
         </table>
     </div>
+    @else
+        <div class="notification is-info">@lang('projects.empty_assignments')</div>
+    @endif
 @endsection

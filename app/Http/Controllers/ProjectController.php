@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Domain\Models\BoundingBox;
 use App\Domain\Models\Image;
 use App\Domain\Models\Project;
+use App\Domain\Models\TaskAssignment;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -72,13 +73,10 @@ class ProjectController extends Controller
      */
     public function assignments(Project $project)
     {
-        $assignments = Auth::user()->assignments()
-            ->with('image')
-            ->whereHas('task', function (Builder $query) use ($project) {
-                $query->where('project_id', $project->getKey());
-            })
+        $assignments = TaskAssignment::where('user_id', Auth::user()->getKey())
             ->orderBy('finished', 'desc')
-            ->get();
+            ->whereHas('process.task', fn (Builder $query) => $query->where('project_id', $project->getKey()))
+            ->paginate(config('phyto.pagination_size'));
 
         return view('projects.assignments', compact('project', 'assignments'));
     }
