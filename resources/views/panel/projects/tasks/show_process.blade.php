@@ -41,7 +41,7 @@
             <tr>
                 <th>@choice('labels.user.users', 1)</th>
                 <th>@lang('general.progress')</th>
-                <th>@choice('labels.image.images', 0)</th>
+                <th class="has-text-right">@choice('labels.image.images', 0)</th>
             </tr>
 
             </thead>
@@ -52,7 +52,7 @@
                     <td>
                         <progress class="progress is-link is-small" value="{{ $assignee->percentage }}" max="100">{{ $assignee->percentage }}%</progress>
                     </td>
-                    <td>{{ $assignee->images }}</td>
+                    <td class="has-text-right">{{ $assignee->images }}</td>
                 </tr>
             @endforeach
             </tbody>
