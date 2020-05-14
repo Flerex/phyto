@@ -5,45 +5,29 @@
         <div class="box">
             <table class="table is-fullwidth">
                 <thead>
-                <th>@lang('labels.name')</th>
-                <th>@lang('labels.status')</th>
+                <th>@lang('labels.samples.sample')</th>
+                <th>@lang('general.progress')</th>
                 <th>@lang('panel.projects.members.added_on')</th>
                 <th class="has-text-right">@lang('general.actions')</th>
                 </thead>
 
                 <tbody>
-               {{-- @foreach($members as $member)
+                @foreach($tasks as $task)
                     <tr>
-                        <td>{{ $member->name }}</td>
-                        <td>
-                            @if($member->pivot->active)
-                                @lang('general.active')
+                        <td>{{ $task->sample->name }}</td>
+                        <td style="max-width: 100px">
+                            @if($task->finished)
+                                @lang('labels.task.finished')
                             @else
-                                @lang('general.disabled')
+                                <progress class="progress is-link is-small" value="{{ $task->completenessPercentage }}" max="100">{{ $task->completenessPercentage }}%</progress>
                             @endif
                         </td>
-                        <td>{{ $member->pivot->created_at->diffForHumans() }}</td>
+                        <td>{{ $task->created_at->diffForHumans() }}</td>
                         <td class="has-text-right">
-                            <form
-                                action="{{ route('panel.projects.members.change_status', compact('project', 'member')) }}"
-                                method="POST">
-                                <input type="hidden" name="active" value="{{ (int) !$member->pivot->active }}">
-                                @if($member->pivot->active)
-                                    <button type="submit" class="button is-rounded is-light is-danger is-small"
-                                            title="{{ trans('panel.projects.members.disable') }}">
-                                        <span class="icon"><i class="fas fa-user-minus"></i></span>
-                                    </button>
-                                @else
-                                    <button type="submit" class="button is-rounded is-light is-small"
-                                            title="{{ trans('panel.projects.members.enable') }}">
-                                        <span class="icon"><i class="fas fa-user-plus"></i></span>
-                                    </button>
-                                @endif
-                                @csrf
-                            </form>
+                            <a href="{{ route('panel.projects.tasks.show', compact('project', 'task')) }}" class="button is-link is-rounded is-light is-small has-text-weight-bold">@lang('general.view')</a>
                         </td>
                     </tr>
-                @endforeach--}}
+                @endforeach
                 </tbody>
             </table>
         </div>

@@ -20,6 +20,12 @@
                     <span>@lang('panel.projects.add_users')</span>
                 </a>
             </div>
+            <div class="level-item">
+                <a href="{{ route('panel.projects.tasks.create', compact('project')) }}" class="button is-rounded is-pulled-right">
+                    <span class="icon is-left"><i class="fas fa-tasks"></i></span>
+                    <span>@lang('panel.projects.tasks.create')</span>
+                </a>
+            </div>
         </div>
     </div>
 
@@ -38,7 +44,7 @@
                     {{ trans_choice('panel.projects.members.label', 0) }}
                 </a>
             </li>
-            <li @if(Str::startsWith(Route::currentRouteName(), 'panel.projects.tasks.index'))class="is-active"@endif>
+            <li @if(Str::startsWith(Route::currentRouteName(), 'panel.projects.tasks.'))class="is-active"@endif>
                 <a href="{{ route('panel.projects.tasks.index', compact('project')) }}">
                     {{ trans_choice('panel.projects.tasks.label', 0) }}
                 </a>

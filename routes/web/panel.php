@@ -114,5 +114,17 @@ Route::prefix('panel')->middleware('permission:'.Permissions::PANEL_ACCESS()->ge
          */
         Route::get('projects/{project}/tasks', 'Panel\\TaskController@index')
             ->name('panel.projects.tasks.index');
+
+        Route::get('projects/{project}/tasks/create', 'Panel\\TaskController@create')
+            ->name('panel.projects.tasks.create');
+
+        Route::post('projects/{project}/tasks/create', 'Panel\\TaskController@store')
+            ->name('panel.projects.tasks.store');
+
+        Route::get('projects/{project}/tasks/{task}', 'Panel\\TaskController@show')
+            ->name('panel.projects.tasks.show');
+
+        Route::get('projects/{project}/tasks/{task}/processes/{process}', 'Panel\\TaskController@show_process')
+            ->name('panel.projects.tasks.show_process');
     });
 });

@@ -21,7 +21,7 @@ return [
     | The amount of elements that will be shown in paginated results.
     |
     */
-    'pagination_size' => 50,
+    'pagination_size' => 25,
 
     /*
     |--------------------------------------------------------------------------

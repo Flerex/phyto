@@ -4,7 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Domain\Models\Catalog;
 use App\Domain\Models\Domain;
+use App\Domain\Models\Project;
+use App\Domain\Models\Sample;
 use App\Domain\Models\User;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
@@ -20,25 +23,26 @@ class AsynchronousController extends Controller
     }
 
     /**
-     * Searches users from a given query.
-     * @param Request $request
+     * Search users from a given query.
+     * @param  Request  $request
      * @return Collection
      */
     public function search_users(Request $request)
     {
         $validated = $request->validate([
-            'query' => ['required_without:ids', 'string'],
-            'ids' => ['required_without:query', 'array', 'min:1'],
+            'query' => ['sometimes', 'nullable', 'string'],
+            'ids' => ['sometimes', 'array', 'min:1'],
             'ids.*' => ['exists:users,id'],
         ]);
 
+
         if (key_exists('query', $validated)) {
             $users = User::where(DB::raw('LOWER(name)'), 'like',
-                '%' . strtolower($validated['query']) . '%')->limit(15)->get();
-        }
-
-        if (key_exists('ids', $validated)) {
+                '%'.strtolower($validated['query']).'%')->limit(15)->get();
+        } elseif (key_exists('ids', $validated)) {
             $users = User::whereIn('id', $validated['ids'])->get();
+        } else {
+            $users = User::latest()->limit(15)->get();
         }
 
         return $users->map(function ($user) {
@@ -69,7 +73,7 @@ class AsynchronousController extends Controller
     /**
      * Handles the modification of the data of a node.
      *
-     * @param Request $request
+     * @param  Request  $request
      * @return array
      * @throws \Illuminate\Validation\ValidationException
      */
@@ -88,7 +92,7 @@ class AsynchronousController extends Controller
 
         $validated = $validator->validated();
 
-        $className = 'App\\' . ucwords($validated['type']);
+        $className = 'App\\'.ucwords($validated['type']);
 
         $el = $className::find($validated['id']);
 
@@ -108,7 +112,7 @@ class AsynchronousController extends Controller
     /**
      * Handles the addition of a node to the hierarchy.
      *
-     * @param Request $request
+     * @param  Request  $request
      * @return array
      * @throws \Illuminate\Validation\ValidationException
      */
@@ -137,9 +141,9 @@ class AsynchronousController extends Controller
         if ($validated['type'] === 'domain') {
             $el = Domain::create($data);
         } else {
-            $className = 'App\\' . ucwords($validated['type']);
+            $className = 'App\\'.ucwords($validated['type']);
 
-            $data[self::getRelationships()[$validated['type']] . '_id'] = $validated['parent'];
+            $data[self::getRelationships()[$validated['type']].'_id'] = $validated['parent'];
 
             $el = $className::create($data);
         }
@@ -201,7 +205,7 @@ class AsynchronousController extends Controller
 
             $attr = $validator->attributes();
 
-            $model = 'App\\' . ucwords($attr['type']);
+            $model = 'App\\'.ucwords($attr['type']);
 
             if ($model::find($attr['id']) === null) {
                 $validator->errors()->add('id', trans('hierarchy_selector.errors.id.exists'));
@@ -218,7 +222,7 @@ class AsynchronousController extends Controller
             $attr = $validator->attributes();
 
             if ($attr['type'] !== 'domain') {
-                $parentModel = 'App\\' . ucwords(self::getRelationships()[$attr['type']]);
+                $parentModel = 'App\\'.ucwords(self::getRelationships()[$attr['type']]);
 
                 if ($parentModel::find($attr['parent']) === null) {
                     $validator->errors()->add('parent', trans('hierarchy_selector.errors.parent.exists'));
@@ -234,7 +238,7 @@ class AsynchronousController extends Controller
 
             $attr = $validator->attributes();
 
-            $model = 'App\\' . ucwords($attr['type']);
+            $model = 'App\\'.ucwords($attr['type']);
 
 
             if ($model::whereName($attr['name'])->first() !== null) {
@@ -247,7 +251,7 @@ class AsynchronousController extends Controller
     /**
      * Obtains the hierarchy tree, specifying which nodes are selected in the catalog.
      *
-     * @param Catalog $catalog
+     * @param  Catalog  $catalog
      * @return array
      */
     public function edit_catalog(Catalog $catalog)
@@ -291,5 +295,79 @@ class AsynchronousController extends Controller
         }
 
         return $domains;
+    }
+
+
+    /**
+     * Searches samples from a given query.
+     * @param  Project  $project
+     * @param  Request  $request
+     * @return Collection
+     * @throws AuthorizationException
+     */
+    public function search_samples(Project $project, Request $request)
+    {
+        $validated = $request->validate([
+            'query' => ['sometimes', 'nullable', 'string'],
+            'ids' => ['sometimes', 'array', 'min:1'],
+            'ids.*' => ['exists:samples,id'],
+        ]);
+
+        $this->authorize('view', $project);
+
+        $samples = Sample::where('project_id', $project->getKey())->latest();
+
+        if (key_exists('query', $validated)) {
+            $samples = $samples->where(DB::raw('LOWER(name)'), 'like',
+                '%'.strtolower($validated['query']).'%')->limit(15)->get();
+        } elseif (key_exists('ids', $validated)) {
+            $samples = Sample::whereIn('id', $validated['ids'])->get();
+        } else {
+            $samples = $samples->limit(15)->get();
+        }
+
+        return $samples->map(function ($sample) {
+            return [
+                'value' => $sample->getKey(),
+                'label' => $sample->name,
+            ];
+        });
+    }
+
+    /**
+     * Searches samples from a given query.
+     * @param  Project  $project
+     * @param  Request  $request
+     * @return Collection
+     * @throws AuthorizationException
+     */
+    public function search_members(Project $project, Request $request)
+    {
+        $validated = $request->validate([
+            'query' => ['sometimes', 'nullable', 'string'],
+            'ids' => ['sometimes', 'array', 'min:1'],
+            'ids.*' => ['exists:users,id'],
+        ]);
+
+        $this->authorize('view', $project);
+
+        $members = $project->users()->latest();
+
+
+        if (key_exists('query', $validated)) {
+            $members = $members->where(DB::raw('LOWER(name)'), 'like',
+                '%'.strtolower($validated['query']).'%')->limit(15)->get();
+        } elseif (key_exists('ids', $validated)) {
+            $members = $members->whereIn('users.id', $validated['ids'])->get();
+        } else {
+            $members = $members->limit(15)->get();
+        }
+
+        return $members->map(function ($sample) {
+            return [
+                'value' => $sample->getKey(),
+                'label' => $sample->name,
+            ];
+        });
     }
 }

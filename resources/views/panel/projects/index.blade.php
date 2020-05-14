@@ -31,7 +31,8 @@
             @if($canManageEverything)
                 <th>@lang('labels.projects.manager')</th>
             @endif
-            <th>@lang('labels.projects.members')</th>
+            <th class="has-text-right">@lang('labels.projects.members')</th>
+            <th class="has-text-right">@lang('labels.projects.samples')</th>
             <th>@lang('labels.description')</th>
             </thead>
 
@@ -40,10 +41,13 @@
                 <tr>
                     <td><a href="{{ route('panel.projects.show', compact('project')) }}">{{ $project->name }}</a>
                     </td>
+
                     @if($canManageEverything)
                         <td>{{ $project->manager->name }}</td>
                     @endif
-                    <td>{{ $project->users()->count() }}</td>
+
+                    <td class="has-text-right">{{ $project->users_count }}</td>
+                    <td class="has-text-right">{{ $project->samples_count }}</td>
                     <td>{{ $project->description }}</td>
                 </tr>
             @endforeach

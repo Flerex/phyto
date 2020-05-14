@@ -5,13 +5,25 @@ namespace App\Http\Controllers;
 use App\Domain\Models\BoundingBox;
 use App\Domain\Models\Image;
 use App\Domain\Models\Project;
+use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\View\View;
 
 class ProjectController extends Controller
 {
 
+    /**
+     * Handles the page that displays the Overview of a Project to its members.
+     *
+     * @param  Project  $project
+     *
+     * @return Application|Factory|View
+     * @throws AuthorizationException
+     */
     public function show(Project $project)
     {
         $this->authorize('access', $project);
@@ -21,6 +33,15 @@ class ProjectController extends Controller
         return view('projects.show', compact('project', 'images'));
     }
 
+    /**
+     * Handles the page that displays the Boxer UI.
+     *
+     * @param  Project  $project
+     * @param  Image  $image
+     *
+     * @return Application|Factory|View
+     * @throws AuthorizationException
+     */
     public function tag(Project $project, Image $image)
     {
         $this->authorize('access', $project);
@@ -42,6 +63,24 @@ class ProjectController extends Controller
             ->values();
 
         return view('projects.tag', compact('project', 'image', 'boxes', 'images'));
+    }
+
+    /**
+     * Handles the page that display the list of Task Assignments for the current member.
+     *
+     * @param  Project  $project
+     */
+    public function assignments(Project $project)
+    {
+        $assignments = Auth::user()->assignments()
+            ->with('image')
+            ->whereHas('task', function (Builder $query) use ($project) {
+                $query->where('project_id', $project->getKey());
+            })
+            ->orderBy('finished', 'desc')
+            ->get();
+
+        return view('projects.assignments', compact('project', 'assignments'));
     }
 
 }

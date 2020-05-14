@@ -43,9 +43,15 @@ class ProjectController extends Controller
 
         $canManageEverything = $user->hasPermissionTo(Permissions::MANAGE_ALL_PROJECTS()->getValue());
 
-        $projects = $canManageEverything
-            ? Project::orderBy('id')->paginate(config('phyto.pagination_size'))
-            : Project::whereUserId($user->getKey())->orderBy('id')->paginate(config('phyto.pagination_size'));
+        $query = Project::with('manager')->withCount(['users', 'samples'])->latest();
+
+        if(!$canManageEverything)
+        {
+            $query = $query->whereUserId($user->getKey());
+        }
+
+        $projects = $query->paginate(config('phyto.pagination_size'));
+
 
         return view('panel.projects.index', compact('projects', 'canManageEverything'));
     }
@@ -93,7 +99,7 @@ class ProjectController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param \App\Project $project
+     * @param  Project  $project
      * @return Factory|View
      * @throws AuthorizationException
      */
@@ -104,6 +110,7 @@ class ProjectController extends Controller
         $stats = (object) [
             'totalMembers' => $project->users()->count(),
             'totalSamples' => $project->samples()->count(),
+            'totalTasks' => $project->tasks()->count(),
         ];
         return view('panel.projects.show', compact('project', 'stats'));
     }

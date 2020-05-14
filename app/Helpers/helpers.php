@@ -11,3 +11,4 @@ function local_path(string $path)
 {
     return storage_path('app/' . $path);
 }
+

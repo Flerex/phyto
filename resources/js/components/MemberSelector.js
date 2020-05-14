@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom'
 import AsyncSelect from 'react-select/async'
 
 
-export default class UserSelector extends Component {
+export default class MemberSelector extends Component {
 
 
     constructor(props) {
@@ -21,14 +21,17 @@ export default class UserSelector extends Component {
             enabled: false,
             data: [],
         };
+
+        this.promiseOptions = this.promiseOptions.bind(this)
     }
 
     componentDidMount() {
-        const ids = this.props.old ? this.props.old.map(i => parseInt(i)) : null,
-            enabled = true;
+        const ids = this.props.old ? this.props.old.map(i => parseInt(i)) : null
+        const enabled = true
+        const project = this.props.project
 
         if (ids && ids.length)
-            axios.get(route('async.search_users'), {params: {ids}})
+            axios.get(route('async.search_members', {project}), {params: {ids}})
                 .then(({data}) => this.setState({data, enabled}));
         else
             this.setState({enabled})
@@ -36,7 +39,8 @@ export default class UserSelector extends Component {
     }
 
     promiseOptions(query) {
-        return axios.get(route('async.search_users'), {params: {query}}).then(r => r.data)
+        const project = this.props.project;
+        return axios.get(route('async.search_members', {project}), {params: {query}}).then(r => r.data)
     }
 
 
@@ -45,15 +49,15 @@ export default class UserSelector extends Component {
 
         return (
             <AsyncSelect isMulti cacheOptions alwaysOpen name="users[]" defaultValue={this.state.data}
-                         loadOptions={this.promiseOptions} defaultOptions={true} />
+                         loadOptions={this.promiseOptions} defaultOptions={true}/>
         )
     }
 
 }
 
 
-const el = document.getElementById('user_selector')
+const el = document.getElementById('member_selector')
 if (el) {
     const old = el.dataset.old ? JSON.parse(el.dataset.old) : null;
-    ReactDOM.render(<UserSelector old={old}/>, el)
+    ReactDOM.render(<MemberSelector old={old} project={el.dataset.project}/>, el)
 }

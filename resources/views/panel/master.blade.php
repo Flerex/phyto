@@ -27,9 +27,21 @@
                 <p class="menu-label">@lang('panel.label.projects')</p>
                 <ul class="menu-list">
                     <li><a href="{{ route('panel.projects.index') }}"
-                           @if(Str::startsWith(Route::currentRouteName(), 'panel.projects.')) class="is-active"@endif>@lang('panel.projects.management')</a>
+                           @if($projectManagementIsActive) class="is-active"@endif>@lang('panel.projects.management')</a>
                     </li>
                 </ul>
+
+                @if(count($projects))
+                    <p class="menu-label">@lang('panel.managed_projects')</p>
+                    <ul class="menu-list">
+                        @foreach($projects as $project)
+                            <li><a href="{{ route('panel.projects.show', compact('project')) }}"
+                                   @if(Request::is(trim(route('panel.projects.show', compact('project'), false), '/') . '*')) class="is-active"@endif>{{ $project->name}}
+                                </a>
+                            </li>
+                        @endforeach
+                    </ul>
+                @endif
             </aside>
         </div>
         <div class="column">

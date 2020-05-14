@@ -37,5 +37,11 @@
             <div class="block__value">{{ $stats->totalSamples }}</div>
             <div class="block__label">{{ trans_choice('panel.projects.samples.label', $stats->totalSamples) }}</div>
         </div>
+
+        {{-- Total tasks --}}
+        <div class="block box">
+            <div class="block__value">{{ $stats->totalTasks }}</div>
+            <div class="block__label">{{ trans_choice('panel.projects.tasks.label', $stats->totalTasks) }}</div>
+        </div>
     </div>
 @endsection

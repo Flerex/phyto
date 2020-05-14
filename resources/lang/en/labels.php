@@ -9,6 +9,7 @@ return [
     'status' => 'Status',
 
     'user' => [
+        'users' => 'User|Users',
         'name' => 'Name',
         'email' => 'Email',
         'role' => 'Role',
@@ -34,9 +35,24 @@ return [
         'catalogs' => 'Catalogs',
         'manager' => 'Manager',
         'members' => 'Members',
+        'samples' => 'Samples',
     ],
 
     'samples' => [
+        'sample' => 'Sample',
         'taken_on' => 'Taken on',
+    ],
+
+    'image' => [
+        'images' => 'Image|Images',
+    ],
+
+    'task' => [
+        'progress' => 'Progress',
+        'finished' => 'Finished',
+        'pending' => 'Pending',
+        'processes' => 'Processes',
+        'assignments' => 'Assignments',
+        'assignees' => 'Assignees',
     ],
 ];
