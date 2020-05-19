@@ -8,9 +8,7 @@ use App\Domain\Models\Sample;
 use App\Domain\Models\Task;
 use App\Domain\Models\TaskAssignment;
 use App\Domain\Models\TaskProcess;
-use App\Domain\Models\User;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Throwable;
 
@@ -37,7 +35,6 @@ class TaskServiceImpl implements TaskService
 
             $task = Task::create([
                 'project_id' => $sample->project_id,
-                'user_id' => optional(Auth::user())->getKey(),
                 'sample_id' => $sample->getKey(),
             ]);
 
