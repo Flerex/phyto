@@ -1,6 +1,7 @@
 @extends('layouts.master')
 
 @section('content')
+    <h1 class="title">{{ $project->name }}</h1>
     <div class="tabs is-centered">
         <ul>
             <li @if(Str::startsWith(Route::currentRouteName(), 'projects.show'))class="is-active"@endif>
