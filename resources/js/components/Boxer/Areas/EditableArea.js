@@ -87,7 +87,7 @@ class EditableArea extends Component {
             || newY > (this.state.selectionBoxTarget[1] - this.minimumSize))
             return;
 
-        this.setState({selectionBoxOrigin: [newX, newY],});
+        this.setState({selectionBoxOrigin: [newX, newY]});
 
     }
 
@@ -146,8 +146,9 @@ class EditableArea extends Component {
 
 
     render() {
+        const wrapperClassname = `${styles.wrapper} ${this.state.mode !== null ? styles.dragging : ''}`;
         return (
-            <div className={styles.wrapper} style={this.containerStyle()} onMouseMove={this.dragging} onMouseUp={this.endDrag}>
+            <div className={wrapperClassname} style={this.containerStyle()} onMouseMove={this.dragging} onMouseUp={this.endDrag}>
                 <div className={styles.selection}
                      style={this.getRelativeCoordinates()}>
                     <div
