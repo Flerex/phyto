@@ -22,6 +22,7 @@ class RolesTableSeeder extends Seeder
         // Boxer permissions
 
         // Manager permissions
+        $manager->givePermissionTo(Permissions::PANEL_ACCESS()->getValue());
         $manager->givePermissionTo(Permissions::PROJECT_MANAGEMENT()->getValue());
 
         $manager->givePermissionTo($tagger->getAllPermissions());

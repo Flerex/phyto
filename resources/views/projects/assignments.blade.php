@@ -7,6 +7,7 @@
             <thead>
             <tr>
                 <th>@choice('labels.image.images', 1)</th>
+                <th>@choice('labels.task.processes', 1)</th>
                 <th>@lang('general.status')</th>
             </tr>
             </thead>
@@ -14,6 +15,7 @@
             @foreach($assignments as $assignment)
                 <tr>
                     <td><img class="thumbnail" src="{{ asset($assignment->image->thumbnail_path) }}"></td>
+                    <td>{{ $assignment->process->getKey() }}</td>
                     <td>
                         @if($assignment->finished)
                             <span class="tag is-light is-success">@lang('labels.task.finished')</span>

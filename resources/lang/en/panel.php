@@ -38,7 +38,7 @@ return [
     ],
 
     'projects' => [
-        'management' => 'Projects management',
+        'management' => 'Project management',
         'create' => 'Start new project',
         'no_projects' => 'There are no projects.',
         'create_alert' => 'Project “:name“ has been created.',

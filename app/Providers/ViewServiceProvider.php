@@ -24,6 +24,7 @@ class ViewServiceProvider extends ServiceProvider
     {
         $this->sortableLinks();
         $this->panelSidebarProjects();
+        $this->taggerNotificationsInProject();
     }
 
     /**
@@ -102,5 +103,19 @@ class ViewServiceProvider extends ServiceProvider
 
             $view->with(compact('projects', 'projectManagementIsActive'));
         });
+    }
+
+    /**
+     * Make the unfinished assignments count available to the project views.
+     */
+    private function taggerNotificationsInProject()
+    {
+        ViewFacade::composer('projects.partials.layout', function (View $view) {
+            // We assume only logged in users can access a project.
+            $unfinishedAssignments = Auth::user()->unfinishedAssignments()->count();
+
+            $view->with(compact('unfinishedAssignments'));
+        });
+
     }
 }

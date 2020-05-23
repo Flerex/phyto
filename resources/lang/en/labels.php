@@ -34,7 +34,7 @@ return [
     'projects' => [
         'catalogs' => 'Catalogs',
         'manager' => 'Manager',
-        'members' => 'Members',
+        'members' => 'Member|Members',
         'samples' => 'Samples',
     ],
 
@@ -51,7 +51,8 @@ return [
         'progress' => 'Progress',
         'finished' => 'Finished',
         'pending' => 'Pending',
-        'processes' => 'Processes',
+        'processes' => 'Process|Processes',
+        'unfinished_assignments' => 'Pending assignments',
         'assignments' => 'Assignments',
         'assignees' => 'Assignees',
     ],

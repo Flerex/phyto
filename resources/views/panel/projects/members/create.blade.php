@@ -10,7 +10,7 @@
 
             {{-- Users --}}
             <div class="field">
-                <label class="label">@lang('labels.projects.members')</label>
+                <label class="label">@choice('labels.projects.members', 0)</label>
 
                 <div class="control">
                     <div id="user_selector"></div>

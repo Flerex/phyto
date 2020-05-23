@@ -74,11 +74,26 @@ class ProjectController extends Controller
     public function assignments(Project $project)
     {
         $assignments = TaskAssignment::where('user_id', Auth::user()->getKey())
-            ->orderBy('finished', 'desc')
+            ->orderBy('finished', 'asc')
+            ->with('process')
             ->whereHas('process.task', fn (Builder $query) => $query->where('project_id', $project->getKey()))
             ->paginate(config('phyto.pagination_size'));
 
         return view('projects.assignments', compact('project', 'assignments'));
+    }
+
+    /**
+     * Handles the page that display the list of members in the project.
+     *
+     * @param  Project  $project
+     */
+    public function members(Project $project)
+    {
+        $members = $project->users()
+            ->with('assignments', 'unfinishedAssignments')
+            ->get();
+
+        return view('projects.members', compact('project', 'members'));
     }
 
 }

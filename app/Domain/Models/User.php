@@ -88,10 +88,17 @@ class User extends Authenticatable implements MustVerifyEmail
     /**
      * Defines the relationship that allows to navigate from the user
      * model to their assignments.
-     *
-     * By default only unfinished assignments can be navigated to.
      */
     public function assignments()
+    {
+        return $this->hasMany(TaskAssignment::class);
+    }
+
+    /**
+     * Defines the relationship that allows to navigate from the user
+     * model to their unfinished assignments.
+     */
+    public function unfinishedAssignments()
     {
         return $this->hasMany(TaskAssignment::class)->where('finished', false);
     }

@@ -31,7 +31,7 @@
             @if($canManageEverything)
                 <th>@lang('labels.projects.manager')</th>
             @endif
-            <th class="has-text-right">@lang('labels.projects.members')</th>
+            <th class="has-text-right">@choice('labels.projects.members', 0)</th>
             <th class="has-text-right">@lang('labels.projects.samples')</th>
             <th>@lang('labels.description')</th>
             </thead>
