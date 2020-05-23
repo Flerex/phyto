@@ -40,4 +40,14 @@ class Project extends Model
     {
         return $this->hasMany(Task::class)->latest();
     }
+
+    public function assignments()
+    {
+        return $this->hasMany(TaskAssignment::class);
+    }
+
+    public function unfinishedAssignments()
+    {
+        return $this->hasMany(TaskAssignment::class)->unfinished();
+    }
 }

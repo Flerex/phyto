@@ -80,6 +80,7 @@ class TaskServiceImpl implements TaskService
             foreach ($assignments as $assignment) {
                 TaskAssignment::create([
                     'task_process_id' => $assignment->process,
+                    'project_id' => $sample->project->getKey(),
                     'user_id' => $assignment->user,
                     'image_id' => $assignment->image,
                 ]);

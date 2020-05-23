@@ -32,6 +32,7 @@ return [
     ],
 
     'projects' => [
+        'projects' => 'Project|Projects',
         'catalogs' => 'Catalogs',
         'manager' => 'Manager',
         'members' => 'Member|Members',

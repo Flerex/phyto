@@ -25,6 +25,17 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Number of random assignments
+    |--------------------------------------------------------------------------
+    |
+    | The number of random unfinished assignments that will be shown
+    | to the user in the application’s dashboard.
+    |
+    */
+    'random_assignments_count' => 5,
+
+    /*
+    |--------------------------------------------------------------------------
     | Email Verification Time
     |--------------------------------------------------------------------------
     |

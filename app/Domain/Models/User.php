@@ -100,7 +100,7 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function unfinishedAssignments()
     {
-        return $this->hasMany(TaskAssignment::class)->where('finished', false);
+        return $this->hasMany(TaskAssignment::class)->unfinished();
     }
 
 }
