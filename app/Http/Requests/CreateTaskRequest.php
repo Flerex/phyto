@@ -84,7 +84,7 @@ class CreateTaskRequest extends FormRequest
 
         $minNecessaryUsers = $validated['repeat_images'] * $validated['process_number'];
 
-        if ($membersCount > $minNecessaryUsers) {
+        if ($membersCount < $minNecessaryUsers) {
             $validator->errors()->add('process_number',
                 trans('panel.projects.tasks.process_max', ['value' => $minNecessaryUsers]));
         }
