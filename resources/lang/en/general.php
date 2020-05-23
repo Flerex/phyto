@@ -25,4 +25,5 @@ return [
     'are_you_sure' => 'Are you sure you want to proceed?',
     'confirmation' => 'Confirmation',
     'close' => 'Close',
+    'you' => 'This is you!',
 ];

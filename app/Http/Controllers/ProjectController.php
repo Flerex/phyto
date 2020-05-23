@@ -91,6 +91,8 @@ class ProjectController extends Controller
     {
         $members = $project->users()
             ->with('assignments', 'unfinishedAssignments')
+            ->withPivot('created_at')
+            ->orderBy('pivot_created_at', 'desc')
             ->get();
 
         return view('projects.members', compact('project', 'members'));
