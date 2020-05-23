@@ -19,6 +19,7 @@ return [
     'active' => 'Active',
     'disabled' => 'Disabled',
     'overview' => 'Overview',
+    'all' => 'All',
     'status' => 'Status',
     'view' => 'View',
     'multiple_select_help' => 'Hold the <kbd>CTRL</kbd> key (<kbd>CMD</kbd> on macOS) and click in order to select multiple entries.',

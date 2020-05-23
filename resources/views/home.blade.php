@@ -80,13 +80,17 @@
                 @if(count($processes))
                     <table class="table is-boxed is-fullwidth">
                         <thead>
-                        <th colspan="2">@choice('labels.task.processes', 1)</th>
+                        <th>@choice('labels.task.processes', 1)</th>
+                        <th colspan="2">@lang('projects.started_on')</th>
                         </thead>
                         <tbody>
                         @foreach($processes as $process)
                             <tr>
                                 <td>
-                                    {{ $process->getKey() }}
+                                    <a href="{{ route('projects.assignments', ['project' => $process->task->project, 'process' => $process->getKey()]) }}">{{ $process->getKey() }}</a>
+                                </td>
+                                <td>
+                                    {{ $process->created_at->diffForHumans() }}
                                 </td>
                                 <td class="has-text-right">
                                     @if($process->unfinished_assignments_count)

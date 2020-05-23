@@ -21,5 +21,6 @@ require('./components/Boxer');
 require('./components/Avatar');
 require('./components/ButtonWithConfirmation');
 require('./components/ImageScroll');
+require('./components/ProcessFilter');
 
 require('./navbar');
