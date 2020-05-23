@@ -2,8 +2,8 @@
 
 namespace Tests\Unit\Services;
 
-use App\Notifications\ActivateAccount;
-use App\Notifications\ResetPassword as ResetPasswordNotification;
+use App\Notifications\ActivateAccountNotification;
+use App\Notifications\ResetPasswordNotification as ResetPasswordNotification;
 use App\Domain\Models\Role;
 use App\Domain\Services\UserService;
 use App\Domain\Models\User;
@@ -94,7 +94,7 @@ class UserServiceTest extends TestCase
         // Retrieve user from DB
         $user = User::find($id);
 
-        Notification::assertSentTo($user, ActivateAccount::class);
+        Notification::assertSentTo($user, ActivateAccountNotification::class);
 
     }
 

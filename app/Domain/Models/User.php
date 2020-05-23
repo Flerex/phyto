@@ -2,8 +2,8 @@
 
 namespace App\Domain\Models;
 
-use App\Notifications\ActivateAccount;
-use App\Notifications\ResetPassword as ResetPasswordNotification;
+use App\Notifications\ActivateAccountNotification;
+use App\Notifications\ResetPasswordNotification as ResetPasswordNotification;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -48,7 +48,7 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function sendEmailVerificationNotification()
     {
-        $this->notify(new ActivateAccount);
+        $this->notify(new ActivateAccountNotification);
     }
 
     /**

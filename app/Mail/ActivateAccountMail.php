@@ -6,15 +6,13 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class ActivateAccount extends Mailable
+class ActivateAccountMail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    /** @var string $name */
-    protected $name;
+    protected string $name;
 
-    /** @var string $link */
-    protected $link;
+    protected string $link;
 
     /**
      * Create a new message instance.

@@ -2,7 +2,7 @@
 
 namespace App\Notifications;
 
-use App\Mail\ActivateAccount as ActivateAccountMail;
+use App\Mail\ActivateAccountMail;
 use App\Domain\Models\User;
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
@@ -11,7 +11,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\URL;
 
-class ActivateAccount extends Notification implements ShouldQueue
+class ActivateAccountNotification extends Notification implements ShouldQueue
 {
     use Queueable;
 
