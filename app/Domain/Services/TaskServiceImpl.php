@@ -8,8 +8,11 @@ use App\Domain\Models\Sample;
 use App\Domain\Models\Task;
 use App\Domain\Models\TaskAssignment;
 use App\Domain\Models\TaskProcess;
+use App\Domain\Models\User;
+use App\Mail\NewAssignmentsMail;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Throwable;
 
 /**
@@ -33,8 +36,10 @@ class TaskServiceImpl implements TaskService
     {
         return DB::transaction(function () use ($processes, $repetitions, $members, $sample) {
 
+            $project = $sample->project;
+
             $task = Task::create([
-                'project_id' => $sample->project_id,
+                'project_id' => $project->getKey(),
                 'sample_id' => $sample->getKey(),
             ]);
 
@@ -80,13 +85,18 @@ class TaskServiceImpl implements TaskService
             foreach ($assignments as $assignment) {
                 TaskAssignment::create([
                     'task_process_id' => $assignment->process,
-                    'project_id' => $sample->project->getKey(),
+                    'project_id' => $project->getKey(),
                     'user_id' => $assignment->user,
                     'image_id' => $assignment->image,
                 ]);
             }
 
-
+            // Group assignments by user to send a mail
+            foreach ($assignments->groupBy('user') as $userId => $assignments) {
+                $user = $members->first(fn(User $user) => $user->getKey() === $userId);
+                $link = route('projects.assignments', compact('project'));
+                Mail::to($user)->queue(new NewAssignmentsMail($user->name, $project->name, count($assignments), $link));
+            }
 
 
             return $task;
