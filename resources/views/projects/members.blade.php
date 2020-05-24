@@ -7,7 +7,7 @@
                 <thead>
                 <tr>
                     <th>@choice('labels.projects.members', 1)</th>
-                    <th>@lang('labels.task.unfinished_assignments')</th>
+                    <th>@choice('labels.task.unfinished_assignments', 0)</th>
                     <th>@lang('labels.task.assignments')</th>
                 </tr>
                 </thead>

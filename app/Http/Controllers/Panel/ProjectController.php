@@ -5,6 +5,9 @@ namespace App\Http\Controllers\Panel;
 use App\Domain\Models\Catalog;
 use App\Domain\Enums\CatalogStatus;
 use App\Domain\Enums\Permissions;
+use App\Domain\Models\Sample;
+use App\Domain\Models\Task;
+use App\Domain\Models\TaskProcess;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AddUserToProjectRequest;
 use App\Http\Requests\CreateProjectRequest;
@@ -107,10 +110,23 @@ class ProjectController extends Controller
     {
         $this->authorize('view', $project);
 
+        $totalProcesses = $project->tasks()
+            ->withCount('processes')
+            ->get()
+            ->reduce(fn (?int $carry, Task $t) => $carry + $t->processes_count);
+
+        $totalImages = $project->samples()
+            ->withCount('images')
+            ->get()
+            ->reduce(fn (?int $carry, Sample $s) => $carry + $s->images_count);
+
         $stats = (object) [
             'totalMembers' => $project->users()->count(),
             'totalSamples' => $project->samples()->count(),
             'totalTasks' => $project->tasks()->count(),
+            'totalProcesses' => $totalProcesses,
+            'totalImages' => $totalImages,
+            'unfinishedAssignments' => $project->unfinishedAssignments()->count(),
         ];
         return view('panel.projects.show', compact('project', 'stats'));
     }

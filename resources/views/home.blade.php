@@ -109,7 +109,7 @@
             </section>
         </div>
         <section class="column is-half">
-            <h1 class="title is-5">@lang('labels.task.unfinished_assignments')</h1>
+            <h1 class="title is-5">@choice('labels.task.unfinished_assignments', 0)</h1>
             @if(count($assignments))
                 <table class="table is-boxed is-fullwidth">
                     <thead>

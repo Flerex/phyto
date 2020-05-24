@@ -53,7 +53,7 @@ return [
         'finished' => 'Finished',
         'pending' => 'Pending',
         'processes' => 'Process|Processes',
-        'unfinished_assignments' => 'Pending assignments',
+        'unfinished_assignments' => 'Pending assignment|Pending assignments',
         'assignments' => 'Assignments',
         'assignees' => 'Assignees',
     ],
