@@ -34,6 +34,7 @@
                 </tbody>
             </table>
         </div>
+        {{ $assignments->links() }}
     @else
         <div class="notification is-info">@lang('projects.empty_assignments')</div>
     @endif
