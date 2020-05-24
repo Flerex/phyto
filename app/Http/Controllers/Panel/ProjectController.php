@@ -113,12 +113,12 @@ class ProjectController extends Controller
         $totalProcesses = $project->tasks()
             ->withCount('processes')
             ->get()
-            ->reduce(fn (?int $carry, Task $t) => $carry + $t->processes_count);
+            ->reduce(fn (int $carry, Task $t) => $carry + $t->processes_count, 0);
 
         $totalImages = $project->samples()
             ->withCount('images')
             ->get()
-            ->reduce(fn (?int $carry, Sample $s) => $carry + $s->images_count);
+            ->reduce(fn (int $carry, Sample $s) => $carry + $s->images_count, 0);
 
         $stats = (object) [
             'totalMembers' => $project->users()->count(),
