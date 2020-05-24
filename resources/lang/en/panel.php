@@ -70,7 +70,8 @@ return [
         'tasks' => [
             'label' => 'Task|Tasks',
             'empty' => 'There are no tasks created.',
-            'create' => 'Create a new task',
+            'create' => 'New task',
+            'automated_create' => 'New automated task',
             'created_alert' => 'Task successfully created.',
             'repeat_images' => 'Image repetition',
             'repeat_images_explain' => 'You can select how many users must tag each image so that there exist multiple opinions by different members.',
