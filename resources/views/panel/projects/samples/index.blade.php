@@ -16,17 +16,22 @@
                 <th>@lang('labels.description')</th>
                 <th>@lang('labels.samples.taken_on')</th>
                 <th>{{ trans_choice('panel.projects.images.label', 0) }}</th>
+                <th class="has-text-right">@lang('general.actions')</th>
                 </thead>
 
                 <tbody>
                 @foreach($samples as $sample)
                     <tr>
-                        <td>
-                            <a href="{{ route('panel.projects.images.index', compact('project', 'sample')) }}">{{ $sample->name }}</a>
-                        </td>
+                        <td>{{ $sample->name }}</td>
                         <td>{{ $sample->description }}</td>
                         <td>{{ $sample->taken_on->format(trans('general.date_format')) }}</td>
                         <td>{{ $sample->images_count }}</td>
+                        <td class="has-text-right">
+                            <a class="button is-rounded is-light is-link is-small has-text-weight-bold"
+                               href="{{ route('panel.projects.images.index', compact('project', 'sample')) }}">
+                                @lang('general.view')
+                            </a>
+                        </td>
                     </tr>
                 @endforeach
                 </tbody>

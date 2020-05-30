@@ -34,13 +34,13 @@
             <th class="has-text-right">@choice('labels.projects.members', 0)</th>
             <th class="has-text-right">@lang('labels.projects.samples')</th>
             <th>@lang('labels.description')</th>
+            <th class="has-text-right" style="width: 15%">@lang('general.actions')</th>
             </thead>
 
             <tbody>
             @foreach($projects as $project)
                 <tr>
-                    <td><a href="{{ route('panel.projects.show', compact('project')) }}">{{ $project->name }}</a>
-                    </td>
+                    <td>{{ $project->name }}</td>
 
                     @if($canManageEverything)
                         <td>{{ $project->manager->name }}</td>
@@ -49,6 +49,17 @@
                     <td class="has-text-right">{{ $project->users_count }}</td>
                     <td class="has-text-right">{{ $project->samples_count }}</td>
                     <td>{{ $project->description }}</td>
+                    <td class="has-text-right">
+                        <a href="{{ route('projects.show', compact('project')) }}" target="_blank"
+                           data-tippy-content="@lang('panel.projects.go_to_project')"
+                           class="button is-rounded is-light is-small">
+                            <span class="icon"><i class="fas fa-external-link-alt"></i></span>
+                        </a>
+                        <a href="{{ route('panel.projects.show', compact('project')) }}"
+                           class="button is-rounded is-link is-light is-small has-text-weight-bold">
+                            @lang('general.manage')
+                        </a>
+                    </td>
                 </tr>
             @endforeach
             </tbody>
