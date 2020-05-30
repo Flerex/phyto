@@ -1,40 +1,25 @@
-import React, {Component} from 'react'
+import React, {Component, useEffect, useState} from 'react'
 import ReactDOM from 'react-dom'
 import TreeView from './TreeView'
 import styles from '../../sass/components/Boxer/HierarchySelector.scss'
 import Tippy from '@tippyjs/react';
 
 
-export default class HierarchySelector extends Component {
+function HierarchySelector({mode, catalog}) {
 
 
-    constructor(props) {
-        super(props)
+    const [data, setData] = useState([])
+    const [originalData, setOriginalData] = useState([])
+    const [query, setQuery] = useState('')
 
-        this.escFunction = this.escFunction.bind(this)
-        this.renderAddButton = this.renderAddButton.bind(this)
-        this.renderEditButton = this.renderEditButton.bind(this)
-        this.renderCheckbox = this.renderCheckbox.bind(this)
-        this.renderError = this.renderError.bind(this)
-        this.hideModal = this.hideModal.bind(this)
-        this.create = this.create.bind(this)
-        this.edit = this.edit.bind(this)
-        this.onCreating = this.onCreating.bind(this)
-        this.onEditing = this.onEditing.bind(this)
-        this.handleSearch = this.handleSearch.bind(this)
+    const [name, setName] = useState('')
+    const [creating, setCreating] = useState(false)
+    const [editing, setEditing] = useState(false)
+    const [parent, setParent] = useState(null)
+    const [element, setElement] = useState(null)
+    const [sending, setSending] = useState(false)
+    const [error, setError] = useState(null)
 
-        this.state = {
-            data: [],
-            originalData: [],
-            query: '',
-
-            name: '',
-            creating: false,
-            editing: false,
-            parent: null,
-            sending: false,
-        }
-    }
 
     /**
      * When called, uses the state data to send a request and
@@ -45,45 +30,27 @@ export default class HierarchySelector extends Component {
      *  - The new name
      *  - The type of the node to be edited
      */
-    edit() {
-        this.setState({
-            sending: true,
-        })
+    const edit = () => {
+        setSending(true)
 
-        const element = this.state.element;
-
-        axios.post('/async/hierarchy/edit', {
+        axios.post(route('async.edit_node'), {
             type: element.type,
             id: element.id,
-            name: this.state.name,
+            name: name,
         }).then(({data}) => {
+            setSending(false)
 
             if (!data.success) {
-                this.setState({
-                    error: data.message,
-                    sending: false,
-                })
-
+                setError(data.message)
                 return
-
             }
-
 
             element.name = data.data.name
 
-            this.setState({
-                editing: false,
-                sending: false,
-            })
-
+            setEditing(false)
         }).catch(e => {
-
-            // FIXME: Show errors in a user-friendly way
-            alert(e)
-
-            this.setState({
-                sending: false,
-            })
+            setSending(false)
+            alert(e) // FIXME: Show errors in a user-friendly way
 
         })
     }
@@ -97,94 +64,64 @@ export default class HierarchySelector extends Component {
      *  - The name of the new node
      *  - The type of the node to be created
      */
-    create() {
-        this.setState({
-            sending: true,
-        })
+    const create = () => {
+        setSending(true)
 
-
-        const parent = this.state.parent,
-
-            request = {
-                name: this.state.name,
-                type: 'domain',
-            }
+        const request = {name, type: 'domain'}
 
         if (parent) {
             request.type = parent.contains
             request.parent = parent.id
         }
 
-        axios.post('/async/hierarchy/add', request).then(({data}) => {
+        axios.post(route('async.add_to_hierarchy'), request).then(({data}) => {
 
+            setSending(false)
             if (!data.success) {
-                this.setState({
-                    error: data.message,
-                    sending: false,
-                })
-
+                setError(data.message)
                 return
-
             }
 
 
-            const parentNode = request.type === 'domain' ? this.state.data : parent.children;
+            const parentNode = request.type === 'domain' ? data : parent.children;
 
             parentNode.push({
                 id: data.data.id,
-                name: this.state.name,
+                name,
                 children: [],
             })
 
 
-            this.setState({
-                creating: false,
-                sending: false,
-            })
+            setCreating(false)
 
         }).catch(e => {
-
-            // FIXME: Show errors in a user-friendly way
-            alert(e)
-
-            this.setState({
-                sending: false,
-            })
-
+            setSending(false)
+            alert(e) // FIXME: Show errors in a user-friendly way
         })
     }
 
-    onCreating(element) {
-        this.setState({
-            creating: true,
-            parent: element,
-            name: '',
-            sending: false,
-        })
-
+    const onCreating = elm => {
+        setCreating(true)
+        setParent(elm)
+        setName('')
+        setSending(false)
     }
 
-    onEditing(element) {
-        this.setState({
-            editing: true,
-            element: element,
-            name: element.name,
-            sending: false,
-        })
+    const onEditing = elm => {
+        setEditing(true)
+        setElement(elm)
+        setName(elm.name)
+        setSending(false)
     }
 
 
     /**
      * Hides the modal
-     * @param e
      */
-    hideModal(e) {
-        this.setState({
-            editing: false,
-            creating: false,
-            name: '',
-            error: '',
-        })
+    const hideModal = _ => {
+        setEditing(false)
+        setCreating(false)
+        setName('')
     }
 
 
@@ -195,24 +132,22 @@ export default class HierarchySelector extends Component {
      * @param query The query to be compared against
      * @returns {boolean}
      */
-    isAMatch(string, query) {
-        return string.toLowerCase().indexOf(query.toLowerCase()) !== -1;
-    }
+    const isAMatch = (string, query) => string.toLowerCase().indexOf(query.toLowerCase()) !== -1;
 
 
     /**
      * Recursively filters a tree showing only the nodes
      * that match the query and its children.
-     * @param data The tree
+     * @param tree The tree
      * @param query The query
      * @returns array
      */
-    filter(data, query) {
-        return data.reduce((acc, node) => {
-            if (this.isAMatch(node.name, query)) {
+    const filter = (tree, query) =>
+        tree.reduce((acc, node) => {
+            if (isAMatch(node.name, query)) {
                 acc.push(node)
             } else if (node.children && node.children.length) {
-                const validNodes = this.filter(node.children, query)
+                const validNodes = filter(node.children, query)
 
                 if (validNodes.length) {
                     const {children, ...newNode} = node
@@ -227,8 +162,6 @@ export default class HierarchySelector extends Component {
         }, [])
 
 
-    }
-
     /**
      * Listener for the onChange event of the search field.
      *
@@ -236,10 +169,10 @@ export default class HierarchySelector extends Component {
      *
      * @param e
      */
-    handleSearch(e) {
-        const query = e.target.value,
-            data = query.trim() ? this.filter(this.state.originalData, query) : this.state.originalData;
-        this.setState({query, data})
+    const handleSearch = e => {
+        const query = e.target.value
+        setQuery(query)
+        setData(query.trim() ? filter(originalData, query) : originalData)
     }
 
     /**
@@ -249,113 +182,107 @@ export default class HierarchySelector extends Component {
      *
      * @param event
      */
-    escFunction(event) {
-        if (event.keyCode === 27) {
-            this.hideModal()
+    const escFunction = (event) => {
+        if (event.keyCode === 27) hideModal()
+    }
+
+    useEffect(() => {
+        document.addEventListener("keydown", escFunction, false)
+
+        const url = mode === 'select' && catalog
+            ? route('async.edit_catalog', {catalog})
+            : route('async.species')
+
+        axios.get(url)
+            .then(r => {
+                const tree = r.data
+                setData(tree)
+                setOriginalData(tree)
+            })
+
+        return function cleanup() {
+            document.removeEventListener("keydown", escFunction, false);
         }
-    }
+    }, [])
 
-    /**
-     * Removes the event listener for the escape key when unmounting the component.
-     */
-    componentWillUnmount() {
-        document.removeEventListener("keydown", this.escFunction, false);
-    }
 
-    render() {
-        return (
-            <React.Fragment>
-                <div className={`box ${styles.hierarchySelector}`}>
-                    <div className={styles.header}>
-                        <p className={styles.heading}>{Lang.trans('hierarchy_selector.hierarchy_selector')}</p>
-
-                        <p className="control has-icons-left">
-                            <input className="input is-small" placeholder={Lang.trans('general.search')} type="text"
-                                   value={this.state.query}
-                                   onChange={this.handleSearch}/>
-                            <span className="icon is-small is-left">
-                            <i className="fas fa-search" aria-hidden="true"/>
-                        </span>
-                        </p>
-                    </div>
-                    <TreeView data={this.state.data} appendList={this.renderAddButton}
-                              appendNode={this.props.mode === 'select' ? this.renderCheckbox : this.renderEditButton}/>
-                </div>
-                {this.renderModal()}
-            </React.Fragment>
-        )
-    }
-
-    renderError() {
-        if (!this.state.error)
+    const renderError = () => {
+        if (!error)
             return;
 
-        return (<span className="has-text-danger">{this.state.error}</span>);
+        return (<span className="has-text-danger">{error}</span>);
     }
 
-    renderModal() {
+    const renderModal = () => {
         return (
-            <div className={this.state.creating || this.state.editing ? 'modal is-active' : 'modal'}>
+            <div className={creating || editing ? 'modal is-active' : 'modal'}>
                 <div className="modal-background"/>
                 <div className="modal-card">
                     <header className="modal-card-head">
-                        <p className="modal-card-title">{this.state.creating ? Lang.trans('hierarchy_selector.add_modal_title') : Lang.trans('hierarchy_selector.edit_modal_title')}</p>
-                        <button className="delete" aria-label="close" onClick={this.hideModal}/>
+                        <p className="modal-card-title">{creating ? Lang.trans('hierarchy_selector.add_modal_title') : Lang.trans('hierarchy_selector.edit_modal_title')}</p>
+                        <button className="delete" aria-label="close" onClick={hideModal}/>
                     </header>
                     <section className="modal-card-body">
-                        <input className="input" type="text" placeholder={Lang.trans('labels.name')} value={this.state.name}
-                               onChange={e => this.setState({name: e.target.value})}/>
+                        <input className="input" type="text" placeholder={Lang.trans('labels.name')}
+                               value={name}
+                               onChange={e => setName(e.target.value)}/>
                     </section>
                     <footer className="modal-card-foot">
-                        <button
-                            className={this.state.sending ? 'button is-success is-loading' : 'button is-success'}
-                            onClick={this.state.creating ? this.create : this.edit}>{this.state.creating ? Lang.trans('hierarchy_selector.add_node') : Lang.trans('hierarchy_selector.edit_node')}
+                        <button className={sending ? 'button is-success is-loading' : 'button is-success'}
+                                onClick={creating ? create : edit}>
+                            {creating ? Lang.trans('hierarchy_selector.add_node') : Lang.trans('hierarchy_selector.edit_node')}
                         </button>
-                        <button className="button" onClick={this.hideModal}>{Lang.trans('general.cancel')}</button>
-                        {this.renderError()}
+                        <button className="button" onClick={hideModal}>{Lang.trans('general.cancel')}</button>
+                        {renderError()}
                     </footer>
                 </div>
             </div>
         )
     }
 
-    componentDidMount() {
-        document.addEventListener("keydown", this.escFunction, false);
-
-        const url = this.props.mode === 'select' && this.props.catalog
-            ? '/async/catalogs/' + this.props.catalog + '/edit'
-            : '/async/species/'
-
-        axios.get(url)
-            .then(r => {
-                const data = r.data
-
-                this.setState({data, originalData: data})
-            })
-
-    }
-
-    renderAddButton(element) {
-        if (this.props.mode !== 'index')
+    const renderAddButton = elm => {
+        if (mode !== 'index')
             return;
 
-        return (<AddButton element={element} onCreating={this.onCreating}/>)
+        return (<AddButton element={elm} onCreating={onCreating}/>)
 
     }
 
-    renderEditButton(element) {
-        if (this.props.mode !== 'index')
+    const renderEditButton = elm => {
+        if (mode !== 'index')
             return;
-        return (<EditButton element={element} onEditing={this.onEditing}/>)
+        return (<EditButton element={elm} onEditing={onEditing}/>)
 
     }
 
-    renderCheckbox(element) {
-        if (this.props.mode !== 'select')
+    const renderCheckbox = elm => {
+        if (mode !== 'select')
             return;
 
-        return (<Checkbox element={element}/>)
+        return (<Checkbox element={elm}/>)
     }
+
+    return (
+        <React.Fragment>
+            <div className={`box ${styles.hierarchySelector}`}>
+                <div className={styles.header}>
+                    <p className={styles.heading}>{Lang.trans('hierarchy_selector.hierarchy_selector')}</p>
+
+                    <p className="control has-icons-left">
+                        <input className="input is-small" placeholder={Lang.trans('general.search')} type="text"
+                               value={query}
+                               onChange={handleSearch}/>
+                        <span className="icon is-small is-left">
+                            <i className="fas fa-search" aria-hidden="true"/>
+                        </span>
+                    </p>
+                </div>
+                <TreeView data={data} appendList={renderAddButton}
+                          appendNode={mode === 'select' ? renderCheckbox : renderEditButton}/>
+            </div>
+            {renderModal()}
+        </React.Fragment>
+    )
 }
 
 /**
@@ -401,7 +328,8 @@ class EditButton extends Component {
     render() {
         return (
             <Tippy content={Lang.trans('hierarchy_selector.edit_node')}>
-                <button className={`button is-small is-light is-rounded is-link ${styles.edit_button}`} onClick={this.clicked}>
+                <button className={`button is-small is-light is-rounded is-link ${styles.edit_button}`}
+                        onClick={this.clicked}>
                     <span className="icon"><i className="fas fa-edit"/></span>
                 </button>
             </Tippy>
