@@ -167,7 +167,7 @@ function SelectableArea({boxes, mode, user, image, dispatch}) {
     return (
         <HotKeys keyMap={keyboardShortcuts.keymap} handlers={keyboardShortcuts.handlers}>
             <div className={styles.container} onMouseMove={dragging} onMouseUp={endSelection}
-                 onMouseLeave={endSelection} onMouseDown={beginSelection}>
+                 onMouseLeave={stopSelection} onMouseDown={beginSelection}>
                 {renderSelectionBox()}
             </div>
         </HotKeys>

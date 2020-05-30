@@ -2,15 +2,18 @@
 
 namespace App\Http\Controllers\Panel;
 
-use App\Catalog;
-use App\Enums\CatalogStatus;
-use App\Enums\Permissions;
+use App\Domain\Models\Catalog;
+use App\Domain\Enums\CatalogStatus;
+use App\Domain\Enums\Permissions;
+use App\Domain\Models\Sample;
+use App\Domain\Models\Task;
+use App\Domain\Models\TaskProcess;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AddUserToProjectRequest;
 use App\Http\Requests\CreateProjectRequest;
-use App\Project;
-use App\Services\ProjectService;
-use App\User;
+use App\Domain\Models\Project;
+use App\Domain\Services\ProjectService;
+use App\Domain\Models\User;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
@@ -41,11 +44,17 @@ class ProjectController extends Controller
 
         $user = Auth::user();
 
-        $canManageEverything = $user->hasPermissionTo(Permissions::MANAGE_ALL_PROJECTS);
+        $canManageEverything = $user->hasPermissionTo(Permissions::MANAGE_ALL_PROJECTS()->getValue());
 
-        $projects = $canManageEverything
-            ? Project::orderBy('id')->paginate(config('phyto.pagination_size'))
-            : Project::whereUserId($user->getKey())->orderBy('id')->paginate(config('phyto.pagination_size'));
+        $query = Project::with('manager')->withCount(['users', 'samples'])->latest();
+
+        if(!$canManageEverything)
+        {
+            $query = $query->whereUserId($user->getKey());
+        }
+
+        $projects = $query->paginate(config('phyto.pagination_size'));
+
 
         return view('panel.projects.index', compact('projects', 'canManageEverything'));
     }
@@ -57,7 +66,7 @@ class ProjectController extends Controller
      */
     public function create()
     {
-        $catalogs = Catalog::where('status', CatalogStatus::SEALED)->get();
+        $catalogs = Catalog::where('status', CatalogStatus::SEALED()->getValue())->get();
 
         return view('panel.projects.create', compact('catalogs'));
     }
@@ -93,7 +102,7 @@ class ProjectController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param \App\Project $project
+     * @param  Project  $project
      * @return Factory|View
      * @throws AuthorizationException
      */
@@ -101,51 +110,24 @@ class ProjectController extends Controller
     {
         $this->authorize('view', $project);
 
+        $totalProcesses = $project->tasks()
+            ->withCount('processes')
+            ->get()
+            ->reduce(fn (int $carry, Task $t) => $carry + $t->processes_count, 0);
+
+        $totalImages = $project->samples()
+            ->withCount('images')
+            ->get()
+            ->reduce(fn (int $carry, Sample $s) => $carry + $s->images_count, 0);
+
         $stats = (object) [
             'totalMembers' => $project->users()->count(),
             'totalSamples' => $project->samples()->count(),
+            'totalTasks' => $project->tasks()->count(),
+            'totalProcesses' => $totalProcesses,
+            'totalImages' => $totalImages,
+            'unfinishedAssignments' => $project->unfinishedAssignments()->count(),
         ];
         return view('panel.projects.show', compact('project', 'stats'));
-    }
-
-
-    /**
-     * Add new user to project page.
-     *
-     * @param Project $project
-     * @return string
-     * @throws AuthorizationException
-     */
-    public function add_user(Project $project)
-    {
-        $this->authorize('add_user', $project);
-
-        return view('panel.projects.add-user', compact('project'));
-    }
-
-
-    public function add_user_store(Project $project, AddUserToProjectRequest $request)
-    {
-        $this->authorize('view', $project);
-
-        $validated = $request->validated();
-
-        $alreadyAdded = $project->users
-            ->push($project->manager)
-            ->pluck('id');
-
-
-        $filteredUsers = collect($validated['users'])->diff($alreadyAdded);
-
-        $project->users()->attach($filteredUsers);
-
-        return redirect()->route('panel.projects.members.index', compact('project'));
-    }
-
-    public function before(User $user, $ability)
-    {
-        if ($user->can(Permissions::MANAGE_ALL_PROJECTS)) {
-            return true;
-        }
     }
 }

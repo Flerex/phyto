@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import ReactDOM from 'react-dom'
-import AsyncSelect from 'react-select/lib/Async';
+import AsyncSelect from 'react-select/async'
 
 
 export default class UserSelector extends Component {
@@ -45,7 +45,7 @@ export default class UserSelector extends Component {
 
         return (
             <AsyncSelect isMulti cacheOptions alwaysOpen name="users[]" defaultValue={this.state.data}
-                         loadOptions={this.promiseOptions}/>
+                         loadOptions={this.promiseOptions} defaultOptions={true} />
         )
     }
 

@@ -2,12 +2,14 @@
 
 namespace App\Providers;
 
-use App\Services\CatalogService;
-use App\Services\CatalogServiceImpl;
-use App\Services\ProjectService;
-use App\Services\ProjectServiceImpl;
-use App\Services\UserService;
-use App\Services\UserServiceImpl;
+use App\Domain\Services\CatalogService;
+use App\Domain\Services\CatalogServiceImpl;
+use App\Domain\Services\ProjectService;
+use App\Domain\Services\ProjectServiceImpl;
+use App\Domain\Services\TaskService;
+use App\Domain\Services\TaskServiceImpl;
+use App\Domain\Services\UserService;
+use App\Domain\Services\UserServiceImpl;
 use App\Utils\FileUtils;
 use App\Utils\FileUtilsImpl;
 use App\Utils\PackageUtils;
@@ -44,6 +46,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(UserService::class, UserServiceImpl::class);
         $this->app->bind(CatalogService::class, CatalogServiceImpl::class);
         $this->app->bind(ProjectService::class, ProjectServiceImpl::class);
+        $this->app->bind(TaskService::class, TaskServiceImpl::class);
 
         $this->app->bind(FileUtils::class, FileUtilsImpl::class);
         $this->app->bind(PackageUtils::class, PackageUtilsImpl::class);

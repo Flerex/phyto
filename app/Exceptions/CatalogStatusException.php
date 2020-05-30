@@ -2,7 +2,7 @@
 
 namespace App\Exceptions;
 
-use App\Catalog;
+use App\Domain\Models\Catalog;
 use Exception;
 
 class CatalogStatusException extends Exception

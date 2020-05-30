@@ -1,8 +1,8 @@
 <?php
 
-use App\Catalog;
-use App\Domain;
-use App\Enums\CatalogStatus;
+use App\Domain\Models\Catalog;
+use App\Domain\Models\Domain;
+use App\Domain\Enums\CatalogStatus;
 use Illuminate\Database\Seeder;
 
 class CatalogTableSeeder extends Seeder
@@ -19,7 +19,7 @@ class CatalogTableSeeder extends Seeder
         foreach(Domain::all() as $domain) {
             $catalog = factory(Catalog::class)->create([
                 'name' => $domain->name . ' catalog',
-                'status' => CatalogStatus::SEALED,
+                'status' => CatalogStatus::SEALED()->getValue(),
             ]);
             $catalog->domains()->attach($domain);
         }

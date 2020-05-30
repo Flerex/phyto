@@ -1,6 +1,13 @@
 @extends('panel.projects.partials.layout')
 
 @section('project_content')
+    <div class="button-strip">
+        <a href="{{ route('panel.projects.members.create', compact('project')) }}"
+           class="button is-rounded is-link">
+            <span class="icon is-left"><i class="fas fa-user-plus"></i></span>
+            <span>@lang('panel.projects.add_users')</span>
+        </a>
+    </div>
     @if(count($members))
         <div class="box">
             <table class="table is-fullwidth">

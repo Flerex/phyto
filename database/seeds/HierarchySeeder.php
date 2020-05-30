@@ -1,9 +1,9 @@
 <?php
 
-use App\Classis;
-use App\Domain;
-use App\Genus;
-use App\Species;
+use App\Domain\Models\Classis;
+use App\Domain\Models\Domain;
+use App\Domain\Models\Genus;
+use App\Domain\Models\Species;
 use Illuminate\Database\Seeder;
 
 class HierarchySeeder extends Seeder

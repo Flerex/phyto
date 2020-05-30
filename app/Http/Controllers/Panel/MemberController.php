@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Panel;
 
 use App\Http\Controllers\Controller;
-use App\Project;
-use App\User;
+use App\Http\Requests\AddUserToProjectRequest;
+use App\Domain\Models\Project;
+use App\Domain\Models\User;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
 
 class MemberController extends Controller
@@ -27,4 +29,38 @@ class MemberController extends Controller
 
         return redirect()->back();
     }
+
+    /**
+     * Add new user to project page.
+     *
+     * @param Project $project
+     * @return string
+     * @throws AuthorizationException
+     */
+    public function create(Project $project)
+    {
+        $this->authorize('add_user', $project);
+
+        return view('panel.projects.members.create', compact('project'));
+    }
+
+
+    public function store(Project $project, AddUserToProjectRequest $request)
+    {
+        $this->authorize('view', $project);
+
+        $validated = $request->validated();
+
+        $alreadyAdded = $project->users
+            ->push($project->manager)
+            ->pluck('id');
+
+
+        $filteredUsers = collect($validated['users'])->diff($alreadyAdded);
+
+        $project->users()->attach($filteredUsers);
+
+        return redirect()->route('panel.projects.members.index', compact('project'));
+    }
+
 }

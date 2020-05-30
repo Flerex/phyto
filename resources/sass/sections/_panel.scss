@@ -13,3 +13,11 @@
     background: $gray2;
     margin-bottom: 0;
 }
+
+
+.thumbnail {
+    width: 200px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: $radius;
+}

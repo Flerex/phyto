@@ -2,6 +2,7 @@
 
 return [
     'panel' => 'Management Panel',
+    'managed_projects' => 'Managed projects',
 
     'users' => [
         'management' => 'User management',
@@ -37,7 +38,7 @@ return [
     ],
 
     'projects' => [
-        'management' => 'Projects management',
+        'management' => 'Project management',
         'create' => 'Start new project',
         'no_projects' => 'There are no projects.',
         'create_alert' => 'Project “:name“ has been created.',
@@ -64,8 +65,23 @@ return [
             'disable' => 'Disable member',
             'enable' => 'Enable member',
             'added_on' => 'Added on',
-        ]
+        ],
+
+        'tasks' => [
+            'label' => 'Task|Tasks',
+            'empty' => 'There are no tasks created.',
+            'create' => 'New task',
+            'automated_create' => 'New automated task',
+            'created_alert' => 'Task successfully created.',
+            'repeat_images' => 'Image repetition',
+            'repeat_images_explain' => 'You can select how many users must tag each image so that there exist multiple opinions by different members.',
+            'process_number' => 'Processes',
+            'process_explained' => 'Here you can select how many times this sample will be tagged. For every process, the assignments for evey member will be unique. This means that the same person won’t be assigned the same image in different processes.',
+            'process_max' => 'There must be at least the same number of members as the the number of processes times the image repetition factor (:value).',
+            'must_be_members' => 'Members must belong to the current project.',
+        ],
     ],
+
 
     'label' => [
         'users' => 'Users',

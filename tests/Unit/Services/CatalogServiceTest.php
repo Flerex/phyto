@@ -1,11 +1,11 @@
 <?php
 
-namespace Tests\Unit;
+namespace Tests\Unit\Services;
 
-use App\Catalog;
-use App\Enums\CatalogStatus;
+use App\Domain\Models\Catalog;
+use App\Domain\Enums\CatalogStatus;
 use App\Exceptions\CatalogStatusException;
-use App\Services\CatalogService;
+use App\Domain\Services\CatalogService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Tests\TestCase;
 
@@ -96,11 +96,11 @@ class CatalogServiceTest extends TestCase
 
         $catalog = $this->catalogService->createCatalog(self::CATALOG_NAME, collect(self::NODE_EXAMPLES));
 
-        $this->assertEquals(CatalogStatus::EDITING, $catalog->status);
+        $this->assertEquals(CatalogStatus::EDITING()->getValue(), $catalog->status);
 
         $this->catalogService->sealCatalog($catalog->getKey());
 
-        $this->assertEquals(CatalogStatus::SEALED, $catalog->fresh()->status);
+        $this->assertEquals(CatalogStatus::SEALED()->getValue(), $catalog->fresh()->status);
 
     }
 
@@ -111,10 +111,10 @@ class CatalogServiceTest extends TestCase
         $catalog = $this->catalogService->createCatalog(self::CATALOG_NAME, collect(self::NODE_EXAMPLES));
 
 
-        $catalog->status = CatalogStatus::SEALED;
+        $catalog->status = CatalogStatus::SEALED()->getValue();
         $catalog->save();
 
-        $this->assertEquals(CatalogStatus::SEALED, $catalog->fresh()->status);
+        $this->assertEquals(CatalogStatus::SEALED()->getValue(), $catalog->fresh()->status);
 
         $this->catalogService->sealCatalog($catalog->getKey());
 
@@ -124,12 +124,12 @@ class CatalogServiceTest extends TestCase
 
         $catalog = $this->catalogService->createCatalog(self::CATALOG_NAME, collect(self::NODE_EXAMPLES));
 
-        $catalog->status = CatalogStatus::SEALED;
+        $catalog->status = CatalogStatus::SEALED()->getValue();
         $catalog->save();
 
         $this->catalogService->markCatalogAsObsolete($catalog->getKey());
 
-        $this->assertEquals(CatalogStatus::OBSOLETE, $catalog->fresh()->status);
+        $this->assertEquals(CatalogStatus::OBSOLETE()->getValue(), $catalog->fresh()->status);
 
     }
 
@@ -147,12 +147,12 @@ class CatalogServiceTest extends TestCase
 
         $catalog = $this->catalogService->createCatalog(self::CATALOG_NAME, collect(self::NODE_EXAMPLES));
 
-        $catalog->status = CatalogStatus::OBSOLETE;
+        $catalog->status = CatalogStatus::OBSOLETE()->getValue();
         $catalog->save();
 
         $this->catalogService->restoreCatalog($catalog->getKey());
 
-        $this->assertEquals(CatalogStatus::SEALED, $catalog->fresh()->status);
+        $this->assertEquals(CatalogStatus::SEALED()->getValue(), $catalog->fresh()->status);
 
     }
 
@@ -195,7 +195,7 @@ class CatalogServiceTest extends TestCase
 
         $catalog = $this->catalogService->createCatalog(self::CATALOG_NAME, collect(self::NODE_EXAMPLES));
 
-        $catalog->status = CatalogStatus::SEALED;
+        $catalog->status = CatalogStatus::SEALED()->getValue();
         $catalog->save();
 
         $this->catalogService->destroyCatalog($catalog->getKey());

@@ -1,15 +1,15 @@
 <?php
 
 
-namespace Tests\Unit;
+namespace Tests\Unit\Services;
 
 
-use App\Catalog;
-use App\Image;
+use App\Domain\Models\Catalog;
+use App\Domain\Models\Image;
 use App\Jobs\NormalizeImagePreview;
-use App\Project;
-use App\Services\ProjectService;
-use App\User;
+use App\Domain\Models\Project;
+use App\Domain\Services\ProjectService;
+use App\Domain\Models\User;
 use App\Utils\FileUtils;
 use App\Utils\FileUtilsImpl;
 use Carbon\Carbon;

@@ -2,9 +2,9 @@
 
 namespace Tests\Feature;
 
-use App\Services\CatalogService;
-use App\User;
-use App\Enums\Roles;
+use App\Domain\Services\CatalogService;
+use App\Domain\Models\User;
+use App\Domain\Enums\Roles;
 use Tests\TestCase;
 
 class PanelCatalogTest extends TestCase
@@ -28,7 +28,7 @@ class PanelCatalogTest extends TestCase
     {
         $user = factory(User::class)->create();
 
-        $user->assignRole(Roles::SUPERVISOR);
+        $user->assignRole(Roles::SUPERVISOR()->getValue());
 
         $user->save();
 

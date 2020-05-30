@@ -1,6 +1,6 @@
 <?php
 
-use App\Enums\Roles;
+use App\Domain\Enums\Roles;
 
 return [
 
@@ -37,10 +37,10 @@ return [
     // Roles
     'role' => 'Role',
     'roles' => [
-        Roles::ADMIN => 'Administrator',
-        Roles::SUPERVISOR => 'Supervisor',
-        Roles::MANAGER => 'Manager',
-        Roles::TAGGER => 'Boxer',
+        Roles::ADMIN()->getValue() => 'Administrator',
+        Roles::SUPERVISOR()->getValue() => 'Supervisor',
+        Roles::MANAGER()->getValue() => 'Manager',
+        Roles::TAGGER()->getValue() => 'Boxer',
     ],
 
     'flash' => [

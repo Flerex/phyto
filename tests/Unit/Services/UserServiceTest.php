@@ -1,13 +1,13 @@
 <?php
 
-namespace Tests\Unit;
+namespace Tests\Unit\Services;
 
-use App\Notifications\ActivateAccount;
-use App\Notifications\ResetPassword as ResetPasswordNotification;
-use App\Role;
-use App\Services\UserService;
-use App\User;
-use App\Enums\Roles;
+use App\Notifications\ActivateAccountNotification;
+use App\Notifications\ResetPasswordNotification as ResetPasswordNotification;
+use App\Domain\Models\Role;
+use App\Domain\Services\UserService;
+use App\Domain\Models\User;
+use App\Domain\Enums\Roles;
 use Carbon\Carbon;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -63,7 +63,7 @@ class UserServiceTest extends TestCase
         Event::fake();
 
         // Get the role model
-        $role = Role::findByName(Roles::TAGGER);
+        $role = Role::findByName(Roles::TAGGER()->getValue());
 
         // Create a user
         $id = $this->userService->createUser(static::TESTING_USER_NAME, static::TESTING_USER_EMAIL, $role);
@@ -76,7 +76,7 @@ class UserServiceTest extends TestCase
         // Check it contains the same values
         $this->assertEquals(static::TESTING_USER_NAME, $user->name);
         $this->assertEquals(static::TESTING_USER_EMAIL, $user->email);
-        $this->assertTrue($user->hasRole(Roles::TAGGER));
+        $this->assertTrue($user->hasRole(Roles::TAGGER()->getValue()));
 
     }
 
@@ -88,13 +88,13 @@ class UserServiceTest extends TestCase
         Notification::fake();
 
         // Create a user
-        $role = Role::findByName(Roles::TAGGER);
+        $role = Role::findByName(Roles::TAGGER()->getValue());
         $id = $this->userService->createUser(static::TESTING_USER_NAME, static::TESTING_USER_EMAIL, $role);
 
         // Retrieve user from DB
         $user = User::find($id);
 
-        Notification::assertSentTo($user, ActivateAccount::class);
+        Notification::assertSentTo($user, ActivateAccountNotification::class);
 
     }
 

@@ -1,9 +1,9 @@
 <?php
 
-use App\Catalog;
-use App\Enums\CatalogStatus;
-use App\Project;
-use App\User;
+use App\Domain\Models\Catalog;
+use App\Domain\Enums\CatalogStatus;
+use App\Domain\Models\Project;
+use App\Domain\Models\User;
 use Faker\Generator as Faker;
 
 $factory->define(Project::class, function (Faker $faker) {
@@ -20,7 +20,7 @@ $factory->afterCreating(Project::class, function (Project $project, Faker $faker
     $project->users()->sync(factory(User::class, rand(0, 10))->create());
 
 
-    $catalog = Catalog::inRandomOrder()->where('status', CatalogStatus::SEALED)->limit(1)->get();
+    $catalog = Catalog::inRandomOrder()->where('status', CatalogStatus::SEALED()->getValue())->limit(1)->get();
     $users = User::inRandomOrder()->limit(rand(2, 10))->get();
 
     $users = $users->filter(fn ($u) => $u->getKey() !== $project->manager->getKey());

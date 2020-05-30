@@ -1,22 +1,13 @@
-@extends('layouts.master')
+@extends('projects.partials.layout')
 
-@section('content')
-    <div class="tabs is-centered">
-        <ul>
-            <li class="is-active"><a>@lang('general.overview')</a></li>
-            <li><a>OUTRO LINK</a></li>
-            <li><a>OUTRO LINK</a></li>
-            <li><a>OUTRO LINK</a></li>
-        </ul>
-    </div>
-
-    <div class="columns is-multiline is-3">
+@section('project-content')
+    <div class="columns is-multiline">
         @foreach($images as $image)
-            <div class="column is-6">
+            <div class="column is-4">
                 <a href="{{ route('projects.images.tag', compact('project', 'image')) }}">
                     <div class="box">
                         <figure class="image">
-                            <img src="{{ asset($image->path) }}">
+                            <img class="thumbnail" src="{{ asset($image->thumbnail_path) }}">
                         </figure>
                     </div>
                 </a>

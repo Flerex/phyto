@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Panel;
 
 use App\Http\Controllers\Controller;
-use App\Image;
-use App\Project;
-use App\Sample;
+use App\Domain\Models\Image;
+use App\Domain\Models\Project;
+use App\Domain\Models\Sample;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\Request;

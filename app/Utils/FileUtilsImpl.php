@@ -45,7 +45,7 @@ class FileUtilsImpl implements FileUtils
             ->map(function ($path, $i) use ($finalPath) {
                 $extension = File::extension(storage_path($path));
 
-                $newPath = $finalPath . '/' . $i . '.' . $extension;
+                $newPath = $finalPath . '/' . ($i + 1) . '.' . $extension;
                 Storage::move($path, 'public/' . $newPath);
 
                 return $newPath;

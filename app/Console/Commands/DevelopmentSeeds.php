@@ -2,8 +2,8 @@
 
 namespace App\Console\Commands;
 
-use App\User;
-use App\Enums\Roles;
+use App\Domain\Models\User;
+use App\Domain\Enums\Roles;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 
@@ -49,7 +49,7 @@ class DevelopmentSeeds extends Command
         $user->email_verified_at = Carbon::now();
         $user->save();
 
-        $user->assignRole(Roles::ADMIN);
+        $user->assignRole(Roles::ADMIN()->getValue());
 
         $this->info('Development seeding completed successfully.');
     }

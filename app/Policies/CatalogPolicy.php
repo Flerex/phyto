@@ -2,8 +2,8 @@
 
 namespace App\Policies;
 
-use App\Catalog;
-use App\User;
+use App\Domain\Models\Catalog;
+use App\Domain\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class CatalogPolicy
@@ -13,7 +13,7 @@ class CatalogPolicy
     /**
      * Determine whether the user can view any holas.
      *
-     * @param  \App\User  $user
+     * @param  \App\Domain\Models\User  $user
      * @return mixed
      */
     public function viewAny(User $user)

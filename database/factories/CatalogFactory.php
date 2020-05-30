@@ -2,27 +2,14 @@
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 
-use App\Catalog;
-use App\Domain;
-use App\Enums\CatalogStatus;
-use App\Species;
+use App\Domain\Models\Catalog;
+use App\Domain\Enums\CatalogStatus;
 use Faker\Generator as Faker;
-
-/*
-|--------------------------------------------------------------------------
-| Model Factories
-|--------------------------------------------------------------------------
-|
-| This directory should contain each of the model factory definitions for
-| your application. Factories provide a convenient way to generate new
-| model instances for testing / seeding your application's database.
-|
-*/
 
 $factory->define(Catalog::class, function (Faker $faker) {
     return [
         'name' => $faker->sentence(3, true),
-        'status' => CatalogStatus::getValues()->random(1)->first()
+        'status' => collect(CatalogStatus::toArray())->random(1)->first()
     ];
 });
 

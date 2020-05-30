@@ -2,8 +2,8 @@
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 
-use App\Enums\Roles;
-use App\User;
+use App\Domain\Enums\Roles;
+use App\Domain\Models\User;
 use Faker\Generator as Faker;
 use Illuminate\Support\Str;
 
@@ -29,11 +29,11 @@ $factory->define(User::class, function (Faker $faker) {
 });
 
 $factory->afterCreating(User::class, function (User $user) {
-    $role = Roles::getValues()->random(1)->first();
+    $role = collect(Roles::toArray())->random(1)->first();
     $user->assignRole($role);
 });
 
 $factory->afterMakingState(User::class, 'manager', function (User $user) {
-    $user->assignRole(Roles::MANAGER);
+    $user->assignRole(Roles::MANAGER()->getValue());
 });
 

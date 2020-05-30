@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers\Panel;
 
-use App\Enums\Permissions;
+use App\Domain\Enums\Permissions;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateSampleRequest;
 use App\Http\Requests\SampleRequest;
-use App\Project;
-use App\Sample;
-use App\Services\ProjectService;
-use App\User;
+use App\Domain\Models\Project;
+use App\Domain\Models\Sample;
+use App\Domain\Services\ProjectService;
+use App\Domain\Models\User;
 use Carbon\Carbon;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\Routing\ResponseFactory;

@@ -1,22 +1,29 @@
 .home_buttons {
     display: flex;
-    flex-wrap: wrap;
-    margin-bottom: -.75rem * 2;
+    align-items: center;
+    padding-bottom: 1rem;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid $grey-lightest;
+}
+
+.home_buttons_feedback {
+    color: $grey-light;
+    margin-right: 1rem;
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: .8rem;
 }
 
 .home_button {
-    flex: 1 0 calc(50% - .75rem * 2);
-    display: block;
-    border-radius: $radius;
-    padding: 4em 1.5em;
+    align-items: center;
+    display: flex;
+    border-radius: 100px;
     color: $white;
-    text-align: center;
-    text-transform: uppercase;
-    font-weight: bold;
-    margin-bottom: .75rem * 2;
+    margin-right: 1rem;
+    padding: .5rem .9rem;
 
-    &:nth-child(odd) {
-        margin-right: .75rem * 2;
+    &:last-child {
+        margin-right: 0;
     }
 
     &.has-background-warning, &.has-background-warning:hover {
@@ -29,47 +36,19 @@
     }
 
     .icon {
-        margin-bottom: .6em;
+        margin-right: .3em;
         opacity: .8;
     }
 }
 
 .home_button__label {
-    letter-spacing: 1px;
+    font-size: .9rem;
 }
 
-.project_list {
-    display: flex;
-    flex-direction: column;
-    background-color: $gray4;
-    border-radius: $radius;
-    padding: 1em;
-    height: 100%;
-
-    a {
-        display: block;
-        padding: .3rem .5rem;
-        border-radius: $radius;
-        color: $grey;
-
-        &:hover {
-            background-color: $white;
-        }
-    }
-
-    li:not(:last-child) {
-        margin-bottom: .5rem;
-    }
-
-    ul {
-        flex: 1;
-        overflow-y: auto;
-    }
+.manager__feedback {
+    margin-right: .25rem;
 }
 
-
-.project_list__label {
-    margin-bottom: 1rem;
+#dashboard section:not(:last-child) {
+    margin-bottom: 3rem;
 }
-
-

@@ -37,5 +37,29 @@
             <div class="block__value">{{ $stats->totalSamples }}</div>
             <div class="block__label">{{ trans_choice('panel.projects.samples.label', $stats->totalSamples) }}</div>
         </div>
+
+        {{-- Total images --}}
+        <div class="block box">
+            <div class="block__value">{{ $stats->totalImages }}</div>
+            <div class="block__label">{{ trans_choice('panel.projects.images.label', $stats->totalImages) }}</div>
+        </div>
+
+        {{-- Total tasks --}}
+        <div class="block box">
+            <div class="block__value">{{ $stats->totalTasks }}</div>
+            <div class="block__label">{{ trans_choice('panel.projects.tasks.label', $stats->totalTasks) }}</div>
+        </div>
+
+        {{-- Total processes --}}
+        <div class="block box">
+            <div class="block__value">{{ $stats->totalProcesses }}</div>
+            <div class="block__label">{{ trans_choice('labels.task.processes', $stats->totalProcesses) }}</div>
+        </div>
+
+        {{-- Total unfinished assignments --}}
+        <div class="block box">
+            <div class="block__value">{{ $stats->unfinishedAssignments }}</div>
+            <div class="block__label">{{ trans_choice('labels.task.unfinished_assignments', $stats->unfinishedAssignments) }}</div>
+        </div>
     </div>
 @endsection

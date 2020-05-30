@@ -2,7 +2,7 @@
 
 namespace App\Jobs;
 
-use App\Image;
+use App\Domain\Models\Image;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;

@@ -1,0 +1,17 @@
+.table-filter {
+    display: flex;
+    width: 25%;
+    margin-left: auto;
+    align-items: center;
+    margin-bottom: 1rem;
+
+    & > span {
+        color: $grey;
+        margin-right: .25rem;
+    }
+
+    #process_filter {
+        flex: 1;
+    }
+}
+

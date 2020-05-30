@@ -1,6 +1,6 @@
 <?php
 
-use App\Enums\Permissions;
+use App\Domain\Enums\Permissions;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Permission;
 
@@ -13,7 +13,7 @@ class PermissionsTableSeeder extends Seeder
      */
     public function run()
     {
-        foreach (Permissions::getValues() as $name) {
+        foreach (Permissions::toArray() as $name) {
             Permission::create(compact('name'));
         }
     }

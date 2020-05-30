@@ -10,7 +10,7 @@ return [
     | The default role used when creating a new user.
     |
     */
-    'default_role' => App\Enums\Roles::TAGGER,
+    'default_role' => App\Domain\Enums\Roles::TAGGER()->getValue(),
 
 
     /*
@@ -21,7 +21,18 @@ return [
     | The amount of elements that will be shown in paginated results.
     |
     */
-    'pagination_size' => 50,
+    'pagination_size' => 25,
+
+    /*
+    |--------------------------------------------------------------------------
+    | Number of random assignments
+    |--------------------------------------------------------------------------
+    |
+    | The number of random unfinished assignments that will be shown
+    | to the user in the application’s dashboard.
+    |
+    */
+    'random_assignments_count' => 5,
 
     /*
     |--------------------------------------------------------------------------
