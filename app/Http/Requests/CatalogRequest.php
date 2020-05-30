@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Domain\Models\Species;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Collection;
 use Illuminate\Validation\Rule;
@@ -45,7 +46,7 @@ class CatalogRequest extends FormRequest
     /**
      * Configure the validator instance.
      *
-     * @param \Illuminate\Validation\Validator $validator
+     * @param  \Illuminate\Validation\Validator  $validator
      * @return void
      */
     public function withValidator($validator)
@@ -88,7 +89,7 @@ class CatalogRequest extends FormRequest
 
         foreach ($nodeTypesToBeAdded as $attribute) {
 
-            $class = 'App\\' . ucwords($attribute);
+            $class = class_namespace(Species::class).'\\'.ucwords($attribute);
 
             $ids = collect($validated[$attribute]);
 

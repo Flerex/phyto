@@ -6,6 +6,7 @@ use App\Domain\Models\Catalog;
 use App\Domain\Models\Domain;
 use App\Domain\Models\Project;
 use App\Domain\Models\Sample;
+use App\Domain\Models\Species;
 use App\Domain\Models\User;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
@@ -92,7 +93,10 @@ class AsynchronousController extends Controller
 
         $validated = $validator->validated();
 
-        $className = 'App\\'.ucwords($validated['type']);
+
+        $namespace = class_namespace(Species::class); // Obtain the entity namespace from an example entity.
+
+        $className = $namespace.'\\'.ucwords($validated['type']);
 
         $el = $className::find($validated['id']);
 
@@ -141,7 +145,8 @@ class AsynchronousController extends Controller
         if ($validated['type'] === 'domain') {
             $el = Domain::create($data);
         } else {
-            $className = 'App\\'.ucwords($validated['type']);
+            $namespace = class_namespace(Species::class);
+            $className = $namespace . '\\'.ucwords($validated['type']);
 
             $data[self::getRelationships()[$validated['type']].'_id'] = $validated['parent'];
 
@@ -205,7 +210,7 @@ class AsynchronousController extends Controller
 
             $attr = $validator->attributes();
 
-            $model = 'App\\'.ucwords($attr['type']);
+            $model = class_namespace(Species::class).'\\'.ucwords($attr['type']);
 
             if ($model::find($attr['id']) === null) {
                 $validator->errors()->add('id', trans('hierarchy_selector.errors.id.exists'));
@@ -222,7 +227,7 @@ class AsynchronousController extends Controller
             $attr = $validator->attributes();
 
             if ($attr['type'] !== 'domain') {
-                $parentModel = 'App\\'.ucwords(self::getRelationships()[$attr['type']]);
+                $parentModel = class_namespace(Species::class).'\\'.ucwords(self::getRelationships()[$attr['type']]);
 
                 if ($parentModel::find($attr['parent']) === null) {
                     $validator->errors()->add('parent', trans('hierarchy_selector.errors.parent.exists'));
@@ -238,7 +243,7 @@ class AsynchronousController extends Controller
 
             $attr = $validator->attributes();
 
-            $model = 'App\\'.ucwords($attr['type']);
+            $model = class_namespace(Species::class).'\\'.ucwords($attr['type']);
 
 
             if ($model::whereName($attr['name'])->first() !== null) {
