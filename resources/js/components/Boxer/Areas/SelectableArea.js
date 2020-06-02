@@ -1,11 +1,17 @@
 import React, {useState} from 'react';
 import styles from '../../../../sass/components/Boxer/SelectableArea.scss'
 import {HotKeys} from 'react-hotkeys'
-import connect from 'react-redux/lib/connect/connect';
 import {addBox, persistBox} from '../store/actions/boxes';
 import BoxerModes from '../BoxerModes';
+import {useDispatch, useSelector} from 'react-redux';
 
-function SelectableArea({boxes, mode, user, image, dispatch}) {
+export default function SelectableArea() {
+
+    const mode = useSelector(s => s.mode);
+    const user = useSelector(s => s.user);
+    const boxes = useSelector(s => s.boxes);
+    const image = useSelector(s => s.image);
+    const dispatch = useDispatch();
 
     let animationInProgress = null;
 
@@ -174,12 +180,3 @@ function SelectableArea({boxes, mode, user, image, dispatch}) {
     );
 
 }
-
-const mapStateToProps = state => ({
-    mode: state.mode,
-    user: state.user,
-    boxes: state.boxes,
-    image: state.image,
-})
-
-export default connect(mapStateToProps)(SelectableArea);

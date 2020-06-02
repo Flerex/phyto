@@ -1,10 +1,12 @@
 import React from 'react'
 import styles from '../../../../sass/components/Boxer/BoundingBoxOptions.scss'
 import {Button, Icon} from 'react-bulma-components'
-import connect from 'react-redux/lib/connect/connect';
 import {deleteBox, editBox, persistBox, setEditingBox} from '../store/actions/boxes';
+import {useDispatch} from 'react-redux';
 
-function BoundingBoxOptions({box, dispatch}) {
+export default function BoundingBoxOptions({box}) {
+
+    const dispatch = useDispatch();
 
     const toggleEditMode = () => {
         dispatch(setEditingBox(box.id, !box.editing));
@@ -67,5 +69,3 @@ function BoundingBoxOptions({box, dispatch}) {
     </>)
 
 }
-
-export default connect()(BoundingBoxOptions);

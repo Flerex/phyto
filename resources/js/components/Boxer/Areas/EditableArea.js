@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import styles from '../../../../sass/components/Boxer/EditableArea.scss'
 import {pascalCase} from 'pascal-case';
 import {setEditingBox} from '../store/actions/boxes';
-import connect from 'react-redux/lib/connect/connect';
+import {connect} from 'react-redux';
 
 class EditableArea extends Component {
 

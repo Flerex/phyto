@@ -2,10 +2,11 @@ import React from 'react'
 import styles from '../../../../sass/components/Boxer/BoundingBoxList.scss'
 import {Heading} from 'react-bulma-components';
 import BoundingBoxListItem from './BoundingBoxListItem';
-import connect from 'react-redux/lib/connect/connect';
+import {useSelector} from 'react-redux';
 
-function BoundingBoxList({boxes}) {
+export default function BoundingBoxList() {
 
+    const boxes = useSelector(s => s.boxes);
 
     const renderBoxes = () => {
         if (!boxes.length) {
@@ -21,10 +22,3 @@ function BoundingBoxList({boxes}) {
         </div>
     )
 }
-
-const mapStateToProps = state => ({
-        boxes: state.boxes,
-    }
-)
-
-export default connect(mapStateToProps)(BoundingBoxList);

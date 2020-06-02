@@ -1,11 +1,14 @@
 import React from 'react'
-import connect from 'react-redux/lib/connect/connect';
 import styles from '../../../../sass/components/Boxer/Toolbox.scss';
 import {Button, Icon} from 'react-bulma-components';
 import {setMode} from '../store/actions/mode';
 import BoxerModes from '../BoxerModes';
+import {useDispatch, useSelector} from 'react-redux';
 
-function ModeSwitcher({mode, dispatch}) {
+export default function ModeSwitcher() {
+
+    const mode = useSelector(s => s.mode);
+    const dispatch = useDispatch();
 
     const changeMode = mode => {
         dispatch(setMode(mode))
@@ -28,10 +31,3 @@ function ModeSwitcher({mode, dispatch}) {
         </Button.Group>
     )
 }
-
-
-const mapStateToProps = state => ({
-    mode: state.mode,
-})
-
-export default connect(mapStateToProps)(ModeSwitcher);

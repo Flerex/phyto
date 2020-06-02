@@ -1,22 +1,26 @@
 import React, {useEffect} from 'react'
 import styles from '../../../../sass/components/Boxer/BoundingBoxListItem.scss'
-import connect from 'react-redux/lib/connect/connect';
 import {highlightBox} from '../store/actions/boxes';
+import {useDispatch, useSelector} from 'react-redux';
 
-function BoundingBoxListItem({box, image, dispatch}) {
+export default function BoundingBoxListItem({box}) {
+
+    const image = useSelector(s => s.image);
+    const dispatch = useDispatch();
 
     const ref = React.createRef();
 
 
     useEffect(() => {
-        if (box.focused) {
-            const element = ref.current;
-            const parent = ref.current.parentNode;
+        if (!box.focused) return
 
-            if (parent.scrollTop > element.offsetTop || (parent.scrollTop + parent.offsetHeight) <= element.offsetTop) {
-                parent.scrollTop = element.offsetTop - 10;
-            }
+        const element = ref.current;
+        const parent = ref.current.parentNode;
+
+        if (parent.scrollTop > element.offsetTop || (parent.scrollTop + parent.offsetHeight) <= element.offsetTop) {
+            parent.scrollTop = element.offsetTop - 10;
         }
+
     }, [box]);
 
     const highlight = highlighted => {
@@ -32,7 +36,7 @@ function BoundingBoxListItem({box, image, dispatch}) {
             height: box.height + 'px',
             backgroundImage: 'url(\'' + image.url + '\')',
             backgroundPosition: -box.left + 'px ' + -box.top + 'px',
-            transform: 'scale(' + 50/minProperty + ')',
+            transform: 'scale(' + 50 / minProperty + ')',
         }
     }
 
@@ -47,15 +51,8 @@ function BoundingBoxListItem({box, image, dispatch}) {
                     <em>{Lang.trans('boxer.untagged')}</em>
                     {!box.persisted && (<i className={`fas fa-spinner fa-spin ${styles.uploading}`}/>)}
                 </div>
-                <div className={styles.author}>
-                    {Lang.trans('boxer.by')} <strong>{box.user}</strong>
-                </div>
+                <div className={styles.author}>{Lang.trans('boxer.by')} <strong>{box.user.name}</strong></div>
             </div>
         </div>
     )
 }
-
-const mapStateToProps = state => ({
-    image: state.image,
-})
-export default connect(mapStateToProps)(BoundingBoxListItem);

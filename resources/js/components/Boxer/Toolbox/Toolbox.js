@@ -1,12 +1,11 @@
 import React from 'react'
-import connect from 'react-redux/lib/connect/connect';
 import styles from '../../../../sass/components/Boxer/Toolbox.scss';
 import MovementTools from './MovementTools';
 import ZoomingTools from './ZoomingTools';
 import SizingTools from './SizingTools';
 import ModeSwitcher from './ModeSwitcher';
 
-function Toolbox() {
+export default function Toolbox() {
 
     return (
         <div className={styles.toolbox}>
@@ -17,5 +16,3 @@ function Toolbox() {
         </div>
     )
 }
-
-export default connect()(Toolbox);

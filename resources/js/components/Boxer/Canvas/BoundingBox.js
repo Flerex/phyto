@@ -3,11 +3,14 @@ import styles from '../../../../sass/components/Boxer/BoundingBox.scss'
 import BoundingBoxOptions from './BoundingBoxOptions';
 import Tippy from '@tippyjs/react';
 import EditableArea from '../Areas/EditableArea';
-import connect from 'react-redux/lib/connect/connect';
 import BoxerModes from '../BoxerModes';
 import {focusBox} from '../store/actions/boxes';
+import {useDispatch, useSelector} from 'react-redux';
 
-function BoundingBox({box, mode, dispatch}) {
+export default function BoundingBox({box}) {
+
+    const mode = useSelector(s => s.mode);
+    const dispatch = useDispatch();
 
     const getBoundingBoxStyle = () => {
         return {
@@ -37,12 +40,12 @@ function BoundingBox({box, mode, dispatch}) {
         return className;
     }
 
-    const boxOptions = (<BoundingBoxOptions box={box} />);
+    const boxOptions = (<BoundingBoxOptions box={box}/>);
 
 
     return (
         <>
-            {box.editing && mode === BoxerModes.EDIT && (<EditableArea box={box} />)}
+            {box.editing && mode === BoxerModes.EDIT && (<EditableArea box={box}/>)}
             <Tippy content={boxOptions} visible={(box.focused || false) && mode === BoxerModes.EDIT}
                    appendTo={document.body} animation="fade" interactive={true} arrow={true}>
                 <div className={className()} style={getBoundingBoxStyle()} onClick={() => toggleFocus()}/>
@@ -51,9 +54,3 @@ function BoundingBox({box, mode, dispatch}) {
     )
 
 }
-
-const mapStateToProps = state => ({
-    mode: state.mode,
-})
-
-export default connect(mapStateToProps)(BoundingBox);

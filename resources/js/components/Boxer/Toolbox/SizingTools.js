@@ -1,10 +1,15 @@
 import React from 'react'
-import connect from 'react-redux/lib/connect/connect';
 import styles from '../../../../sass/components/Boxer/Toolbox.scss';
 import {Button, Icon} from 'react-bulma-components';
 import {moveTo, setScale} from '../store/actions/zoom';
+import {useDispatch, useSelector} from 'react-redux';
 
-function SizingTools({zoom, taggerDimensions, canvas, dispatch}) {
+export default function SizingTools() {
+
+    const zoom = useSelector(s => s.zoom);
+    const taggerDimensions = useSelector(s => s.taggerDimensions);
+    const canvas = useSelector(s => s.canvas);
+    const dispatch = useDispatch();
 
     const updateScale = absoluteValue => {
         dispatch(setScale(absoluteValue))
@@ -49,13 +54,3 @@ function SizingTools({zoom, taggerDimensions, canvas, dispatch}) {
         </>
     )
 }
-
-
-const mapStateToProps = state => ({
-    zoom: state.zoom,
-    canvas: state.canvas,
-    taggerDimensions: state.taggerDimensions,
-
-})
-
-export default connect(mapStateToProps)(SizingTools);

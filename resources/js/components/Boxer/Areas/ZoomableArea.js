@@ -1,16 +1,18 @@
 import React, {useState} from 'react';
-import connect from 'react-redux/lib/connect/connect';
-import {addToScale, moveTo, moveToRelatively} from '../store/actions/zoom';
+import {addToScale, moveToRelatively} from '../store/actions/zoom';
 import BoxerModes from '../BoxerModes';
+import {useDispatch, useSelector} from 'react-redux';
 
-function ZoomableArea({dispatch, zoom, mode}) {
+export default function ZoomableArea() {
 
-    // Only enable the component when we're in zoom mode.
-    if (mode !== BoxerModes.ZOOM) return null;
+    const mode = useSelector(s => s.mode);
+    const dispatch = useDispatch();
 
     // State
     const [dragging, setDragging] = useState(false);
 
+    // Only enable the component when we're in zoom mode.
+    if (mode !== BoxerModes.ZOOM) return null;
 
     // Styles
     const containerStyle = {
@@ -45,10 +47,3 @@ function ZoomableArea({dispatch, zoom, mode}) {
     );
 
 }
-
-const mapStateToProps = state => ({
-    zoom: state.zoom,
-    mode: state.mode,
-})
-
-export default connect(mapStateToProps)(ZoomableArea);
