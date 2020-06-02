@@ -13,6 +13,9 @@ export default function ImageScroll({images}) {
 
     useEffect(() => {
         const item = active.current;
+
+        if (!item) return;
+
         scroll.current.scrollLeft = item.offsetLeft - 2 - (scroll.current.offsetWidth / 2 - item.offsetWidth / 2)
 
         scrolling()
