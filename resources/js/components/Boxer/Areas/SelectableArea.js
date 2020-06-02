@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import styles from '../../../../sass/components/Boxer/SelectableArea.scss'
 import {HotKeys} from 'react-hotkeys'
-import {addBox, persistBox} from '../store/actions/boxes';
+import {addBox} from '../store/actions/boxes';
 import BoxerModes from '../BoxerModes';
 import {useDispatch, useSelector} from 'react-redux';
 
@@ -46,12 +46,7 @@ export default function SelectableArea() {
 
         if (alreadyExists) return;
 
-        dispatch(addBox(coords, user));
-
-        axios.post(route('async.bounding_boxes.store', {image: image.key}), coords)
-            .then(({data}) => {
-                dispatch(persistBox(data));
-            });
+        dispatch(addBox(coords, user, image.key));
     }
 
     const endSelection = _ => {

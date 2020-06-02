@@ -1,5 +1,6 @@
-import {createStore} from 'redux';
+import {applyMiddleware, createStore} from 'redux';
 import reducers from './store/reducers';
+import thunkMiddleware from 'redux-thunk'
 import ReactDOM from 'react-dom';
 import React from 'react';
 import Boxer from './Boxer';
@@ -21,7 +22,7 @@ if (el) {
         },
     };
 
-    const store = createStore(reducers, initialState);
+    const store = createStore(reducers, initialState, applyMiddleware(thunkMiddleware));
 
     ReactDOM.render(
         <Provider store={store}>

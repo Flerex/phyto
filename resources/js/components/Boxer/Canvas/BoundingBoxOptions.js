@@ -1,7 +1,7 @@
 import React from 'react'
 import styles from '../../../../sass/components/Boxer/BoundingBoxOptions.scss'
 import {Button, Icon} from 'react-bulma-components'
-import {deleteBox, editBox, persistBox, setEditingBox} from '../store/actions/boxes';
+import {deleteBox, editBox, setEditingBox} from '../store/actions/boxes';
 import {useDispatch} from 'react-redux';
 
 export default function BoundingBoxOptions({box}) {
@@ -14,18 +14,11 @@ export default function BoundingBoxOptions({box}) {
 
     const saveResizing = () => {
         dispatch(editBox(box.id, {...box.temporalCoordinates}));
-        axios.post(route('async.bounding_boxes.update', {boundingBox: box.id}), {
-            ...box.temporalCoordinates,
-            _method: 'PATCH'
-        }).then(({data: {id}}) => {
-            dispatch(persistBox(id));
-        });
         dispatch(setEditingBox(box.id, false));
     }
 
     const removeBox = () => {
         dispatch(deleteBox(box.id));
-        axios.post(route('async.bounding_boxes.destroy', {boundingBox: box.id}), {_method: 'DELETE'});
     }
 
     const renderDefaultButtons = () => {
