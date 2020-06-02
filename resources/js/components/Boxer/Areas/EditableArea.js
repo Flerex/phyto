@@ -1,173 +1,124 @@
-import React, {Component} from 'react';
+import React, {useState} from 'react'
 import styles from '../../../../sass/components/Boxer/EditableArea.scss'
-import {pascalCase} from 'pascal-case';
-import {setEditingBox} from '../store/actions/boxes';
-import {connect} from 'react-redux';
+import {camelCase} from 'camel-case'
+import {setEditingBox} from '../store/actions/boxes'
+import {useDispatch} from 'react-redux'
 
-class EditableArea extends Component {
+export default function EditableArea({box}) {
 
-    constructor(props) {
-        super(props);
+    // Constants
+    const minimumSize = 5
 
-        this.minimumSize = 5;
+    // Redux
+    const dispatch = useDispatch()
 
-        this.initialState = {
-            mode: null,
-            selectionBoxOrigin: [props.box.left, props.box.top],
-            selectionBoxTarget: [+props.box.left + +props.box.width, +props.box.top + +props.box.height],
-        };
+    // State
+    const [mode, setMode] = useState(null)
+    const [selectionBoxOrigin, setSelectionBoxOrigin] = useState([box.left, box.top])
+    const [selectionBoxTarget, setSelectionBoxTarget] = useState([+box.left + +box.width, +box.top + +box.height])
 
-        this.state = {
-            mode: null,
-            selectionBoxOrigin: [props.box.left, props.box.top],
-            selectionBoxTarget: [+props.box.left + +props.box.width, +props.box.top + +props.box.height],
-        };
-
-        this.startEditing = this.startEditing.bind(this);
-        this.getRelativeCoordinates = this.getRelativeCoordinates.bind(this);
-        this.getSelectionCoordinates = this.getSelectionCoordinates.bind(this);
-        this.dragging = this.dragging.bind(this);
-        this.endDrag = this.endDrag.bind(this);
-
-        this.manageBottomLeftResizing = this.manageBottomLeftResizing.bind(this);
-        this.manageBottomRightResizing = this.manageBottomRightResizing.bind(this);
-        this.manageTopLeftResizing = this.manageTopLeftResizing.bind(this);
-        this.manageTopRightResizing = this.manageTopRightResizing.bind(this);
+    const relativeCoordinates = {
+        left: Math.abs(selectionBoxOrigin[0]),
+        top: Math.abs(selectionBoxOrigin[1]),
+        height: Math.abs(selectionBoxTarget[1] - selectionBoxOrigin[1]),
+        width: Math.abs(selectionBoxTarget[0] - selectionBoxOrigin[0]),
     }
 
-    endDrag() {
-        this.setState({mode: null});
-        this.props.dispatch(setEditingBox(this.props.box.id, true, this.getRelativeCoordinates()));
+    const endDrag = () => {
+        setMode(null)
+        dispatch(setEditingBox(box.id, true, relativeCoordinates))
     }
 
-    startEditing(y, x) {
-        this.setState({mode: {y, x}});
+    const startEditing = (y, x) => {
+        setMode({y, x})
     }
 
-    manageBottomRightResizing(newX, newY) {
 
-        if (newX < (this.state.selectionBoxOrigin[0] - this.minimumSize)
-            || newY < (this.state.selectionBoxOrigin[1] - this.minimumSize))
+    /*
+     * We define all these functions inside an object manageResizing because:
+     *
+     * 1) We need to dynamically access them with a string (We need to do manageResizing[functionToCall]() because
+     * there is no way to access the current scope without using eval(), which of course is evil)
+     *
+     * 2) They are related anyway.
+     */
+    const manageResizing = {}
+    manageResizing.bottomRight = (newX, newY) => {
+
+        if (newX < (selectionBoxOrigin[0] - minimumSize)
+            || newY < (selectionBoxOrigin[1] - minimumSize))
             return;
 
-        this.setState({
-            selectionBoxTarget: [newX, newY],
-        });
+        setSelectionBoxTarget([newX, newY])
 
     }
 
-    manageBottomLeftResizing(newX, newY) {
+    manageResizing.bottomLeft = (newX, newY) => {
 
-        if (newX > (this.state.selectionBoxTarget[0] - this.minimumSize)
-            || newY < (this.state.selectionBoxOrigin[1] - this.minimumSize))
+        if (newX > (selectionBoxTarget[0] - minimumSize)
+            || newY < (selectionBoxOrigin[1] - minimumSize))
             return;
 
-        this.setState({
-            selectionBoxTarget: [this.state.selectionBoxTarget[0], newY],
-            selectionBoxOrigin: [newX, this.state.selectionBoxOrigin[1]],
-        });
+        setSelectionBoxTarget([selectionBoxTarget[0], newY])
+        setSelectionBoxOrigin([newX, selectionBoxOrigin[1]])
 
 
     }
 
-    manageTopRightResizing(newX, newY) {
-        if (newX < (this.state.selectionBoxOrigin[0] - this.minimumSize)
-            || newY > (this.state.selectionBoxTarget[1] - this.minimumSize))
+    manageResizing.topRight = (newX, newY) => {
+        if (newX < (selectionBoxOrigin[0] - minimumSize)
+            || newY > (selectionBoxTarget[1] - minimumSize))
             return;
 
-        this.setState({
-            selectionBoxTarget: [newX, this.state.selectionBoxTarget[1]],
-            selectionBoxOrigin: [this.state.selectionBoxOrigin[0], newY],
-        });
-
+        setSelectionBoxTarget([newX, selectionBoxTarget[1]])
+        setSelectionBoxOrigin([selectionBoxOrigin[0], newY])
     }
 
-    manageTopLeftResizing(newX, newY) {
-        if (newX > (this.state.selectionBoxTarget[0] - this.minimumSize)
-            || newY > (this.state.selectionBoxTarget[1] - this.minimumSize))
+    manageResizing.topLeft = (newX, newY) => {
+        if (newX > (selectionBoxTarget[0] - minimumSize)
+            || newY > (selectionBoxTarget[1] - minimumSize))
             return;
 
-        this.setState({selectionBoxOrigin: [newX, newY]});
-
+        setSelectionBoxOrigin([newX, newY])
     }
 
-    dragging(e) {
-        if (!this.state.mode) return;
+    const dragging = e => {
+        if (!mode) return
 
-        const re = e.currentTarget.getBoundingClientRect(),
-            methodName = 'manage' + pascalCase(this.state.mode.y + '.' + this.state.mode.x) + 'Resizing';
+        const functionName = camelCase(mode.y + '.' + mode.x)
 
-        // Call the corresponding manageYXResizing event handler
-        this[methodName](e.nativeEvent.offsetX, e.nativeEvent.offsetY);
+        // Call the corresponding manageResizing.xY event handler
+        manageResizing[functionName](e.nativeEvent.offsetX, e.nativeEvent.offsetY)
     }
 
-
-    getRelativeCoordinates() {
-
-        const {selectionBoxOrigin, selectionBoxTarget} = this.state;
-
-        return {
-            left: Math.abs(selectionBoxOrigin[0]),
-            top: Math.abs(selectionBoxOrigin[1]),
-            height: Math.abs(selectionBoxTarget[1] - selectionBoxOrigin[1]),
-            width: Math.abs(selectionBoxTarget[0] - selectionBoxOrigin[0]),
-        }
+    const containerStyle = {
+        top: 0,
+        left: 0,
+        bottom: 0,
+        right: 0,
+        position: 'absolute',
     }
 
 
-    getSelectionCoordinates() {
-
-        const {selectionBoxOrigin, selectionBoxTarget} = this.state,
-            coordinates = this.getRelativeCoordinates();
-
-
-        let top = coordinates.top,
-            left = coordinates.left;
-
-        if (selectionBoxOrigin[1] > selectionBoxTarget[1])
-            top -= coordinates.height
-
-        if (selectionBoxOrigin[0] > selectionBoxTarget[0])
-            left -= coordinates.width
-
-        return Object.assign(coordinates, {top, left})
-    }
-
-
-    containerStyle() {
-        return {
-            top: 0,
-            left: 0,
-            bottom: 0,
-            right: 0,
-            position: 'absolute',
-        }
-    }
-
-
-    render() {
-        const wrapperClassname = `${styles.wrapper} ${this.state.mode !== null ? styles.dragging : ''}`;
-        return (
-            <div className={wrapperClassname} style={this.containerStyle()} onMouseMove={this.dragging} onMouseUp={this.endDrag}>
-                <div className={styles.selection}
-                     style={this.getRelativeCoordinates()}>
-                    <div
-                        className={`${styles.resizer} ${styles.top} ${styles.left}`}
-                        onMouseDown={() => this.startEditing('top', 'left')}/>
-                    <div
-                        className={`${styles.resizer} ${styles.bottom} ${styles.left}`}
-                        onMouseDown={() => this.startEditing('bottom', 'left')}/>
-                    <div
-                        className={`${styles.resizer} ${styles.top} ${styles.right}`}
-                        onMouseDown={() => this.startEditing('top', 'right')}/>
-                    <div
-                        className={`${styles.resizer} ${styles.bottom} ${styles.right}`}
-                        onMouseDown={() => this.startEditing('bottom', 'right')}/>
-                </div>
+    const wrapperClassname = `${styles.wrapper} ${mode !== null ? styles.dragging : ''}`;
+    return (
+        <div className={wrapperClassname} style={containerStyle} onMouseMove={dragging} onMouseUp={endDrag}>
+            <div className={styles.selection}
+                 style={relativeCoordinates}>
+                <div
+                    className={`${styles.resizer} ${styles.top} ${styles.left}`}
+                    onMouseDown={() => startEditing('top', 'left')}/>
+                <div
+                    className={`${styles.resizer} ${styles.bottom} ${styles.left}`}
+                    onMouseDown={() => startEditing('bottom', 'left')}/>
+                <div
+                    className={`${styles.resizer} ${styles.top} ${styles.right}`}
+                    onMouseDown={() => startEditing('top', 'right')}/>
+                <div
+                    className={`${styles.resizer} ${styles.bottom} ${styles.right}`}
+                    onMouseDown={() => startEditing('bottom', 'right')}/>
             </div>
-        );
-    }
+        </div>
+    );
+
 }
-
-
-export default connect()(EditableArea);
