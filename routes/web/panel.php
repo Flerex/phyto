@@ -4,7 +4,7 @@ use App\Domain\Enums\Permissions;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('panel')->middleware('permission:'.Permissions::PANEL_ACCESS()->getValue())->group(function () {
-    Route::get('/', 'Panel\PanelController@index')->name('panel');
+    Route::get('/', 'Panel\PanelController@index')->name('panel.index');
 
 
     /*
