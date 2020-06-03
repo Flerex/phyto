@@ -34,7 +34,7 @@ export default function ImageScroll({images}) {
             <div ref={scroll} className={styles.scroll} onScroll={scrolling}>
                 {images.map((img, key) => (
                     <a key={key} ref={img.active ? active : null}
-                       className={`${styles.item} ${img.active ? styles.active : ''}`} href={img.href}>
+                       className={`${styles.item} ${img.active ? styles.active : ''} ${parseInt(img.finished) ? styles.finished : ''}`} href={img.href}>
                         <img src={img.thumbnail_link}/>
                     </a>
                 ))}

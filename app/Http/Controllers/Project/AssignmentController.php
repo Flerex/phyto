@@ -11,6 +11,7 @@ use App\Domain\Models\TaskProcess;
 use App\Domain\Services\TaxonomyService;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\FilteredByProcessRequest;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Contracts\View\Factory;
@@ -60,9 +61,10 @@ class AssignmentController extends Controller
     /**
      * Handles the request that sets the state of an assignment to finished.
      *
-     * @param  Project  $project
+     * @param  TaskAssignment  $assignment
      * @param  Request  $request
      * @return Application|Factory|View
+     * @throws AuthorizationException
      */
     public function finish(TaskAssignment $assignment, Request $request)
     {
@@ -89,15 +91,15 @@ class AssignmentController extends Controller
 
         $image = $assignment->image;
 
-        $boxes  = $assignment->boxes()->get();
+        $boxes = $assignment->boxes()->get();
 
         $images = $this->getAssignmentsForProcess($project->getKey(), $filtered, false)
-            ->map(function (TaskAssignment $a) use ($assignment) {
-                $image = $a->image;
-                $image->active = $image->getKey() === $assignment->image->getKey();
-                $image->thumbnail_link = asset($image->thumbnail_path);
-                return $image;
-            });
+            ->map(fn(TaskAssignment $a) => [
+                'active' => $assignment->getKey() === $a->getKey(),
+                'thumbnail_link' => asset($a->image->thumbnail_path),
+                'finished' => $a->finished,
+                'href' => route('projects.assignments.show', ['project' => $project, 'assignment' => $a]),
+            ]);
 
         $catalogs = $project->catalogs->map(function (Catalog $c) {
             $c->nodes = $c->nodes();
