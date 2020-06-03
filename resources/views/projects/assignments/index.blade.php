@@ -35,12 +35,15 @@
                         @endif
                     </td>
                     <td class="has-text-right">
-                        @if(!$assignment->finished)
-                            <a href="{{ route('projects.assignments.show', array_merge($process ? ['filtered'] : [], compact('project', 'assignment'))) }}"
-                               class="button is-light is-link is-small is-rounded has-text-weight-bold">
+
+                        <a href="{{ route('projects.assignments.show', array_merge($process ? ['filtered'] : [], compact('project', 'assignment'))) }}"
+                           class="button is-light {{ $assignment->finished ? '' : 'is-link' }} is-small is-rounded has-text-weight-bold">
+                            @if($assignment->finished)
+                                @lang('general.view')
+                            @else
                                 @lang('projects.tag')
-                            </a>
-                        @endif
+                            @endif
+                        </a>
                     </td>
                 </tr>
             @endforeach
