@@ -40,7 +40,7 @@
                 </p>
             @endif
         </div>
-        <div id="hierarchy_selector" data-mode="select"></div>
+        <div id="taxonomy-selector" data-tree="{{ $tree->toJson() }}"></div>
 
         {{-- Actions --}}
         <div class="has-text-centered">

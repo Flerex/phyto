@@ -42,10 +42,10 @@
                 </p>
             @endif
         </div>
-        <div id="hierarchy_selector" data-mode="select" data-catalog="{{ $catalog->getKey() }}"></div>
+        <div id="taxonomy-selector" data-tree="{{ $tree->toJson() }}" data-nodes="{{ json_encode($nodes) }}"></div>
 
         {{-- Actions --}}
-        <div class="has-text-centered">
+        <div class="detatched-control-strip has-text-centered">
             <button type="submit" class="button is-primary is-rounded" name="mode" value="create">
                 <span class="icon"><i class="fas fa-plus"></i></span>
                 <span>@lang('general.create')</span>

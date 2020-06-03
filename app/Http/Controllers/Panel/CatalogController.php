@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Panel;
 
 use App\Domain\Models\Catalog;
+use App\Domain\Services\TaxonomyService;
 use App\Exceptions\CatalogStatusException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CatalogRequest;
@@ -18,12 +19,19 @@ use Illuminate\View\View;
 class CatalogController extends Controller
 {
 
-    /** @var CatalogService $catalogService */
-    protected $catalogService;
+    protected CatalogService $catalogService;
 
-    public function __construct(CatalogService $catalogService)
+    protected TaxonomyService $taxonomyService;
+
+    /**
+     * CatalogController constructor.
+     * @param  CatalogService  $catalogService
+     * @param  TaxonomyService  $taxonomyService
+     */
+    public function __construct(CatalogService $catalogService, TaxonomyService $taxonomyService)
     {
         $this->catalogService = $catalogService;
+        $this->taxonomyService = $taxonomyService;
     }
 
 
@@ -53,7 +61,10 @@ class CatalogController extends Controller
      */
     public function create()
     {
-        return view('panel.catalogs.create');
+
+        $tree = $this->taxonomyService->getTree();
+
+        return view('panel.catalogs.create', compact('tree'));
     }
 
     /**
@@ -92,9 +103,11 @@ class CatalogController extends Controller
     {
         $this->authorize('edit', $catalog);
 
+        $tree = $this->taxonomyService->getTree();
+
         $nodes = $catalog->nodes();
 
-        return view('panel.catalogs.edit', compact('catalog', 'nodes'));
+        return view('panel.catalogs.edit', compact('catalog', 'tree', 'nodes'));
     }
 
     /**
@@ -199,9 +212,11 @@ class CatalogController extends Controller
 
         $this->authorize('create_from', $catalog);
 
+        $tree = $this->taxonomyService->getTree();
+
         $nodes = $catalog->nodes();
 
-        return view('panel.catalogs.create_from', compact('catalog', 'nodes'));
+        return view('panel.catalogs.create_from', compact('catalog', 'tree', 'nodes'));
 
     }
 }

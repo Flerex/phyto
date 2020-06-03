@@ -3,9 +3,10 @@
 use App\Domain\Enums\Permissions;
 
 Route::prefix('async')->group(function () {
-    Route::get('/species',
-        'AsynchronousController@species')// TODO: No permissions because taggers might use this API call?
-    ->name('async.species');
+    Route::middleware('auth')->group(function () {
+        Route::get('/species', 'AsynchronousController@species')
+            ->name('async.species');
+    });
 
 
     Route::middleware('permission:'.Permissions::SPECIES_MANAGEMENT()->getValue().','.Permissions::CATALOG_MANAGEMENT()->getValue())
@@ -14,8 +15,6 @@ Route::prefix('async')->group(function () {
                 ->name('async.add_to_hierarchy');
             Route::post('/hierarchy/edit', 'AsynchronousController@edit_node')
                 ->name('async.edit_node');
-            Route::get('/catalogs/{catalog}/edit', 'AsynchronousController@edit_catalog')
-                ->name('async.edit_catalog');
         });
 
     Route::middleware('permission:'.Permissions::PANEL_ACCESS()->getValue())

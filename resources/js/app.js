@@ -13,7 +13,6 @@ require('./bootstrap');
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-require('./components/HierarchySelector');
 require('./components/UserSelector');
 require('./components/SampleSelector');
 require('./components/MemberSelector');
@@ -22,5 +21,7 @@ require('./components/Avatar');
 require('./components/ButtonWithConfirmation');
 require('./components/ImageScroll');
 require('./components/ProcessFilter');
+require('./components/Taxonomy/TaxonomySelector');
+require('./components/Taxonomy/TaxonomyEditor');
 
 require('./navbar');

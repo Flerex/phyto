@@ -1,0 +1,16 @@
+@import '../../variables';
+
+.editButton {
+    margin-left: auto;
+}
+
+.addNew {
+    color: $link;
+    display: inline-flex;
+    align-items: center;
+    cursor: pointer;
+
+    &:hover {
+        color: lighten($link, 5%);
+    }
+}
