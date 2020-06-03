@@ -28,6 +28,12 @@ export const setEditingBox = (id, state, temporalCoordinates = null) => ({
     }
 )
 
+export const setTaggingBox = (id, state) => ({
+        type: 'SET_TAGGING_BOX',
+        id, state
+    }
+)
+
 const editingBox = (id, box) => ({
         type: 'EDIT_BOX',
         id, box

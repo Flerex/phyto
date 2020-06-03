@@ -87,7 +87,7 @@
                         @foreach($processes as $process)
                             <tr>
                                 <td>
-                                    <a href="{{ route('projects.assignments', ['project' => $process->task->project, 'process' => $process->getKey()]) }}">{{ $process->getKey() }}</a>
+                                    <a href="{{ route('projects.assignments.index', ['project' => $process->task->project, 'process' => $process->getKey()]) }}">{{ $process->getKey() }}</a>
                                 </td>
                                 <td>
                                     {{ $process->created_at->diffForHumans() }}

@@ -13,4 +13,5 @@ return [
     'unfinished_assignments_count' => 'Randomly retrieved from your <strong>:number</strong> currently unfinished assignments.',
     'showing_process' => 'Showing process:',
     'started_on' => 'Started',
+    'tag' => 'Tag',
 ];

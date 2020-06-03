@@ -1,18 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Project;
 
-use App\Domain\Models\BoundingBox;
 use App\Domain\Models\Image;
 use App\Domain\Models\Project;
-use App\Domain\Models\TaskAssignment;
-use App\Domain\Models\TaskProcess;
+use App\Http\Controllers\Controller;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
 class ProjectController extends Controller
@@ -65,49 +60,6 @@ class ProjectController extends Controller
             ->values();
 
         return view('projects.tag', compact('project', 'image', 'boxes', 'images'));
-    }
-
-    /**
-     * Handles the page that display the list of Task Assignments for the current member.
-     *
-     * @param  Project  $project
-     * @param  Request  $request
-     * @return Application|Factory|View
-     */
-    public function assignments(Project $project, Request $request)
-    {
-        $validated = $request->validate([
-            'process' => ['sometimes', 'exists:task_processes,id'],
-        ]);
-
-        $assignmentsBuilder = TaskAssignment::where('user_id', Auth::user()->getKey())
-            ->orderBy('finished', 'asc')
-            ->with('process')
-            ->whereHas('process.task', fn(Builder $query) => $query->where('project_id', $project->getKey()));
-
-        if (isset($validated['process'])) {
-            $assignments = $assignmentsBuilder->where('task_process_id', $validated['process'])->paginate(config('phyto.pagination_size'));
-        } else {
-            $assignments = $assignmentsBuilder->paginate(config('phyto.pagination_size'));
-        }
-
-        $processes = TaskProcess::unfinished()
-            ->whereHas('assignments', function(Builder $query) {
-                $query->where('user_id', Auth::user()->getKey());
-            })->get()
-            ->map(function (TaskProcess $process) {
-                return [
-                    'label' => $process->getKey(),
-                    'value' => $process->getKey(),
-                ];
-            })->prepend([
-                'label' => trans('general.all'),
-                'value' => null,
-            ]);
-
-        $filteredProcess = $request->get('process') ?? 'null';
-
-        return view('projects.assignments', compact('project', 'assignments', 'processes', 'filteredProcess'));
     }
 
     /**

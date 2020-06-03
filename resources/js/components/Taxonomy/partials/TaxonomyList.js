@@ -1,14 +1,17 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import TreeView from './TreeView'
 import styles from '../../../../sass/components/Taxonomy/TaxonomyList.scss'
 
 
 export default function TaxonomyList({tree: originalTree, ...props}) {
 
-
     const [tree, setTree] = useState(originalTree)
 
     const [query, setQuery] = useState('')
+
+    useEffect(() => {
+        setTree(query.trim() ? filter(originalTree, query) : originalTree)
+    }, [originalTree])
 
 
     /**
@@ -61,6 +64,17 @@ export default function TaxonomyList({tree: originalTree, ...props}) {
         setTree(query.trim() ? filter(originalTree, query) : originalTree)
     }
 
+    const renderAfterHeaderEvent = () => {
+        if (!props.afterHeader) return;
+
+        return props.afterHeader()
+    };
+    const renderAfterListEvent = () => {
+        if (!props.afterList) return;
+
+        return props.afterList()
+    };
+
     return (
         <React.Fragment>
             <div className={'box ' + styles.list}>
@@ -74,9 +88,11 @@ export default function TaxonomyList({tree: originalTree, ...props}) {
                         </span>
                     </p>
                 </div>
+                {renderAfterHeaderEvent()}
                 <div>
                     <TreeView tree={tree} {...props} />
                 </div>
+                {renderAfterListEvent()}
             </div>
         </React.Fragment>
     )

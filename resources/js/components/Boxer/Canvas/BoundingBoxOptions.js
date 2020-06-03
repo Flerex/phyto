@@ -1,7 +1,7 @@
 import React from 'react'
 import styles from '../../../../sass/components/Boxer/BoundingBoxOptions.scss'
 import {Button, Icon} from 'react-bulma-components'
-import {deleteBox, editBox, setEditingBox} from '../store/actions/boxes';
+import {deleteBox, editBox, setEditingBox, setTaggingBox} from '../store/actions/boxes';
 import {useDispatch} from 'react-redux';
 
 export default function BoundingBoxOptions({box}) {
@@ -17,6 +17,10 @@ export default function BoundingBoxOptions({box}) {
         dispatch(setEditingBox(box.id, false));
     }
 
+    const setTagMode = () => {
+        dispatch(setTaggingBox(box.id, !box.tagging));
+    }
+
     const removeBox = () => {
         dispatch(deleteBox(box.id));
     }
@@ -26,6 +30,10 @@ export default function BoundingBoxOptions({box}) {
 
         return (
             <>
+                <Button onClick={setTagMode} color="black" size="small" className={styles.button}>
+                    <Icon><i className="fas fa-tag"/></Icon>
+                </Button>
+
                 <Button onClick={toggleEditMode} color="black" size="small" className={styles.button}>
                     <Icon><i className="fas fa-expand-arrows-alt"/></Icon>
                 </Button>

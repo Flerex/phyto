@@ -20,6 +20,8 @@ if (el) {
             width: 768,
             height: 600,
         },
+        catalogs: JSON.parse(el.dataset.catalogs),
+        tree: JSON.parse(el.dataset.tree),
     };
 
     const store = createStore(reducers, initialState, applyMiddleware(thunkMiddleware));

@@ -12,6 +12,8 @@ const mode = (state = [], action) => {
             return setEditingBox(state, action.id, action.state, action.temporalCoordinates);
         case 'EDIT_BOX':
             return state.map(box => box.id === action.id ? {...box, persisted: false, editing: false, ...action.box} : box);
+        case 'SET_TAGGING_BOX':
+            return setTaggingBox(state, action.id, action.state);
         case 'FOCUS_BOX':
             return state.map(box => box.id === action.id ? {...box, focused: action.focused} : {
                 ...box,
@@ -50,8 +52,8 @@ function persistBox(state, boxOrId) {
 /**
  * Reducer that sets a box into editing mode.
  *
- * A box in editing mode has it's editing property set to true and
- * has a temporalCoordinates property that stores the edited
+ * A box in editing mode has it's “editing” property set to true
+ * and has a temporalCoordinates property that stores the edited
  * coordinates of the box, prior to saving them.
  */
 function setEditingBox(boxes, id, editing, temporalCoordinates) {
@@ -69,8 +71,28 @@ function setEditingBox(boxes, id, editing, temporalCoordinates) {
 
         return {
             ...box,
-            editing: editing,
+            editing,
             temporalCoordinates: editing ? temporalCoordinates : null
+        };
+
+    });
+}
+
+
+/**
+ * Reducer that sets a box into tagging mode.
+ *
+ * A box in editing mode has it's “tagging” property set to true.
+ */
+function setTaggingBox(boxes, id, tagging) {
+
+    return boxes.map(box => {
+
+        if (box.id !== id) return box;
+
+        return {
+            ...box,
+            tagging,
         };
 
     });
