@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react'
 import TreeView from './TreeView'
 import styles from '../../../../sass/components/Taxonomy/TaxonomyList.scss'
+import {filterTree} from '../../../utils/taxonomyUtils';
 
 
 export default function TaxonomyList({tree: originalTree, ...props}) {
@@ -23,34 +24,6 @@ export default function TaxonomyList({tree: originalTree, ...props}) {
      */
     const isAMatch = (string, query) => string.toLowerCase().indexOf(query.toLowerCase()) !== -1;
 
-
-    /**
-     * Recursively filters a tree showing only the nodes
-     * that match the query and its children.
-     * @param tree The tree
-     * @param query The query
-     * @returns array
-     */
-    const filter = (tree, query) =>
-        tree.reduce((acc, node) => {
-            if (isAMatch(node.name, query)) {
-                acc.push(node)
-            } else if (node.children && node.children.length) {
-                const validNodes = filter(node.children, query)
-
-                if (validNodes.length) {
-                    const {children, ...newNode} = node
-
-                    newNode.children = validNodes
-                    acc.push(newNode)
-                }
-            }
-
-            return acc
-
-        }, [])
-
-
     /**
      * Listener for the onChange event of the search field.
      *
@@ -61,7 +34,7 @@ export default function TaxonomyList({tree: originalTree, ...props}) {
     const handleSearch = ({target}) => {
         const query = target.value
         setQuery(query)
-        setTree(query.trim() ? filter(originalTree, query) : originalTree)
+        setTree(query.trim() ? filterTree(originalTree, n => isAMatch(n.name, query)) : originalTree)
     }
 
     const renderAfterHeaderEvent = () => {
