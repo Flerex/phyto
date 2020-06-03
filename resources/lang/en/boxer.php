@@ -17,5 +17,5 @@ return [
     'by' => 'by',
     'on' => 'on',
     'no_boxes' => 'There are no tags in this picture.',
-    'untagged' => 'Untagged species',
+    'untagged' => 'Untagged',
 ];
