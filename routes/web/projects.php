@@ -10,8 +10,8 @@ Route::get('/projects/{project}/assignments/{assignment}', 'Project\\AssignmentC
     ->name('projects.assignments.show');
 Route::get('/projects/{project}/members', 'Project\\ProjectController@members')
     ->name('projects.members');
-Route::get('/projects/{project}/images/{image}', 'Project\\ProjectController@tag')
-    ->name('projects.images.tag');
+Route::get('/projects/{project}/images/{image}', 'Project\\ProjectController@view_image')
+    ->name('projects.images.show');
 
 /**
  * Bounding Boxes

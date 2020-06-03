@@ -39,7 +39,7 @@ class ProjectController extends Controller
      * @return Application|Factory|View
      * @throws AuthorizationException
      */
-    public function tag(Project $project, Image $image)
+    public function view_image(Project $project, Image $image)
     {
         $this->authorize('access', $project);
 
@@ -48,13 +48,13 @@ class ProjectController extends Controller
             ->filter(fn(Image $img) => !is_null($img->path))
             ->map(function (Image $img) use ($image, $project) {
                 $img->active = $image->getKey() === $img->getKey();
-                $img->href = route('projects.images.tag', ['project' => $project, 'image' => $img]);
+                $img->href = route('projects.images.show', ['project' => $project, 'image' => $img]);
                 $img->thumbnail_link = asset($img->thumbnail_path);
                 return $img;
             })
             ->values();
 
-        return view('projects.tag', compact('project', 'image', 'images'));
+        return view('projects.view_image', compact('project', 'image', 'images'));
     }
 
     /**
