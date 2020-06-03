@@ -8,6 +8,8 @@ Route::get('/projects/{project}/assignments', 'Project\\AssignmentController@ind
     ->name('projects.assignments.index');
 Route::get('/projects/{project}/assignments/{assignment}', 'Project\\AssignmentController@show')
     ->name('projects.assignments.show');
+Route::post('/projects/assignments/{assignment}/finish', 'Project\\AssignmentController@finish')
+    ->name('projects.assignments.finish');
 Route::get('/projects/{project}/members', 'Project\\ProjectController@members')
     ->name('projects.members');
 Route::get('/projects/{project}/images/{image}', 'Project\\ProjectController@view_image')

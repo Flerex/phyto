@@ -14,4 +14,5 @@ return [
     'showing_process' => 'Showing process:',
     'started_on' => 'Started',
     'tag' => 'Tag',
+    'mark_as_finished' => 'Mark as finished',
 ];

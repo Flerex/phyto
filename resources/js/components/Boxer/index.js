@@ -20,6 +20,7 @@ if (el) {
         },
         catalogs: JSON.parse(el.dataset.catalogs),
         tree: JSON.parse(el.dataset.tree),
+        viewOnly: !!el.dataset.viewOnly,
     };
 
     const store = createStore(reducers, initialState, applyMiddleware(thunkMiddleware));

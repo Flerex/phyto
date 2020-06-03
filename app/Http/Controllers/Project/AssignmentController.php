@@ -58,6 +58,24 @@ class AssignmentController extends Controller
     }
 
     /**
+     * Handles the request that sets the state of an assignment to finished.
+     *
+     * @param  Project  $project
+     * @param  Request  $request
+     * @return Application|Factory|View
+     */
+    public function finish(TaskAssignment $assignment, Request $request)
+    {
+
+        $this->authorize('work', $assignment);
+
+        $assignment->finished = true;
+        $assignment->save();
+
+        return redirect()->back();
+    }
+
+    /**
      * Handles the request for the page that allows to tag an image in a given assignment.
      * @param  Project  $project
      * @param  TaskAssignment  $assignment
