@@ -152,6 +152,9 @@ class AssignmentController extends Controller
         $assignmentsBuilder = TaskAssignment::where('user_id', Auth::user()->getKey())
             ->orderBy('finished', 'asc')
             ->with('process')
+            ->withCount(['boxes', 'boxes as untagged_count' => function(Builder $query) {
+                $query->whereNotNull('taggable_id');
+            }])
             ->whereHas('process.task', fn(Builder $query) => $query->where('project_id', $projectId));
 
         if ($process) {

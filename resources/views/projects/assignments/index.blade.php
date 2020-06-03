@@ -13,7 +13,9 @@
             <thead>
             <tr>
                 <th>@choice('labels.image.images', 1)</th>
-                <th>@choice('labels.task.processes', 1)</th>
+                <th class="has-text-right">@choice('labels.task.processes', 1)</th>
+                <th class="has-text-right">@choice('labels.catalog.species', 0)</th>
+                <th class="has-text-right">@lang('boxer.untagged')</th>
                 <th>@lang('general.status')</th>
                 <th class="has-text-right">@lang('general.actions')</th>
             </tr>
@@ -22,7 +24,9 @@
             @foreach($assignments as $assignment)
                 <tr>
                     <td><img class="thumbnail" src="{{ asset($assignment->image->thumbnail_path) }}"></td>
-                    <td>{{ $assignment->process->getKey() }}</td>
+                    <td class="has-text-right">{{ $assignment->process->getKey() }}</td>
+                    <td class="has-text-right">{{ $assignment->boxes_count }}</td>
+                    <td class="has-text-right">{{ $assignment->untagged_count }}</td>
                     <td>
                         @if($assignment->finished)
                             <span class="tag is-light is-success">@lang('labels.task.finished')</span>
