@@ -12,6 +12,8 @@ const mode = (state = [], action) => {
             return setEditingBox(state, action.id, action.state, action.temporalCoordinates);
         case 'EDIT_BOX':
             return state.map(box => box.id === action.id ? {...box, persisted: false, editing: false, ...action.box} : box);
+        case 'TAG_BOX':
+            return tagBox(state, action.id, action.node);
         case 'SET_TAGGING_BOX':
             return setTaggingBox(state, action.id, action.state);
         case 'FOCUS_BOX':
@@ -97,6 +99,30 @@ function setTaggingBox(boxes, id, tagging) {
 
     });
 }
+
+
+/**
+ * Handle the tagBox action.
+ *
+ * @param boxes
+ * @param id
+ * @param taggable
+ * @returns {*}
+ */
+function tagBox(boxes, id, taggable) {
+    return boxes.map(box => {
+
+        if (box.id !== id) return box;
+
+        return {
+            ...box,
+            persisted: false,
+            taggable,
+        };
+
+    });
+}
+
 
 
 /**

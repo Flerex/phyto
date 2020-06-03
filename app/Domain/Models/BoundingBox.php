@@ -3,6 +3,7 @@
 namespace App\Domain\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 class BoundingBox extends Model
 {
@@ -15,7 +16,9 @@ class BoundingBox extends Model
 
     protected $fillable = ['left', 'top', 'width', 'height', 'user_id', 'task_assignment_id'];
 
-    protected $visible = ['id', 'left', 'top', 'width', 'height', 'user'];
+    protected $visible = ['id', 'left', 'top', 'width', 'height', 'user', 'taggable'];
+
+    protected $with = ['user', 'taggable'];
 
     public function user()
     {
@@ -29,6 +32,16 @@ class BoundingBox extends Model
 
     public function assignment()
     {
-        return $this->belongsTo(TaskAssignment::class);
+        return $this->belongsTo(TaskAssignment::class, 'task_assignment_id');
+    }
+
+    /**
+     * Defines the relationship to navigate to the tagged taxonomy node (element from the hierarchy).
+     *
+     * @return MorphTo
+     */
+    public function taggable(): MorphTo
+    {
+        return $this->morphTo();
     }
 }

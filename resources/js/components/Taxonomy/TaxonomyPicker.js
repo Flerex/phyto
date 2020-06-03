@@ -5,7 +5,7 @@ import Select from 'react-select';
 import {filterTree} from '../../utils/taxonomyUtils';
 
 
-export default function TaxonomyPicker({tree, catalogs}) {
+export default function TaxonomyPicker({tree, catalogs, onPick}) {
 
     const [selection, setSelection] = useState(null)
 
@@ -36,7 +36,7 @@ export default function TaxonomyPicker({tree, catalogs}) {
     const renderAfterList = () => {
         return (
             <div>
-                <button className={styles.selectionButton} onClick={() => alert('clicked!')} disabled={!selection}>
+                <button className={styles.selectionButton} onClick={_ => onPick(selection)} disabled={!selection}>
                     {Lang.trans('general.select')}
                 </button>
             </div>

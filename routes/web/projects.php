@@ -22,3 +22,5 @@ Route::patch('/projects/assignments/bounding-boxes/{boundingBox}/update', 'Proje
     ->name('projects.bounding_boxes.update');
 Route::delete('/projects/assignments/bounding-boxes/{boundingBox}/delete', 'Project\\BoundingBoxController@destroy')
     ->name('projects.bounding_boxes.destroy');
+Route::post('/projects/assignments/bounding-boxes/{boundingBox}/tag', 'Project\\BoundingBoxController@tag')
+    ->name('projects.bounding_boxes.tag');

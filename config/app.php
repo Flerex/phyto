@@ -191,6 +191,7 @@ return [
         App\Providers\BladeServiceProvider::class,
         App\Providers\ViewServiceProvider::class,
         App\Providers\CollectionServiceProvider::class,
+        App\Providers\EloquentServiceProvider::class,
 
     ],
 

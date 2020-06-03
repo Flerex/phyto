@@ -8,6 +8,19 @@ const persistBox = (boxOrId) => ({
     boxOrId
 })
 
+const taggingBox = (id, node) => ({
+    type: 'TAG_BOX',
+    id, node
+})
+
+export const tagBox = (id, node) => dispatch => {
+    dispatch(taggingBox(id, node))
+    axios.post(route('projects.bounding_boxes.tag', {boundingBox: id}), node)
+        .then(_ => {
+            dispatch(persistBox(id));
+        });
+}
+
 export const addBox = (box, user, assignment) => dispatch => {
     dispatch(addingBox(box, user))
     axios.post(route('projects.bounding_boxes.store', {assignment}), box)

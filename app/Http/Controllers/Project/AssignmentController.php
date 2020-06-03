@@ -71,7 +71,7 @@ class AssignmentController extends Controller
 
         $image = $assignment->image;
 
-        $boxes  = $assignment->boxes()->with('user')->get();
+        $boxes  = $assignment->boxes()->get();
 
         $images = $this->getAssignmentsForProcess($project->getKey(), $filtered, false)
             ->map(function (TaskAssignment $a) use ($assignment) {

@@ -40,7 +40,15 @@ export default function BoundingBoxListItem({box}) {
         }
     }
 
+    const renderBoxName = () => {
+      if(!box.taggable)
+          return (<i>{Lang.trans('boxer.untagged')}</i>)
+
+      return box.taggable.name
+    };
+
     const className = styles.boxInfo + (box.focused ? ' ' + styles.focused : '');
+
     return (
         <div className={className} ref={ref} onMouseEnter={() => highlight(true)} onMouseLeave={() => highlight(false)}>
             <div className={styles.boxPreview}>
@@ -48,7 +56,7 @@ export default function BoundingBoxListItem({box}) {
             </div>
             <div>
                 <div>
-                    <em>{Lang.trans('boxer.untagged')}</em>
+                    {renderBoxName()}
                     {!box.persisted && (<i className={`fas fa-spinner fa-spin ${styles.uploading}`}/>)}
                 </div>
                 <div className={styles.author}>{Lang.trans('boxer.by')} <strong>{box.user.name}</strong></div>
