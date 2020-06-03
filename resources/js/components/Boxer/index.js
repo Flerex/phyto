@@ -12,10 +12,8 @@ if (el) {
     const initialState = {
         boxes: JSON.parse(el.dataset.boxes).map(b => Object.assign(b, {persisted: true})),
         user: JSON.parse(el.dataset.user),
-        image: {
-            key: el.dataset.imageKey,
-            url: el.dataset.image,
-        },
+        image: el.dataset.image,
+        assignment: el.dataset.assignment,
         canvas: {
             width: 768,
             height: 600,

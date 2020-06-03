@@ -43,11 +43,6 @@ class ProjectController extends Controller
     {
         $this->authorize('access', $project);
 
-        $boxes = collect($image->boundingBoxes()->with('user')->get()->toArray())->map(function ($bb) {
-            $bb['user'] = $bb['user']['name'];
-            return $bb;
-        });
-
         $images = $project->samples->pluck('images')
             ->flatten()
             ->filter(fn(Image $img) => !is_null($img->path))
@@ -59,7 +54,7 @@ class ProjectController extends Controller
             })
             ->values();
 
-        return view('projects.tag', compact('project', 'image', 'boxes', 'images'));
+        return view('projects.tag', compact('project', 'image', 'images'));
     }
 
     /**

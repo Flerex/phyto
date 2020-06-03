@@ -39,11 +39,11 @@ export default function Canvas() {
         marginLeft: zoom.position.left + 'px',
         width: boxerDimensions ? boxerDimensions.width : null,
         height: boxerDimensions ? boxerDimensions.height : null,
-        backgroundImage: 'url(' + image.url + ')',
+        backgroundImage: 'url(' + image + ')',
     }
 
     useLayoutEffect(_ => {
-        getImageSize(image.url).then((res) => {
+        getImageSize(image).then((res) => {
             const {x, y} = imageContainer.current.getBoundingClientRect();
             dispatch(updateDimensions({...res, x, y}))
         })

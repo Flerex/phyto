@@ -8,9 +8,9 @@ const persistBox = (boxOrId) => ({
     boxOrId
 })
 
-export const addBox = (box, user, image) => dispatch => {
+export const addBox = (box, user, assignment) => dispatch => {
     dispatch(addingBox(box, user))
-    axios.post(route('async.bounding_boxes.store', {image}), box)
+    axios.post(route('projects.bounding_boxes.store', {assignment}), box)
         .then(({data}) => {
             dispatch(persistBox(data));
         });
@@ -42,7 +42,7 @@ const editingBox = (id, box) => ({
 
 export const editBox = (id, box) => dispatch => {
     dispatch(editingBox(id, box));
-    axios.post(route('async.bounding_boxes.update', {boundingBox: id}), {
+    axios.post(route('projects.bounding_boxes.update', {boundingBox: id}), {
         ...box,
         _method: 'PATCH'
     }).then(({data: {id}}) => {
@@ -52,7 +52,7 @@ export const editBox = (id, box) => dispatch => {
 
 export const deleteBox = id => dispatch => {
     dispatch(deletingBox(id));
-    axios.post(route('async.bounding_boxes.destroy', {boundingBox: id}), {_method: 'DELETE'});
+    axios.post(route('projects.bounding_boxes.destroy', {boundingBox: id}), {_method: 'DELETE'});
 }
 
 const deletingBox = id => ({

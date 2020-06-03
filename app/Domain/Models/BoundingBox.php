@@ -13,7 +13,7 @@ class BoundingBox extends Model
         'height' => ['required', 'integer', 'min:5'],
     ];
 
-    protected $fillable = ['left', 'top', 'width', 'height', 'user_id', 'image_id'];
+    protected $fillable = ['left', 'top', 'width', 'height', 'user_id', 'task_assignment_id'];
 
     protected $visible = ['id', 'left', 'top', 'width', 'height', 'user'];
 
@@ -25,5 +25,10 @@ class BoundingBox extends Model
     public function image()
     {
         return $this->belongsTo(Image::class);
+    }
+
+    public function assignment()
+    {
+        return $this->belongsTo(TaskAssignment::class);
     }
 }

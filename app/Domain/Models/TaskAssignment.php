@@ -5,6 +5,7 @@ namespace App\Domain\Models;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class TaskAssignment extends Model
 {
@@ -46,8 +47,7 @@ class TaskAssignment extends Model
 
 
     /**
-     * Defines the relationship to navigate to the image of
-     * this assignment.
+     * Defines the relationship to navigate to the image of this assignment.
      *
      * @return BelongsTo
      */
@@ -56,8 +56,7 @@ class TaskAssignment extends Model
     }
 
     /**
-     * Defines the relationship to navigate to the user of
-     * this assignment.
+     * Defines the relationship to navigate to the user of this assignment.
      *
      * @return BelongsTo
      */
@@ -66,8 +65,7 @@ class TaskAssignment extends Model
     }
 
     /**
-     * Defines the relationship to navigate to the project
-     * of this assignment.
+     * Defines the relationship to navigate to the project of this assignment.
      *
      * @return BelongsTo
      */
@@ -76,13 +74,21 @@ class TaskAssignment extends Model
     }
 
     /**
-     * Defines the relationship to navigate to the task process
-     * of this assignment.
+     * Defines the relationship to navigate to the task process of this assignment.
      *
      * @return BelongsTo
      */
     public function process() {
         return $this->belongsTo(TaskProcess::class, 'task_process_id');
+    }
+
+    /**
+     * Defines the relationship to naviagate to the bounding boxes created for the image in this assignment.
+     *
+     * @return HasMany
+     */
+    public function boxes() {
+        return $this->hasMany(BoundingBox::class);
     }
 
 }

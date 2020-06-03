@@ -10,7 +10,7 @@ export default function SelectableArea() {
     const mode = useSelector(s => s.mode);
     const user = useSelector(s => s.user);
     const boxes = useSelector(s => s.boxes);
-    const image = useSelector(s => s.image);
+    const assignment = useSelector(s => s.assignment);
     const dispatch = useDispatch();
 
     let animationInProgress = null;
@@ -46,7 +46,7 @@ export default function SelectableArea() {
 
         if (alreadyExists) return;
 
-        dispatch(addBox(coords, user, image.key));
+        dispatch(addBox(coords, user, assignment));
     }
 
     const endSelection = _ => {

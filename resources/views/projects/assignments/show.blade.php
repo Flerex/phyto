@@ -2,7 +2,7 @@
 
 @section('content')
     <div id="boxer"
-         data-image-key="{{ $image->getKey() }}"
+         data-assignment="{{ $assignment->getKey() }}"
          data-image="{{ asset($image->path) }}"
          data-boxes="{{ $boxes->toJson() }}"
          data-user="{{ Auth::user()->toJson() }}"

@@ -34,7 +34,7 @@ export default function BoundingBoxListItem({box}) {
         return {
             width: box.width + 'px',
             height: box.height + 'px',
-            backgroundImage: 'url(\'' + image.url + '\')',
+            backgroundImage: 'url(\'' + image + '\')',
             backgroundPosition: -box.left + 'px ' + -box.top + 'px',
             transform: 'scale(' + 50 / minProperty + ')',
         }

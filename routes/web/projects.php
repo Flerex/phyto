@@ -14,11 +14,11 @@ Route::get('/projects/{project}/images/{image}', 'Project\\ProjectController@tag
     ->name('projects.images.tag');
 
 /**
- * Asynchronous calls.
+ * Bounding Boxes
  */
-Route::post('/projects/images/{image}/bounding-boxes', 'Project\\BoundingBoxController@store')
-    ->name('async.bounding_boxes.store');
-Route::patch('/projects/images/bounding-boxes/{boundingBox}/update', 'Project\\BoundingBoxController@update')
-    ->name('async.bounding_boxes.update');
-Route::delete('/projects/images/bounding-boxes/{boundingBox}/delete', 'Project\\BoundingBoxController@destroy')
-    ->name('async.bounding_boxes.destroy');
+Route::post('/projects/assignments/{assignment}/bounding-boxes', 'Project\\BoundingBoxController@store')
+    ->name('projects.bounding_boxes.store');
+Route::patch('/projects/assignments/bounding-boxes/{boundingBox}/update', 'Project\\BoundingBoxController@update')
+    ->name('projects.bounding_boxes.update');
+Route::delete('/projects/assignments/bounding-boxes/{boundingBox}/delete', 'Project\\BoundingBoxController@destroy')
+    ->name('projects.bounding_boxes.destroy');

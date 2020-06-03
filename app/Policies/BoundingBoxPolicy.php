@@ -3,6 +3,7 @@
 namespace App\Policies;
 
 use App\Domain\Models\BoundingBox;
+use App\Domain\Models\TaskAssignment;
 use App\Domain\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
@@ -19,7 +20,6 @@ class BoundingBoxPolicy
     {
         //
     }
-
 
     public function update(User $user, BoundingBox $boundingBox)
     {

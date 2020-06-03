@@ -8,5 +8,6 @@ import image from './image';
 import canvas from './canvas';
 import catalogs from './catalogs';
 import tree from './tree';
+import assignment from './assignment';
 
-export default combineReducers({boxerDimensions, mode, zoom, user, boxes, image, canvas, catalogs, tree})
+export default combineReducers({boxerDimensions, mode, zoom, user, boxes, image, canvas, catalogs, tree, assignment})

@@ -7,6 +7,7 @@ use App\Domain\Models\Catalog;
 use App\Domain\Enums\Permissions;
 use App\Domain\Enums\Roles;
 use App\Domain\Models\Image;
+use App\Domain\Models\TaskAssignment;
 use App\Policies\BoundingBoxPolicy;
 use App\Policies\CatalogPolicy;
 use App\Policies\ImagePolicy;
@@ -15,6 +16,7 @@ use App\Policies\SamplePolicy;
 use App\Domain\Models\Project;
 use App\Domain\Models\Sample;
 use App\Domain\Models\User;
+use App\Policies\TaskAssignmentPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
 
@@ -32,6 +34,7 @@ class AuthServiceProvider extends ServiceProvider
         Sample::class => SamplePolicy::class,
         Image::class => ImagePolicy::class,
         BoundingBox::class => BoundingBoxPolicy::class,
+        TaskAssignment::class => TaskAssignmentPolicy::class,
     ];
 
     /**
