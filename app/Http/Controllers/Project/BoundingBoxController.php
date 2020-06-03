@@ -26,7 +26,7 @@ class BoundingBoxController extends Controller
 
     public function update(BoundingBox $boundingBox, Request $request)
     {
-        $this->authorize('update', $boundingBox);
+        $this->authorize('work', $boundingBox->assignment);
 
         $validated = $request->validate(BoundingBox::RULES);
 
@@ -38,7 +38,7 @@ class BoundingBoxController extends Controller
 
     public function destroy(BoundingBox $boundingBox)
     {
-        $this->authorize('destroy', $boundingBox);
+        $this->authorize('work', $boundingBox->assignment);
 
         $boundingBox->delete();
 
