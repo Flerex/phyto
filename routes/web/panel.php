@@ -126,5 +126,9 @@ Route::prefix('panel')->middleware('permission:'.Permissions::PANEL_ACCESS()->ge
 
         Route::get('projects/{project}/tasks/{task}/processes/{process}', 'Panel\\TaskController@show_process')
             ->name('panel.projects.tasks.show_process');
+
+        Route::get('projects/{project}/tasks/{task}/processes/{process}/assignments/{assignment}',
+            'Panel\\TaskController@show_assignment')
+            ->name('panel.projects.tasks.show_assignment');
     });
 });

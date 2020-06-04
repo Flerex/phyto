@@ -10,6 +10,7 @@
             <th>@choice('labels.image.images', 1)</th>
             <th>@lang('general.status')</th>
             <th>@choice('labels.user.users', 1)</th>
+            <th class="has-text-right">@lang('general.actions')</th>
         </tr>
 
         </thead>
@@ -25,6 +26,12 @@
                     @endif
                 </td>
                 <td>{{ $assignment->user->name }}</td>
+                <td class="has-text-right">
+                    <a href="{{ route('panel.projects.tasks.show_assignment', compact('project', 'task', 'process', 'assignment')) }}"
+                       class="button is-rounded is-light is-link has-text-weight-bold is-small">
+                        @lang('general.view')
+                    </a>
+                </td>
             </tr>
         @endforeach
         </tbody>

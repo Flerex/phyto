@@ -8,6 +8,7 @@ use App\Domain\Models\TaskAssignment;
 use App\Domain\Models\TaskProcess;
 use App\Domain\Models\User;
 use App\Domain\Services\TaskService;
+use App\Domain\Services\TaxonomyService;
 use App\Http\Controllers\Controller;
 use App\Domain\Models\Project;
 use App\Http\Requests\CreateTaskRequest;
@@ -24,9 +25,12 @@ class TaskController extends Controller
 
     protected TaskService $taskService;
 
-    public function __construct(TaskService $taskService)
+    protected TaxonomyService $taxonomyService;
+
+    public function __construct(TaskService $taskService, TaxonomyService $taxonomyService)
     {
         $this->taskService = $taskService;
+        $this->taxonomyService = $taxonomyService;
     }
 
     /**
@@ -126,6 +130,31 @@ class TaskController extends Controller
                 ];
             });
 
-        return view('panel.projects.tasks.show_process', compact('project', 'process', 'assignments', 'assignees'));
+        return view('panel.projects.tasks.show_process', compact('project', 'process', 'task', 'assignments', 'assignees'));
+    }
+
+    /**
+     * Show the progress of the assignment.
+     *
+     * @param  Project  $project
+     * @param  Task  $task
+     * @param  TaskProcess  $process
+     * @param  TaskAssignment  $assignment
+     * @return Application|Factory|View
+     * @throws AuthorizationException
+     */
+    public function show_assignment(Project $project, Task $task, TaskProcess $process, TaskAssignment $assignment)
+    {
+        $this->authorize('view', $task->project);
+
+        $image = $assignment->image;
+
+        $boxes = $assignment->boxes()->get();
+
+        $tree = $this->taxonomyService->getTree();
+
+        $assignments = $process->assignments()->paginate(config('phyto.pagination_size'));
+
+        return view('panel.projects.tasks.show_assignment', compact('project', 'process', 'assignment', 'assignments', 'tree', 'boxes', 'image'));
     }
 }
