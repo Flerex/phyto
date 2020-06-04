@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import styles from '../../sass/components/TreeView.scss'
+import styles from '../../../../sass/components/Taxonomy/TreeView.scss'
 
 export default class TreeView extends Component {
 
@@ -21,7 +21,7 @@ export default class TreeView extends Component {
         return (
             <div className={styles.treeview}>
                 <ul>
-                    {this.props.data.map((el, i) => <Node key={i} element={el}
+                    {this.props.tree.map(el => <Node key={el.type + '-' + el.id} element={el}
                                                           appendList={this.props.appendList}
                                                           appendNode={this.props.appendNode}
                                                           prependNode={this.props.prependNode}/>)}
@@ -103,8 +103,8 @@ class Node extends Component {
 
         return (
             <ul hidden={!this.state.expanded}>
-                {this.props.element.children.map((el, i) =>
-                    <Node key={i} element={el} appendList={this.props.appendList}
+                {this.props.element.children.map(el =>
+                    <Node key={el.type + '-' + el.id} element={el} appendList={this.props.appendList}
                           appendNode={this.props.appendNode} prependNode={this.props.prependNode} />
                 )}
                 {this.renderAppendList()}

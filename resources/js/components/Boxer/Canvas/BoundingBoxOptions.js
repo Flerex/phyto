@@ -1,10 +1,12 @@
 import React from 'react'
 import styles from '../../../../sass/components/Boxer/BoundingBoxOptions.scss'
 import {Button, Icon} from 'react-bulma-components'
-import connect from 'react-redux/lib/connect/connect';
-import {deleteBox, editBox, persistBox, setEditingBox} from '../store/actions/boxes';
+import {deleteBox, editBox, setEditingBox, setTaggingBox} from '../store/actions/boxes';
+import {useDispatch} from 'react-redux';
 
-function BoundingBoxOptions({box, dispatch}) {
+export default function BoundingBoxOptions({box}) {
+
+    const dispatch = useDispatch();
 
     const toggleEditMode = () => {
         dispatch(setEditingBox(box.id, !box.editing));
@@ -12,18 +14,15 @@ function BoundingBoxOptions({box, dispatch}) {
 
     const saveResizing = () => {
         dispatch(editBox(box.id, {...box.temporalCoordinates}));
-        axios.post(route('async.bounding_boxes.update', {boundingBox: box.id}), {
-            ...box.temporalCoordinates,
-            _method: 'PATCH'
-        }).then(({data: {id}}) => {
-            dispatch(persistBox(id));
-        });
         dispatch(setEditingBox(box.id, false));
+    }
+
+    const setTagMode = () => {
+        dispatch(setTaggingBox(box.id, !box.tagging));
     }
 
     const removeBox = () => {
         dispatch(deleteBox(box.id));
-        axios.post(route('async.bounding_boxes.destroy', {boundingBox: box.id}), {_method: 'DELETE'});
     }
 
     const renderDefaultButtons = () => {
@@ -31,6 +30,10 @@ function BoundingBoxOptions({box, dispatch}) {
 
         return (
             <>
+                <Button onClick={setTagMode} color="black" size="small" className={styles.button}>
+                    <Icon><i className="fas fa-tag"/></Icon>
+                </Button>
+
                 <Button onClick={toggleEditMode} color="black" size="small" className={styles.button}>
                     <Icon><i className="fas fa-expand-arrows-alt"/></Icon>
                 </Button>
@@ -67,5 +70,3 @@ function BoundingBoxOptions({box, dispatch}) {
     </>)
 
 }
-
-export default connect()(BoundingBoxOptions);

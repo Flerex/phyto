@@ -6,7 +6,7 @@ use App\Domain\Models\Genus;
 use App\Domain\Models\Species;
 use Illuminate\Database\Seeder;
 
-class HierarchySeeder extends Seeder
+class TaxonomySeeder extends Seeder
 {
 
     private const DATA = [

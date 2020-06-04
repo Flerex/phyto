@@ -11,7 +11,7 @@
                 </a>
             </li>
             <li @if(Str::startsWith(Route::currentRouteName(), 'projects.assignments'))class="is-active"@endif>
-                <a href="{{ route('projects.assignments', compact('project')) }}">
+                <a href="{{ route('projects.assignments.index', compact('project')) }}">
                     <span class="icon is-small"><i class="fas fa-thumbtack" aria-hidden="true"></i></span>
                     <span>
                     @lang('projects.assignments')

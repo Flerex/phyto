@@ -2,29 +2,49 @@ import React from 'react'
 import styles from '../../../../sass/components/Boxer/BoundingBoxList.scss'
 import {Heading} from 'react-bulma-components';
 import BoundingBoxListItem from './BoundingBoxListItem';
-import connect from 'react-redux/lib/connect/connect';
+import {useSelector} from 'react-redux';
 
-function BoundingBoxList({boxes}) {
+export default function BoundingBoxList() {
 
+    const boxes = useSelector(s => s.boxes);
 
-    const renderBoxes = () => {
-        if (!boxes.length) {
-            return (<span className="has-text-grey">{Lang.trans('boxer.no_boxes')}</span>)
-        }
-        return boxes.map((box, i) => (<BoundingBoxListItem key={i} box={box}/>));
+    const {untagged, tagged} = boxes.reduce((acc, item) => {
+        acc[item.taggable ? 'tagged' : 'untagged'].push(item)
+        return acc;
+    }, {untagged: [], tagged: []});
+
+    const renderUntaggedBoxes = () => {
+        if (!untagged.length) return
+
+        return (
+            <>
+                <Heading className={styles.label}>{Lang.trans('boxer.untagged')}</Heading>
+                {untagged.map((box, i) => (<BoundingBoxListItem key={i} box={box}/>))}
+            </>
+        )
     }
+
+    const renderTaggedBoxes = () => {
+        if (!tagged.length) return
+
+        return (
+            <>
+                <Heading className={styles.label}>{Lang.trans('boxer.box_list')}</Heading>
+                {tagged.map((box, i) => (<BoundingBoxListItem key={i} box={box}/>))}
+            </>
+        )
+    }
+
+    const renderEmptyWarning = () => {
+        if (boxes.length) return;
+        return (<span className="has-text-grey">{Lang.trans('boxer.no_boxes')}</span>)
+    };
 
     return (
         <div className={styles.bbList}>
-            <Heading className={styles.label}>{Lang.trans('boxer.box_list')}</Heading>
-            {renderBoxes()}
+            {renderEmptyWarning()}
+            {renderUntaggedBoxes()}
+            {renderTaggedBoxes()}
         </div>
     )
 }
-
-const mapStateToProps = state => ({
-        boxes: state.boxes,
-    }
-)
-
-export default connect(mapStateToProps)(BoundingBoxList);

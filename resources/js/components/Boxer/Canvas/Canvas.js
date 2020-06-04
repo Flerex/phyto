@@ -3,8 +3,8 @@ import styles from '../../../../sass/components/Boxer/Canvas.scss';
 import SelectableArea from '../Areas/SelectableArea';
 import ZoomableArea from '../Areas/ZoomableArea';
 import BoundingBox from './BoundingBox';
-import connect from 'react-redux/lib/connect/connect';
 import {updateDimensions} from '../store/actions/boxerDimensions';
+import {useDispatch, useSelector} from 'react-redux';
 
 const getImageSize = url => {
     return new Promise(resolve => {
@@ -19,7 +19,15 @@ const getImageSize = url => {
     })
 }
 
-function Canvas({boxerDimensions, canvas, zoom, image, boxes, dispatch}) {
+export default function Canvas() {
+
+
+    const boxerDimensions = useSelector(s => s.boxerDimensions);
+    const zoom = useSelector(s => s.zoom);
+    const image = useSelector(s => s.image);
+    const canvas = useSelector(s => s.canvas);
+    const boxes = useSelector(s => s.boxes);
+    const dispatch = useDispatch();
 
     // Refs
     const imageContainer = React.createRef();
@@ -31,11 +39,11 @@ function Canvas({boxerDimensions, canvas, zoom, image, boxes, dispatch}) {
         marginLeft: zoom.position.left + 'px',
         width: boxerDimensions ? boxerDimensions.width : null,
         height: boxerDimensions ? boxerDimensions.height : null,
-        backgroundImage: 'url(' + image.url + ')',
+        backgroundImage: 'url(' + image + ')',
     }
 
     useLayoutEffect(_ => {
-        getImageSize(image.url).then((res) => {
+        getImageSize(image).then((res) => {
             const {x, y} = imageContainer.current.getBoundingClientRect();
             dispatch(updateDimensions({...res, x, y}))
         })
@@ -68,13 +76,3 @@ function Canvas({boxerDimensions, canvas, zoom, image, boxes, dispatch}) {
         </div>
     )
 }
-
-const mapStateToProps = state => ({
-    boxerDimensions: state.boxerDimensions,
-    zoom: state.zoom,
-    image: state.image,
-    canvas: state.canvas,
-    boxes: state.boxes,
-})
-
-export default connect(mapStateToProps)(Canvas);

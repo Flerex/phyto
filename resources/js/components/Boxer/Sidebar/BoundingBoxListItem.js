@@ -1,22 +1,26 @@
 import React, {useEffect} from 'react'
 import styles from '../../../../sass/components/Boxer/BoundingBoxListItem.scss'
-import connect from 'react-redux/lib/connect/connect';
 import {highlightBox} from '../store/actions/boxes';
+import {useDispatch, useSelector} from 'react-redux';
 
-function BoundingBoxListItem({box, image, dispatch}) {
+export default function BoundingBoxListItem({box}) {
+
+    const image = useSelector(s => s.image);
+    const dispatch = useDispatch();
 
     const ref = React.createRef();
 
 
     useEffect(() => {
-        if (box.focused) {
-            const element = ref.current;
-            const parent = ref.current.parentNode;
+        if (!box.focused) return
 
-            if (parent.scrollTop > element.offsetTop || (parent.scrollTop + parent.offsetHeight) <= element.offsetTop) {
-                parent.scrollTop = element.offsetTop - 10;
-            }
+        const element = ref.current;
+        const parent = ref.current.parentNode;
+
+        if (parent.scrollTop > element.offsetTop || (parent.scrollTop + parent.offsetHeight) <= element.offsetTop) {
+            parent.scrollTop = element.offsetTop - 10;
         }
+
     }, [box]);
 
     const highlight = highlighted => {
@@ -30,13 +34,21 @@ function BoundingBoxListItem({box, image, dispatch}) {
         return {
             width: box.width + 'px',
             height: box.height + 'px',
-            backgroundImage: 'url(\'' + image.url + '\')',
+            backgroundImage: 'url(\'' + image + '\')',
             backgroundPosition: -box.left + 'px ' + -box.top + 'px',
-            transform: 'scale(' + 50/minProperty + ')',
+            transform: 'scale(' + 50 / minProperty + ')',
         }
     }
 
+    const renderBoxName = () => {
+      if(!box.taggable)
+          return (<i>{Lang.trans('boxer.untagged')}</i>)
+
+      return box.taggable.name
+    };
+
     const className = styles.boxInfo + (box.focused ? ' ' + styles.focused : '');
+
     return (
         <div className={className} ref={ref} onMouseEnter={() => highlight(true)} onMouseLeave={() => highlight(false)}>
             <div className={styles.boxPreview}>
@@ -44,18 +56,11 @@ function BoundingBoxListItem({box, image, dispatch}) {
             </div>
             <div>
                 <div>
-                    <em>{Lang.trans('boxer.untagged')}</em>
+                    {renderBoxName()}
                     {!box.persisted && (<i className={`fas fa-spinner fa-spin ${styles.uploading}`}/>)}
                 </div>
-                <div className={styles.author}>
-                    {Lang.trans('boxer.by')} <strong>{box.user}</strong>
-                </div>
+                <div className={styles.author}>{Lang.trans('boxer.by')} <strong>{box.user.name}</strong></div>
             </div>
         </div>
     )
 }
-
-const mapStateToProps = state => ({
-    image: state.image,
-})
-export default connect(mapStateToProps)(BoundingBoxListItem);

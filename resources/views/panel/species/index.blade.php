@@ -2,5 +2,5 @@
 
 @section('panel_content')
     <h1 class="title">@lang('panel.label.species')</h1>
-    <div id="hierarchy_selector" data-mode="index"></div>
+    <div id="taxonomy-editor" data-tree="{{ $tree->toJson() }}"></div>
 @endsection

@@ -2,17 +2,27 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::get('/projects/{project}', 'ProjectController@show')->name('projects.show');
-Route::get('/projects/{project}/assignments', 'ProjectController@assignments')->name('projects.assignments');
-Route::get('/projects/{project}/members', 'ProjectController@members')->name('projects.members');
-Route::get('/projects/{project}/images/{image}', 'ProjectController@tag')->name('projects.images.tag');
+Route::get('/projects/{project}', 'Project\\ProjectController@show')
+    ->name('projects.show');
+Route::get('/projects/{project}/assignments', 'Project\\AssignmentController@index')
+    ->name('projects.assignments.index');
+Route::get('/projects/{project}/assignments/{assignment}', 'Project\\AssignmentController@show')
+    ->name('projects.assignments.show');
+Route::post('/projects/assignments/{assignment}/finish', 'Project\\AssignmentController@finish')
+    ->name('projects.assignments.finish');
+Route::get('/projects/{project}/members', 'Project\\ProjectController@members')
+    ->name('projects.members');
+Route::get('/projects/{project}/images/{image}', 'Project\\ProjectController@view_image')
+    ->name('projects.images.show');
 
 /**
- * Asynchronous calls.
+ * Bounding Boxes
  */
-Route::post('/projects/images/{image}/bounding-boxes', 'BoundingBoxController@store')
-    ->name('async.bounding_boxes.store');
-Route::patch('/projects/images/bounding-boxes/{boundingBox}/update', 'BoundingBoxController@update')
-    ->name('async.bounding_boxes.update');
-Route::delete('/projects/images/bounding-boxes/{boundingBox}/delete', 'BoundingBoxController@destroy')
-    ->name('async.bounding_boxes.destroy');
+Route::post('/projects/assignments/{assignment}/bounding-boxes', 'Project\\BoundingBoxController@store')
+    ->name('projects.bounding_boxes.store');
+Route::patch('/projects/assignments/bounding-boxes/{boundingBox}/update', 'Project\\BoundingBoxController@update')
+    ->name('projects.bounding_boxes.update');
+Route::delete('/projects/assignments/bounding-boxes/{boundingBox}/delete', 'Project\\BoundingBoxController@destroy')
+    ->name('projects.bounding_boxes.destroy');
+Route::post('/projects/assignments/bounding-boxes/{boundingBox}/tag', 'Project\\BoundingBoxController@tag')
+    ->name('projects.bounding_boxes.tag');

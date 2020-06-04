@@ -64,7 +64,9 @@ export default class ButtonWithConfirmation extends Component {
 
     renderButton() {
 
-        const className = `button is-rounded is-small is-${this.props.type} is-light ${this.props.class}`;
+        const className = this.props.overrideStyles
+            ? this.props.class
+            : `button is-rounded is-small is-${this.props.type} is-light ${this.props.class}`;
         if(this.props.icon) {
             return (
                 <Tippy content={this.props.action}>
@@ -95,5 +97,7 @@ export default class ButtonWithConfirmation extends Component {
 document.querySelectorAll('.button-confirmation').forEach(el => {
     ReactDOM.render(<ButtonWithConfirmation type={el.dataset.type} route={el.dataset.route}
                                             action={el.dataset.action} icon={el.dataset.icon}
-                                            method={el.dataset.method} class={el.dataset.class}/>, el);
+                                            method={el.dataset.method} class={el.dataset.class}
+                                            overrideStyles={el.dataset.overrideStyles !== undefined}
+    />, el);
 });

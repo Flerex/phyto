@@ -19,8 +19,10 @@
                             {{ Auth::user()->name }}</a>
                         @include('partials.navbar.dropdown')
                     </div>
-                    <a href="{{ route('panel') }}" class="navbar-item"><span class="icon"><i
-                                class="fas fa-sliders-h"></i></span>@lang('panel.panel')</a>
+                    @can(\App\Domain\Enums\Permissions::PANEL_ACCESS()->getValue())
+                        <a href="{{ route('panel.index') }}" class="navbar-item{{ Str::startsWith(Route::currentRouteName(), 'panel.') ? ' is-active' : '' }}"><span class="icon"><i
+                                    class="fas fa-sliders-h"></i></span>@lang('panel.panel')</a>
+                    @endcan
                 @else
                     <a href="{{ route('login') }}" class="navbar-item">@lang('auth.login')</a>
                 @endif

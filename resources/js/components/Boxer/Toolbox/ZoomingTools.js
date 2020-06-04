@@ -1,10 +1,12 @@
 import React from 'react'
-import connect from 'react-redux/lib/connect/connect';
 import styles from '../../../../sass/components/Boxer/Toolbox.scss';
 import {Button, Icon} from 'react-bulma-components';
 import {addToScale} from '../store/actions/zoom';
+import {useDispatch} from 'react-redux';
 
-function ZoomingTools({dispatch}) {
+export default function ZoomingTools() {
+
+    const dispatch = useDispatch();
 
     const modifyScale = scale => {
         dispatch(addToScale(scale));
@@ -23,5 +25,3 @@ function ZoomingTools({dispatch}) {
         </Button.Group>
     )
 }
-
-export default connect()(ZoomingTools);

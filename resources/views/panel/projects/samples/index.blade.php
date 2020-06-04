@@ -9,30 +9,33 @@
         </a>
     </div>
     @if(count($samples))
-        <div class="box">
-            <table class="table is-fullwidth">
-                <thead>
-                <th>@lang('labels.name')</th>
-                <th>@lang('labels.description')</th>
-                <th>@lang('labels.samples.taken_on')</th>
-                <th>{{ trans_choice('panel.projects.images.label', 0) }}</th>
-                </thead>
+        <table class="table is-fullwidth is-boxed">
+            <thead>
+            <th>@lang('labels.name')</th>
+            <th>@lang('labels.description')</th>
+            <th>@lang('labels.samples.taken_on')</th>
+            <th>{{ trans_choice('panel.projects.images.label', 0) }}</th>
+            <th class="has-text-right">@lang('general.actions')</th>
+            </thead>
 
-                <tbody>
-                @foreach($samples as $sample)
-                    <tr>
-                        <td>
-                            <a href="{{ route('panel.projects.images.index', compact('project', 'sample')) }}">{{ $sample->name }}</a>
-                        </td>
-                        <td>{{ $sample->description }}</td>
-                        <td>{{ $sample->taken_on->format(trans('general.date_format')) }}</td>
-                        <td>{{ $sample->images_count }}</td>
-                    </tr>
-                @endforeach
-                </tbody>
-            </table>
-            {{ $samples->links() }}
-        </div>
+            <tbody>
+            @foreach($samples as $sample)
+                <tr>
+                    <td>{{ $sample->name }}</td>
+                    <td>{{ $sample->description }}</td>
+                    <td>{{ $sample->taken_on->format(trans('general.date_format')) }}</td>
+                    <td>{{ $sample->images_count }}</td>
+                    <td class="has-text-right">
+                        <a class="button is-rounded is-light is-link is-small has-text-weight-bold"
+                           href="{{ route('panel.projects.images.index', compact('project', 'sample')) }}">
+                            @lang('general.view')
+                        </a>
+                    </td>
+                </tr>
+            @endforeach
+            </tbody>
+        </table>
+        {{ $samples->links() }}
     @else
         <div class="message is-info">
             <div class="message-body">@lang('panel.projects.samples.no_samples')</div>

@@ -1,10 +1,13 @@
 import React from 'react'
-import connect from 'react-redux/lib/connect/connect';
 import styles from '../../../../sass/components/Boxer/Toolbox.scss';
 import {Button, Icon} from 'react-bulma-components';
 import {moveTo} from '../store/actions/zoom';
+import {useDispatch, useSelector} from 'react-redux';
 
-function MovementTools({zoom, dispatch}) {
+export default function MovementTools() {
+
+    const zoom = useSelector(s => s.zoom);
+    const dispatch = useDispatch();
 
     const modifyPosition = (x, y) => {
         dispatch(moveTo(zoom.position.top + y, zoom.position.left + x));
@@ -41,11 +44,3 @@ function MovementTools({zoom, dispatch}) {
 
     )
 }
-
-
-const mapStateToProps = state => ({
-    zoom: state.zoom,
-
-})
-
-export default connect(mapStateToProps)(MovementTools);

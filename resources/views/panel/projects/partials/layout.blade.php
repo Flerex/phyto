@@ -2,7 +2,21 @@
 
 @section('panel_content')
 
-    <h1 class="title">{{ $project->name }}</h1>
+    <div class="level">
+        <div class="level-left">
+            <div class="level-item">
+                <h1 class="title">{{ $project->name }}</h1>
+            </div>
+        </div>
+        <div class="level-right">
+            <div class="level-item">
+                <a href="{{ route('projects.show', compact('project')) }}" target="_blank" class="button is-rounded is-grey is-small"
+                    data-tippy-content="@lang('panel.projects.go_to_project')">
+                    <span class="icon"><i class="fas fa-eye"></i></span>
+                </a>
+            </div>
+        </div>
+    </div>
 
     <div class="tabs">
         <ul>

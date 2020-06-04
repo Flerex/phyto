@@ -4,9 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Domain\Models\Catalog;
 use App\Domain\Models\Domain;
+use App\Domain\Models\Image;
 use App\Domain\Models\Project;
 use App\Domain\Models\Sample;
+use App\Domain\Models\Species;
 use App\Domain\Models\User;
+use App\Domain\Services\TaxonomyService;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
@@ -16,9 +19,18 @@ use Illuminate\Validation\Validator;
 
 class AsynchronousController extends Controller
 {
-    public function __construct()
+
+    protected TaxonomyService $taxonomyService;
+
+    /**
+     * AsynchronousController constructor.
+     * @param  TaxonomyService  $taxonomyService
+     */
+    public function __construct(TaxonomyService $taxonomyService)
     {
         $this->middleware('auth');
+
+        $this->taxonomyService = $taxonomyService;
 
     }
 
@@ -54,9 +66,14 @@ class AsynchronousController extends Controller
 
     }
 
-    public function species()
+    /**
+     * Retrieves the taxonomy tree.
+     *
+     * @return Collection
+     */
+    public function species() : Collection
     {
-        return Domain::with('children.children.children')->get();
+        return $this->taxonomyService->getTree();
     }
 
     private static function getRelationships()
@@ -92,7 +109,10 @@ class AsynchronousController extends Controller
 
         $validated = $validator->validated();
 
-        $className = 'App\\'.ucwords($validated['type']);
+
+        $namespace = class_namespace(Species::class); // Obtain the entity namespace from an example entity.
+
+        $className = $namespace.'\\'.ucwords($validated['type']);
 
         $el = $className::find($validated['id']);
 
@@ -141,7 +161,8 @@ class AsynchronousController extends Controller
         if ($validated['type'] === 'domain') {
             $el = Domain::create($data);
         } else {
-            $className = 'App\\'.ucwords($validated['type']);
+            $namespace = class_namespace(Species::class);
+            $className = $namespace.'\\'.ucwords($validated['type']);
 
             $data[self::getRelationships()[$validated['type']].'_id'] = $validated['parent'];
 
@@ -205,10 +226,10 @@ class AsynchronousController extends Controller
 
             $attr = $validator->attributes();
 
-            $model = 'App\\'.ucwords($attr['type']);
+            $model = class_namespace(Species::class).'\\'.ucwords($attr['type']);
 
             if ($model::find($attr['id']) === null) {
-                $validator->errors()->add('id', trans('hierarchy_selector.errors.id.exists'));
+                $validator->errors()->add('id', trans('taxonomy.errors.id.exists'));
             }
 
 
@@ -222,10 +243,10 @@ class AsynchronousController extends Controller
             $attr = $validator->attributes();
 
             if ($attr['type'] !== 'domain') {
-                $parentModel = 'App\\'.ucwords(self::getRelationships()[$attr['type']]);
+                $parentModel = class_namespace(Species::class).'\\'.ucwords(self::getRelationships()[$attr['type']]);
 
                 if ($parentModel::find($attr['parent']) === null) {
-                    $validator->errors()->add('parent', trans('hierarchy_selector.errors.parent.exists'));
+                    $validator->errors()->add('parent', trans('taxonomy.errors.parent.exists'));
                 }
             }
 
@@ -238,65 +259,15 @@ class AsynchronousController extends Controller
 
             $attr = $validator->attributes();
 
-            $model = 'App\\'.ucwords($attr['type']);
+            $model = class_namespace(Species::class).'\\'.ucwords($attr['type']);
 
 
             if ($model::whereName($attr['name'])->first() !== null) {
-                $validator->errors()->add('name', trans('hierarchy_selector.errors.name.unique'));
+                $validator->errors()->add('name', trans('taxonomy.errors.name.unique'));
             }
 
         });
     }
-
-    /**
-     * Obtains the hierarchy tree, specifying which nodes are selected in the catalog.
-     *
-     * @param  Catalog  $catalog
-     * @return array
-     */
-    public function edit_catalog(Catalog $catalog)
-    {
-
-        $domains = Domain::with('children.children.children')->get()->toArray();
-
-        $nodes = $catalog->nodes();
-
-        foreach ($domains as &$domain) {
-            $node = $nodes['domains']->first(function ($node) use ($domain) {
-                return $domain['id'] === $node->id;
-            });
-
-            $domain['selected'] = $node !== null;
-
-
-            foreach ($domain['children'] as &$classis) {
-                $node = $nodes['classis']->first(function ($node) use ($classis) {
-                    return $classis['id'] === $node->id;
-                });
-
-                $classis['selected'] = $node !== null;
-
-                foreach ($classis['children'] as &$genus) {
-                    $node = $nodes['genera']->first(function ($node) use ($genus) {
-                        return $genus['id'] === $node->id;
-                    });
-
-                    $genus['selected'] = $node !== null;
-
-                    foreach ($genus['children'] as &$species) {
-                        $node = $nodes['species']->first(function ($node) use ($species) {
-                            return $species['id'] === $node->id;
-                        });
-
-                        $species['selected'] = $node !== null;
-                    }
-                }
-            }
-        }
-
-        return $domains;
-    }
-
 
     /**
      * Searches samples from a given query.

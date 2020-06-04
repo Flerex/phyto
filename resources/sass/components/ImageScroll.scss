@@ -51,6 +51,27 @@
             border-radius: $radius;
         }
 
+        &.finished {
+            position: relative;
+
+            &::before {
+                position: absolute;
+                color: $primary;
+                bottom: 1rem;
+                right: 1rem;
+                font-size: 20px;
+                content: '\f058';
+                -moz-osx-font-smoothing: grayscale;
+                font-style: normal;
+                font-family: 'Font Awesome 5 Free';
+                font-weight: 900;
+                font-variant: normal;
+                text-rendering: auto;
+                line-height: 1;
+            }
+
+        }
+
         img {
             $borderWidth: 3px;
             width: 400px;

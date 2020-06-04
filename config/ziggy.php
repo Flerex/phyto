@@ -1,5 +1,5 @@
 <?php
 
 return [
-    'whitelist' => ['async.*'],
+    'whitelist' => ['async.*', 'projects.bounding_boxes.*'],
 ];

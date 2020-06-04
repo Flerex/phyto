@@ -9,6 +9,8 @@ class Catalog extends Model
 {
     protected $fillable = ['name', 'status'];
 
+    protected $visible = ['name'];
+
     public function isEditable()
     {
         return $this->status === CatalogStatus::EDITING()->getValue();
@@ -74,13 +76,16 @@ class Catalog extends Model
     {
         return [
             'species' => $this->species,
-            'genera' => $this->genera,
-            'domains' => $this->domain,
+            'genus' => $this->genera,
+            'domain' => $this->domain,
             'classis' => $this->classis,
         ];
     }
 
-    public function empty()
+    /**
+     * Empties the content of the catalog.
+     */
+    public function empty(): void
     {
         $this->domains()->detach();
         $this->classis()->detach();

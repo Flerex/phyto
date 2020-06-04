@@ -94,7 +94,7 @@ class TaskServiceImpl implements TaskService
             // Group assignments by user to send a mail
             foreach ($assignments->groupBy('user') as $userId => $assignments) {
                 $user = $members->first(fn(User $user) => $user->getKey() === $userId);
-                $link = route('projects.assignments', compact('project'));
+                $link = route('projects.assignments.index', compact('project'));
                 Mail::to($user)->queue(new NewAssignmentsMail($user->name, $project->name, count($assignments), $link));
             }
 

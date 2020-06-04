@@ -20,11 +20,13 @@ class CreateBoundingBoxesTable extends Migration
             $table->unsignedInteger('width');
             $table->unsignedInteger('height');
             $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('image_id');
+            $table->unsignedBigInteger('task_assignment_id');
+            $table->unsignedBigInteger('taggable_id')->nullable()->default(null);
+            $table->string('taggable_type')->nullable()->default(null);
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('image_id')->references('id')->on('images');
+            $table->foreign('task_assignment_id')->references('id')->on('task_assignments');
         });
     }
 

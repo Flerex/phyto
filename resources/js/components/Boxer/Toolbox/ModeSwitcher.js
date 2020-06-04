@@ -1,23 +1,31 @@
 import React from 'react'
-import connect from 'react-redux/lib/connect/connect';
 import styles from '../../../../sass/components/Boxer/Toolbox.scss';
 import {Button, Icon} from 'react-bulma-components';
 import {setMode} from '../store/actions/mode';
 import BoxerModes from '../BoxerModes';
+import {useDispatch, useSelector} from 'react-redux';
 
-function ModeSwitcher({mode, dispatch}) {
+export default function ModeSwitcher() {
+
+    const mode = useSelector(s => s.mode);
+    const viewOnly = useSelector(s => s.viewOnly);
+    const dispatch = useDispatch();
 
     const changeMode = mode => {
         dispatch(setMode(mode))
     }
 
+    if (viewOnly) return null;
+
     return (
         <Button.Group className={styles.buttonGroup} hasAddons={true} style={{marginLeft: 'auto'}}>
-            <Button rounded={true} onClick={() => changeMode(BoxerModes.DRAW)} size="small" className={styles.button}
+            <Button rounded={true} onClick={() => changeMode(BoxerModes.DRAW)} size="small"
+                    className={styles.button}
                     color={mode === BoxerModes.DRAW ? 'link' : null} title={Lang.trans('boxer.draw_mode')}>
                 <Icon><i className="fas fa-expand"/></Icon>
             </Button>
-            <Button rounded={true} onClick={() => changeMode(BoxerModes.EDIT)} size="small" className={styles.button}
+            <Button rounded={true} onClick={() => changeMode(BoxerModes.EDIT)} size="small"
+                    className={styles.button}
                     color={mode === BoxerModes.EDIT ? 'link' : null} title={Lang.trans('boxer.edit_mode')}>
                 <Icon><i className="fas fa-pen"/></Icon>
             </Button>
@@ -28,10 +36,3 @@ function ModeSwitcher({mode, dispatch}) {
         </Button.Group>
     )
 }
-
-
-const mapStateToProps = state => ({
-    mode: state.mode,
-})
-
-export default connect(mapStateToProps)(ModeSwitcher);
