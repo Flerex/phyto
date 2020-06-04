@@ -53,7 +53,7 @@
                         <a href="{{ route('projects.show', compact('project')) }}" target="_blank"
                            data-tippy-content="@lang('panel.projects.go_to_project')"
                            class="button is-rounded is-light is-small">
-                            <span class="icon"><i class="fas fa-external-link-alt"></i></span>
+                            <span class="icon"><i class="fas fa-eye"></i></span>
                         </a>
                         <a href="{{ route('panel.projects.show', compact('project')) }}"
                            class="button is-rounded is-link is-light is-small has-text-weight-bold">
