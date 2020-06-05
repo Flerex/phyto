@@ -20,9 +20,9 @@ if (el) {
         },
         catalogs: JSON.parse(el.dataset.catalogs ?? null),
         tree: JSON.parse(el.dataset.tree),
-        viewOnly: !!el.dataset.viewOnly,
+        viewOnly: parseInt(el.dataset.viewOnly),
     };
-
+    
     const store = createStore(reducers, initialState, applyMiddleware(thunkMiddleware));
 
     ReactDOM.render(
