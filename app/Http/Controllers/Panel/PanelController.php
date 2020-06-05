@@ -8,6 +8,6 @@ class PanelController extends Controller
 {
     public function index()
     {
-        return view('panel.index');
+        return redirect()->route('panel.projects.index');
     }
 }
