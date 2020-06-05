@@ -24,6 +24,33 @@ class TaskAssignment extends Model
 
 
     /**
+     * When we update the finished attribute, we check if it was the last assignment of the process to be marked as
+     * completed. If it was, we mark the process as completed.
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::updated(function (TaskAssignment $assignment) {
+            if ($assignment->finished === $assignment->getOriginal('finished') || $assignment->finished === false) {
+                return;
+            }
+
+            $process = $assignment->process()->withCount([
+                'assignments AS unfinished_assignments_count' => function (Builder $query) {
+                    $query->unfinished();
+                }
+            ])->first();
+
+            if ($process->unfinished_assignments_count) {
+                $process->finished = true;
+                $process->save();
+            }
+        });
+    }
+
+
+    /**
      * Scope a query to only include unfinished assignments.
      *
      * @param  Builder  $query
@@ -51,7 +78,8 @@ class TaskAssignment extends Model
      *
      * @return BelongsTo
      */
-    public function image() {
+    public function image()
+    {
         return $this->belongsTo(Image::class);
     }
 
@@ -60,7 +88,8 @@ class TaskAssignment extends Model
      *
      * @return BelongsTo
      */
-    public function user() {
+    public function user()
+    {
         return $this->belongsTo(User::class);
     }
 
@@ -69,7 +98,8 @@ class TaskAssignment extends Model
      *
      * @return BelongsTo
      */
-    public function project() {
+    public function project()
+    {
         return $this->belongsTo(Project::class);
     }
 
@@ -78,7 +108,8 @@ class TaskAssignment extends Model
      *
      * @return BelongsTo
      */
-    public function process() {
+    public function process()
+    {
         return $this->belongsTo(TaskProcess::class, 'task_process_id');
     }
 
@@ -87,7 +118,8 @@ class TaskAssignment extends Model
      *
      * @return HasMany
      */
-    public function boxes() {
+    public function boxes()
+    {
         return $this->hasMany(BoundingBox::class);
     }
 

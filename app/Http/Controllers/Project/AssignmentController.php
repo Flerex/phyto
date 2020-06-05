@@ -98,7 +98,8 @@ class AssignmentController extends Controller
                 'active' => $assignment->getKey() === $a->getKey(),
                 'thumbnail_link' => asset($a->image->thumbnail_path),
                 'finished' => $a->finished,
-                'href' => route('projects.assignments.show', ['project' => $project, 'assignment' => $a]),
+                'href' => route('projects.assignments.show',
+                    ['project' => $project, 'assignment' => $a, 'filtered' => $filtered]),
             ]);
 
         $catalogs = $project->catalogs->map(function (Catalog $c) {
@@ -152,9 +153,11 @@ class AssignmentController extends Controller
         $assignmentsBuilder = TaskAssignment::where('user_id', Auth::user()->getKey())
             ->orderBy('finished', 'asc')
             ->with('process')
-            ->withCount(['boxes', 'boxes as untagged_count' => function(Builder $query) {
-                $query->whereNotNull('taggable_id');
-            }])
+            ->withCount([
+                'boxes', 'boxes as untagged_count' => function (Builder $query) {
+                    $query->whereNotNull('taggable_id');
+                }
+            ])
             ->whereHas('process.task', fn(Builder $query) => $query->where('project_id', $projectId));
 
         if ($process) {

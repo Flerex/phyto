@@ -17,6 +17,7 @@ class TaskProcess extends Model
      */
     protected $fillable = ['task_id'];
 
+
     /**
      * Scope a query to only include unfinished processes.
      *
