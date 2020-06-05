@@ -92,7 +92,7 @@ class AssignmentController extends Controller
 
         $boxes = $assignment->boxes()->get();
 
-        $images = $this->getAssignmentsForProcess($project->getKey(), $filtered, false)
+        $images = $this->getAssignmentsForProcess($project->getKey(), $filtered, false, false)
             ->map(fn(TaskAssignment $a) => [
                 'active' => $assignment->getKey() === $a->getKey(),
                 'thumbnail_link' => asset($a->image->thumbnail_path),
@@ -143,13 +143,13 @@ class AssignmentController extends Controller
      * @param  int  $projectId
      * @param  int|null  $process
      * @param  bool  $paginated
+     * @param  bool  $ordered
      * @return LengthAwarePaginator|Collection
      */
-    private function getAssignmentsForProcess(int $projectId, int $process = null, bool $paginated = true)
+    private function getAssignmentsForProcess(int $projectId, int $process = null, bool $paginated = true, bool $ordered = true)
     {
 
         $assignmentsBuilder = TaskAssignment::where('user_id', Auth::user()->getKey())
-            ->orderBy('finished', 'asc')
             ->with('process')
             ->withCount([
                 'boxes', 'boxes as untagged_count' => function (Builder $query) {
@@ -160,6 +160,10 @@ class AssignmentController extends Controller
 
         if ($process) {
             $assignmentsBuilder = $assignmentsBuilder->where('task_process_id', $process);
+        }
+
+        if($ordered) {
+            $assignmentsBuilder= $assignmentsBuilder->orderBy('finished', 'asc');
         }
 
         return $paginated
