@@ -1,4 +1,4 @@
-import React, { useState} from 'react'
+import React, {useState} from 'react'
 import ReactDOM from 'react-dom'
 import styles from '../../../sass/components/Taxonomy/TaxonomySelector.scss'
 import TaxonomyList from './partials/TaxonomyList';
@@ -6,6 +6,10 @@ import TaxonomyList from './partials/TaxonomyList';
 
 export default function TaxonomySelector({tree, nodes}) {
     const renderCheckbox = elm => {
+        if (!nodes) {
+            return (<Checkbox element={elm}/>)
+        }
+
         const isPartOfCatalog = !!nodes[elm.type].find(el => elm.id === el.id);
 
         return (<Checkbox element={elm} startsSelected={isPartOfCatalog}/>)
@@ -37,5 +41,6 @@ function Checkbox({element, startsSelected: initialState = false}) {
 
 const el = document.getElementById('taxonomy-selector');
 if (el) {
-    ReactDOM.render(<TaxonomySelector tree={JSON.parse(el.dataset.tree)} nodes={JSON.parse(el.dataset.nodes)}/>, el);
+    ReactDOM.render(<TaxonomySelector tree={JSON.parse(el.dataset.tree)}
+                                      nodes={JSON.parse(el.dataset.nodes ?? null)}/>, el);
 }
