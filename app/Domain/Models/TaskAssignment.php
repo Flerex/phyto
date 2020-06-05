@@ -42,7 +42,7 @@ class TaskAssignment extends Model
                 }
             ])->first();
 
-            if ($process->unfinished_assignments_count) {
+            if (!$process->unfinished_assignments_count) {
                 $process->finished = true;
                 $process->save();
             }
