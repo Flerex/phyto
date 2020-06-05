@@ -22,7 +22,7 @@ if (el) {
         tree: JSON.parse(el.dataset.tree),
         viewOnly: parseInt(el.dataset.viewOnly),
     };
-    
+
     const store = createStore(reducers, initialState, applyMiddleware(thunkMiddleware));
 
     ReactDOM.render(
