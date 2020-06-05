@@ -62,7 +62,7 @@ export default function TaxonomyList({tree: originalTree, ...props}) {
                     </p>
                 </div>
                 {renderAfterHeaderEvent()}
-                <div>
+                <div className={styles.treeView}>
                     <TreeView tree={tree} {...props} />
                 </div>
                 {renderAfterListEvent()}

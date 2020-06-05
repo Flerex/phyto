@@ -4,6 +4,15 @@
     overflow: hidden;
     padding: 0;
 
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+
+    .treeView {
+        flex: 1;
+        overflow-y: auto;
+    }
+
 
     :global(.control input) {
         border: none;
