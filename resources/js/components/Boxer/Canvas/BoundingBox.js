@@ -41,6 +41,9 @@ export default function BoundingBox({box}) {
         if (box.editing)
             className += ' ' + styles.resizing;
 
+        if (box.taggable)
+            className += ' ' + styles.tagged;
+
         return className;
     }
 

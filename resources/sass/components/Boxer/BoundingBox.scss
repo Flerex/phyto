@@ -1,6 +1,8 @@
+@import '../../variables';
+
 .boundingBox {
     position: absolute;
-    box-shadow: 0 0 0 3px rgb(56, 117, 252);
+    box-shadow: 0 0 0 3px $link;
     border-radius: 1px;
     transform: scale(1);
     transform-origin: top left;
@@ -12,7 +14,11 @@
     }
 
     &.highlightedBox {
-        box-shadow: 0 0 0 3px hsl(48, 100%, 67%);
+        box-shadow: 0 0 0 3px $warning;
+    }
+
+    &.tagged {
+        box-shadow: 0 0 0 3px $success;
     }
 }
 
