@@ -120,7 +120,11 @@
                     <tbody>
                     @foreach($assignments as $assignment)
                         <tr>
-                            <td><img class="thumbnail" src="{{ asset($assignment->image->thumbnail_path) }}"></td>
+                            <td>
+                                <a href="{{ route('projects.assignments.show', ['project' => $assignment->project, 'assignment' => $assignment]) }}">
+                                    <img class="thumbnail" src="{{ asset($assignment->image->thumbnail_path) }}">
+                                </a>
+                            </td>
                             <td>{{ $assignment->project->name }}</td>
                             <td class="has-text-right">{{ $assignment->process->getKey() }}</td>
                         </tr>
