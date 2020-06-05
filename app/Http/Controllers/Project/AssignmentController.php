@@ -10,7 +10,6 @@ use App\Domain\Models\TaskAssignment;
 use App\Domain\Models\TaskProcess;
 use App\Domain\Services\TaxonomyService;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\FilteredByProcessRequest;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
@@ -122,8 +121,7 @@ class AssignmentController extends Controller
      */
     private function getProcessesForCurrentUser()
     {
-        return TaskProcess::unfinished()
-            ->whereHas('assignments', function (Builder $query) {
+        return TaskProcess::whereHas('assignments', function (Builder $query) {
                 $query->where('user_id', Auth::user()->getKey());
             })->get()
             ->map(function (TaskProcess $process) {
