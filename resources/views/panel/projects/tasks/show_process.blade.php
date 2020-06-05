@@ -40,29 +40,27 @@
 
     {{-- Assignees --}}
     <h2 class="title is-4">@lang('labels.task.assignees')</h2>
-    <div class="box">
-        <table class="table is-fullwidth">
-            <thead>
-            <tr>
-                <th>@choice('labels.user.users', 1)</th>
-                <th>@lang('general.progress')</th>
-                <th class="has-text-right">@choice('labels.image.images', 0)</th>
-            </tr>
+    <table class="table is-boxed is-fullwidth">
+        <thead>
+        <tr>
+            <th>@choice('labels.user.users', 1)</th>
+            <th>@lang('general.progress')</th>
+            <th class="has-text-right">@choice('labels.image.images', 0)</th>
+        </tr>
 
-            </thead>
-            <tbody>
-            @foreach($assignees as $assignee)
-                <tr>
-                    <td>{{ $assignee->user }}</td>
-                    <td>
-                        <progress class="progress is-link is-small" value="{{ $assignee->percentage }}"
-                                  max="100">{{ $assignee->percentage }}%
-                        </progress>
-                    </td>
-                    <td class="has-text-right">{{ $assignee->images }}</td>
-                </tr>
-            @endforeach
-            </tbody>
-        </table>
-    </div>
+        </thead>
+        <tbody>
+        @foreach($assignees as $assignee)
+            <tr>
+                <td>{{ $assignee->user }}</td>
+                <td>
+                    <progress class="progress is-link is-small" value="{{ $assignee->percentage }}"
+                              max="100">{{ $assignee->percentage }}%
+                    </progress>
+                </td>
+                <td class="has-text-right">{{ $assignee->images }}</td>
+            </tr>
+        @endforeach
+        </tbody>
+    </table>
 @endsection
