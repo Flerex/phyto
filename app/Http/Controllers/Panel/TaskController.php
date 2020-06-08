@@ -9,6 +9,7 @@ use App\Domain\Models\TaskProcess;
 use App\Domain\Models\User;
 use App\Domain\Services\TaskService;
 use App\Domain\Services\TaxonomyService;
+use App\Exceptions\NotEnoughMembersForProcessException;
 use App\Http\Controllers\Controller;
 use App\Domain\Models\Project;
 use App\Http\Requests\CreateTaskRequest;
@@ -85,6 +86,7 @@ class TaskController extends Controller
      * @param  CreateTaskRequest  $request
      * @return RedirectResponse
      * @throws AuthorizationException
+     * @throws NotEnoughMembersForProcessException
      */
     public function store(Project $project, CreateTaskRequest $request)
     {
@@ -96,7 +98,7 @@ class TaskController extends Controller
         $users = $project->users()->findMany($validated['users'])->unique();
         $sample = $project->samples()->find($validated['sample']);
 
-        $this->taskService->create_task($sample, $users, $validated['repeat_images'], $validated['process_number']);
+        $this->taskService->create_task($sample, $users, $validated['process_number']);
 
 
         return redirect()->route('panel.projects.tasks.index', compact('project'))

@@ -9,6 +9,7 @@ use App\Domain\Models\Task;
 use App\Domain\Models\TaskAssignment;
 use App\Domain\Models\TaskProcess;
 use App\Domain\Models\User;
+use App\Exceptions\NotEnoughMembersForProcessException;
 use App\Mail\NewAssignmentsMail;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
@@ -27,80 +28,105 @@ class TaskServiceImpl implements TaskService
      *
      * @param  Sample  $sample
      * @param  Collection  $members
-     * @param  int  $repetitions
-     * @param  int  $processes
+     * @param  int  $processCount
      * @return Task
      * @throws Throwable
      */
-    public function create_task(Sample $sample, Collection $members, int $repetitions = 1, int $processes = 1): Task
+    public function create_task(Sample $sample, Collection $members, int $processCount = 1): Task
     {
-        return DB::transaction(function () use ($processes, $repetitions, $members, $sample) {
+        return DB::transaction(function () use ($processCount, $members, $sample) {
 
             $project = $sample->project;
 
-            $task = Task::create([
-                'project_id' => $project->getKey(),
-                'sample_id' => $sample->getKey(),
-            ]);
+            $task = Task::create(['project_id' => $project->getKey(), 'sample_id' => $sample->getKey()]);
 
-
-            $membersCount = $members->count();
-
-
-            $processes = collect(range(0, $processes - 1))
-                ->map(fn($i) => TaskProcess::create(['task_id' => $task->getKey()]));
-
-
-            /*
-             * Create a collection that maps 1:1 to the Task Assignments. The algorithm works as follows:
-             *
-             * For every process we iterate through the images of the sample to assign to them the $imageIndex modulo
-             * the number of members in the task in case there's more images than members. This will grantee that all
-             * users are assigned equally to every image.
-             *
-             * Now, as multiple users might be assigned to the same image, we iterate $repetitions times for every
-             * image and use the index of this loop as an offset in the array position. This means that for two users
-             * per image, the current one and the next one will be selected for one picture iteration. This also equally
-             * distributes the load.
-             *
-             * Finally, we have to take into account the loop for the processes, as we must make sure that in two
-             * different processes, no user will tag the same image. To do this, we first know that the $processes
-             * variable will never have less than count($members) / $repetitions, and then, we add $processIndex *
-             * $repetitions to the position index so that the member array is shifted in groups, so that every process
-             * will start in a different group of users for one image.
-             */
-            $assignments = $processes->map(
-                fn(TaskProcess $process, int $processIndex) => $sample->images->map(
-                    fn(Image $image, int $imageIndex) => collect(range(0, $repetitions - 1))->map(
-                        fn($offset) => (object) [
-                            'process' => $process->getKey(),
-                            'image' => $image->getKey(),
-                            'user' => $members[($imageIndex + $offset + $processIndex * $repetitions) % $membersCount]->getKey(),
-                        ]
-                    )
-                )
-            )->flatten(2);
-
-
-            foreach ($assignments as $assignment) {
-                TaskAssignment::create([
-                    'task_process_id' => $assignment->process,
-                    'project_id' => $project->getKey(),
-                    'user_id' => $assignment->user,
-                    'image_id' => $assignment->image,
-                ]);
+            if ($members->count() < $processCount) {
+                throw new NotEnoughMembersForProcessException;
             }
 
-            // Group assignments by user to send a mail
-            foreach ($assignments->groupBy('user') as $userId => $assignments) {
-                $user = $members->first(fn(User $user) => $user->getKey() === $userId);
-                $link = route('projects.assignments.index', compact('project'));
-                Mail::to($user)->queue(new NewAssignmentsMail($user->name, $project->name, count($assignments), $link));
-            }
+            $processes = $this->createProcesses($task->getKey(), $processCount);
 
+             $this->createAssignments($processes, $members, $sample->images, $project, $members->count());
 
             return $task;
         });
+    }
+
+    /**
+     * Compute the assignments for the given parameters. For every process, the assignments are retrieved as follow:
+     *
+     * 1. We map the image list and assign to every image a member that is in the same position in both lists
+     * ($members and $sample->images lists). Of course, as there can be less users than images, we compute the
+     * position modulo the member count so if we run out of users we start again from the top, making sure this
+     * way that the members are assigned evenly.
+     *
+     * 2. As for every process we have to make sure that the same member is not assigned more than one time to
+     * the same image, we shift the members array for every process.
+     *
+     * @param  Collection  $processes
+     * @param  Collection  $members
+     * @param  Collection  $images
+     * @param  int  $projectId
+     * @param  int  $membersCount
+     * @return Collection
+     */
+    private function createAssignments(
+        Collection $processes,
+        Collection $members,
+        Collection $images,
+        Project $project,
+        int $membersCount
+    ): Collection {
+        $assignments =  $processes->map(
+            fn(TaskProcess $process, int $processIndex) => $images->map(
+                fn(Image $image, int $imageIndex) => (object) [
+                    'process' => $process->getKey(),
+                    'image' => $image->getKey(),
+                    'user' => $members[($imageIndex + $processIndex) % $membersCount]->getKey(),
+                ]
+            )
+        )->flatten(2);
+
+        foreach ($assignments as $assignment) {
+            TaskAssignment::create([
+                'task_process_id' => $assignment->process,
+                'project_id' => $project->getKey(),
+                'user_id' => $assignment->user,
+                'image_id' => $assignment->image,
+            ]);
+        }
+
+        $this->notifyUsers($assignments, $members, $project);
+
+        return $assignments;
+    }
+
+    /**
+     * Instantiates a given number of processes in the provided task and returns them in a collection.
+     *
+     * @param  int  $taskId
+     * @param  int  $count
+     * @return Collection
+     */
+    private function createProcesses(int $taskId, int $count = 1): Collection
+    {
+        return collect(range(0, $count - 1))->map(fn($i) => TaskProcess::create(['task_id' => $taskId]));
+    }
+
+    /**
+     * Sends an email to the users to notify them of the new assignments.
+     *
+     * @param  Collection  $assignments
+     * @param  Collection  $members
+     * @param  Project  $project
+     */
+    private function notifyUsers(Collection $assignments, Collection $members, Project $project): void
+    {
+        foreach ($assignments->groupBy('user') as $userId => $assignments) {
+            $user = $members->first(fn(User $user) => $user->getKey() === $userId);
+            $link = route('projects.assignments.index', compact('project'));
+            Mail::to($user)->queue(new NewAssignmentsMail($user->name, $project->name, count($assignments), $link));
+        }
     }
 
 }

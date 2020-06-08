@@ -40,22 +40,6 @@
                 @endif
             </div>
 
-            {{-- Tags per user --}}
-            <div class="field">
-                <label
-                    class="label">@lang('panel.projects.tasks.repeat_images') @include('partials.info', ['info' => trans('panel.projects.tasks.repeat_images_explain')])</label>
-
-                <div class="control">
-                    <input type="number" class="input" name="repeat_images" value="{{ old('repeat_images') ?? 1 }}" min="1">
-                </div>
-
-                @if ($errors->has('repeat_images'))
-                    <p class="help is-danger">
-                        {{ $errors->first('repeat_images') }}
-                    </p>
-                @endif
-            </div>
-
             {{-- Process number --}}
             <div class="field">
                 <label class="label">@lang('panel.projects.tasks.process_number') @include('partials.info', ['info' => trans('panel.projects.tasks.process_explained')])</label>

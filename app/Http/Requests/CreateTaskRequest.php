@@ -29,7 +29,6 @@ class CreateTaskRequest extends FormRequest
             'users' => ['required', 'array', 'min:1'],
             'users.*' => ['exists:users,id'],
             'sample' => ['required', 'exists:samples,id'],
-            'repeat_images' => ['required', 'int', 'min:1'],
             'process_number' => ['required', 'int', 'min:1'],
         ];
     }
@@ -82,7 +81,7 @@ class CreateTaskRequest extends FormRequest
 
         $membersCount = count($validated['users']);
 
-        $minNecessaryUsers = $validated['repeat_images'] * $validated['process_number'];
+        $minNecessaryUsers = $validated['process_number'];
 
         if ($membersCount < $minNecessaryUsers) {
             $validator->errors()->add('process_number',
