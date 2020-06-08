@@ -66,7 +66,7 @@ class TaskServiceImpl implements TaskService
      * @param  Collection  $processes
      * @param  Collection  $members
      * @param  Collection  $images
-     * @param  int  $projectId
+     * @param  Project  $project
      * @param  int  $membersCount
      * @return Collection
      */

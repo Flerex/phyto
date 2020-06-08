@@ -5,6 +5,8 @@ namespace Tests\Unit\Services;
 use App\Domain\Models\Image;
 use App\Domain\Models\Project;
 use App\Domain\Models\Sample;
+use App\Domain\Models\TaskAssignment;
+use App\Domain\Models\TaskProcess;
 use App\Domain\Services\TaskService;
 use App\Notifications\ActivateAccountNotification;
 use App\Notifications\ResetPasswordNotification as ResetPasswordNotification;
@@ -58,12 +60,26 @@ class TaskServiceTest extends TestCase
             'sample_id' => $sample->getKey(),
         ]);
 
-
         // Get random members for assignment
         $assignees = $members->random(3);
+
         $task = $this->taskService->create_task($sample, $assignees);
 
         $this->assertEquals(count($assignees), $task->processes[0]->assignments()->pluck('user_id')->unique()->count());
-    }
 
+
+        // Check the same user is not assigned to the same image
+        $task = $this->taskService->create_task($sample, $assignees, 3);
+
+
+        $images = $task->processes->map(fn(TaskProcess $process) => $process->assignments)
+            ->flatten(1)
+            ->groupBy(fn(TaskAssignment $a) => $a->image->getKey());
+
+        foreach ($images as $assignment) {
+            $this->assertTrue($assignment->unique()->count() === $assignment->count());
+        }
+
+
+    }
 }
