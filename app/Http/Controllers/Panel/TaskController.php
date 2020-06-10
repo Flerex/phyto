@@ -64,7 +64,7 @@ class TaskController extends Controller
 
         $task->with(['processes.assignments.user']);
 
-        return view('panel.projects.tasks.show', compact('project', 'task'));
+        return view('panel.projects.processes.index', compact('project', 'task'));
     }
 
     /**
@@ -133,7 +133,7 @@ class TaskController extends Controller
                 ];
             });
 
-        return view('panel.projects.tasks.show_process', compact('project', 'process', 'task', 'assignments', 'assignees'));
+        return view('panel.projects.processes.show', compact('project', 'process', 'task', 'assignments', 'assignees'));
     }
 
     /**
@@ -158,6 +158,6 @@ class TaskController extends Controller
 
         $assignments = $process->assignments()->paginate(config('phyto.pagination_size'));
 
-        return view('panel.projects.tasks.show_assignment', compact('project', 'process', 'assignment', 'assignments', 'tree', 'boxes', 'image'));
+        return view('panel.projects.assignments.show', compact('project', 'process', 'assignment', 'assignments', 'tree', 'boxes', 'image'));
     }
 }
