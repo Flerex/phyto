@@ -21,3 +21,12 @@
     object-fit: cover;
     border-radius: $radius;
 }
+
+.project-subtitle {
+    color: $grey;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: .9rem;
+    margin-top: 2rem;
+    margin-bottom: .75rem;
+}
