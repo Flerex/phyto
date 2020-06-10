@@ -13,7 +13,7 @@
 
         </thead>
         <tbody>
-        @foreach($task->processes as $process)
+        @foreach($processes as $process)
             <tr>
                 <td>{{ $process->getKey() }}</td>
                 <td>
@@ -29,7 +29,7 @@
                     </progress>
                 </td>
                 <td class="has-text-right">
-                    <a href="{{ route('panel.projects.tasks.show_process', compact('project', 'task', 'process')) }}"
+                    <a href="{{ route('panel.projects.tasks.show_process', array_merge(['task' => $process->task], compact('project', 'process'))) }}"
                        class="button is-link is-rounded is-light is-small has-text-weight-bold">@lang('general.view')</a>
                 </td>
             </tr>

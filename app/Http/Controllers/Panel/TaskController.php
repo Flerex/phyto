@@ -64,7 +64,9 @@ class TaskController extends Controller
 
         $task->with(['processes.assignments.user']);
 
-        return view('panel.projects.processes.index', compact('project', 'task'));
+        $processes = $task->processes;
+
+        return view('panel.projects.processes.index', compact('project', 'processes'));
     }
 
     /**
