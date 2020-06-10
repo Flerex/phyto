@@ -79,6 +79,10 @@ return [
             'process_max' => 'There must be at least the same number of members as the the number of processes (:value).',
             'must_be_members' => 'Members must belong to the current project.',
         ],
+
+        'processes' => [
+            'empty' => 'There are no processes here.',
+        ]
     ],
 
 
