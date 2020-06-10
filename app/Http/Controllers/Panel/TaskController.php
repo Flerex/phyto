@@ -46,6 +46,7 @@ class TaskController extends Controller
         $this->authorize('view', $project);
 
         $tasks = $project->tasks;
+
         return view('panel.projects.tasks.index', compact('project', 'tasks'));
     }
 
