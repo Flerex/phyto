@@ -81,6 +81,7 @@ return [
             'compatible_same_sample' => 'Compatible tasks must be from the same sample.',
             'compatibility' => 'Backwards compatibility',
             'compatibility_explained' => 'Backwards compatibility with previous tasks ensures that members will not be assigned to the same image if they were already assigned in compatible tasks.',
+            'not_enough_members_for_assignments' => 'There are not enough members for this amount of labeling per image. Please take into account that if you are setting compatibility with previous tasks, previous assignments will be taken into account. Please reduce the number of labeling per image or increase the number of members.',
         ],
 
         'processes' => [

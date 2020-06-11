@@ -9,6 +9,7 @@ use App\Domain\Models\Task;
 use App\Domain\Models\TaskAssignment;
 use App\Domain\Models\TaskProcess;
 use App\Domain\Models\User;
+use App\Domain\Services\Utils\AssignmentManager;
 use App\Exceptions\NotEnoughMembersForProcessException;
 use App\Mail\NewAssignmentsMail;
 use Illuminate\Support\Collection;
@@ -23,6 +24,7 @@ use Throwable;
  */
 class TaskServiceImpl implements TaskService
 {
+
     /**
      * Create a task.
      *
@@ -40,19 +42,20 @@ class TaskServiceImpl implements TaskService
         int $processCount = 1
     ): Task {
         return DB::transaction(function () use ($compatibility, $processCount, $members, $sample) {
-
             if ($members->count() < $processCount) {
                 throw new NotEnoughMembersForProcessException;
             }
 
-            $compatibilityAssignments = $this->getAssignmentsFromPreviousTasks($compatibility);
-
-            $assignmentsByProcess = $this->computeAssignments($compatibilityAssignments, $sample->images->pluck('id'),
-                $members->pluck('id'), $processCount);
-
+            /** @var AssignmentManager $assignmentManager */
+            $assignmentManager = app(AssignmentManager::class, [
+                'compatibility' => $compatibility,
+                'processCount' => $processCount,
+                'images' => $sample->images->pluck('id'),
+                'members' => $members->pluck('id'),
+            ]);
+            $assignmentsByProcess = $assignmentManager->computeAssignments($processCount);
 
             $task = $this->createTask($assignmentsByProcess, $sample);
-
             $this->notifyUsers($assignmentsByProcess, $members, $sample->project);
             return $task;
         });
@@ -79,45 +82,7 @@ class TaskServiceImpl implements TaskService
         Collection $members,
         int $processCount
     ) {
-        $previousMembers = $compatibilityAssignments->flatten()->unique();
 
-        /*
-         * Separate the provided members in $recurringMembers (members that were in previous compatible tasks) and
-         * $newMembers (members that are completely new to this task).
-         */
-        [$recurringMembers, $newMembers] = $members->reduce(function (array $carry, int $u) use ($previousMembers) {
-            $carry[$previousMembers->contains($u) ? 0 : 1]->push($u);
-            return $carry;
-        }, [collect(), collect()]);
-
-        // A list of available members from the $members list that are available for every image.
-        $availability = $images->mapWithKeys(fn(int $image) => [
-            $image => (object) [
-                'recurring' => $recurringMembers->diff($compatibilityAssignments->get($image)),
-                'new' => $newMembers->collect(),
-            ]
-        ]);
-
-        // We keep track of every user's assignments to ensure an equal workload balance.
-        $workload = $members->mapWithKeys(fn(int $member) => [$member => 0]);
-
-        return empty_collection($processCount)->map(function () use ($workload, $availability, $images) {
-            return $images->map(function (int $image) use ($workload, $availability) {
-                $availabilityForImage = $availability->get($image);
-
-                if ($availabilityForImage->recurring->isEmpty() && $availabilityForImage->new->isEmpty()) {
-                    throw new NotEnoughMembersForProcessException;
-                }
-
-                $assignee = $this->assignMember($availabilityForImage->recurring, $workload)
-                    ?? $this->assignMember($availabilityForImage->new, $workload);
-
-                return (object) [
-                    'image' => $image,
-                    'user' => $assignee,
-                ];
-            });
-        });
     }
 
     /**
@@ -166,59 +131,6 @@ class TaskServiceImpl implements TaskService
         }
     }
 
-    /**
-     * Retrieves the assignments from a list of tasks.
-     *
-     * @param  Collection  $tasks
-     * @return Collection
-     */
-    private function getAssignmentsFromPreviousTasks(Collection $tasks): Collection
-    {
-        return $tasks
-            ->map(function (Task $task) {
-                return $task->processes->map(function (TaskProcess $process) {
-                    return $process->assignments;
-                });
-            })
-            ->flatten()
-            ->groupBy(fn(TaskAssignment $assignment) => $assignment->image->getKey())
-            ->map(function (Collection $assignments) {
-                return $assignments->map(function (TaskAssignment $a) {
-                    return $a->user->getKey();
-                });
-            });
-    }
 
-
-    /**
-     * Assigns the member in $availability with the lowest workload in $workload and returns it. Assigning a member
-     * automatically modifies the $availability list.
-     *
-     * If more than one member fulfil the condition, one is randomly returned.
-     *
-     * @param $availability
-     * @param  Collection  $workload
-     */
-    private function assignMember(Collection $availability, Collection $workload)
-    {
-        if ($availability->isEmpty()) {
-            return null;
-        }
-
-        // Get the relative workload that only contains members of $member
-        $membersWorkload = $workload->filter(fn(int $assignmentCount, int $member) => $availability->contains($member));
-
-        // Filter the workload to get only members with the minimum work. Of those members, we pick one randomly.
-        $assignee = $membersWorkload->filter(fn(int $assignmentCount) => $assignmentCount === $membersWorkload->min())
-            ->keys()
-            ->random();
-
-
-        $workload->put($assignee, $workload->get($assignee) + 1);
-
-        $availability->forget($availability->search($assignee));
-
-        return $assignee;
-    }
 
 }

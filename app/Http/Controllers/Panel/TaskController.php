@@ -19,6 +19,7 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 
 class TaskController extends Controller
@@ -108,10 +109,9 @@ class TaskController extends Controller
 
             $this->taskService->create_task($sample, $users, $compatibility, $validated['process_number']);
         } catch (NotEnoughMembersForProcessException $e) {
-            dd('exception!');
-            return redirect()
-                ->back()
-                ->withErrors(['process_number', trans('panel.projects.tasks.process_max', ['value' => 4])]);
+            throw ValidationException::withMessages([
+                'process_number' => [trans('panel.projects.tasks.not_enough_members_for_assignments')]
+            ]);
         }
 
         return redirect()->route('panel.projects.tasks.index', compact('project'))

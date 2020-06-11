@@ -324,6 +324,7 @@ class AsynchronousController extends Controller
         return Task::without('processes')
             ->with('sample')
             ->where('sample_id', $validated['sample'])
+            ->latest()
             ->get()
             ->map(function (Task $task) {
                 $task->date = $task->created_at->format(config('phyto.date_format'));
