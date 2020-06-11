@@ -29,6 +29,8 @@ Route::prefix('async')->group(function () {
                 ->name('async.search_samples');
             Route::get('/project/{project}/members/search', 'AsynchronousController@search_members')
                 ->name('async.search_members');
+            Route::get('/project/{project}/tasks/search', 'AsynchronousController@search_tasks')
+                ->name('async.search_tasks');
         });
 
 });

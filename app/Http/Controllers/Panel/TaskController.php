@@ -89,7 +89,6 @@ class TaskController extends Controller
      * @param  CreateTaskRequest  $request
      * @return RedirectResponse
      * @throws AuthorizationException
-     * @throws NotEnoughMembersForProcessException
      */
     public function store(Project $project, CreateTaskRequest $request)
     {
@@ -99,10 +98,21 @@ class TaskController extends Controller
 
         // We make sure we get only users and samples belonging to the project
         $users = $project->users()->findMany($validated['users'])->unique();
+
+        /** @var Sample $sample */
         $sample = $project->samples()->find($validated['sample']);
 
-        $this->taskService->create_task($sample, $users, $validated['process_number']);
+        $compatibility = $project->tasks()->findMany($validated['compatibility'])->unique();
 
+        try {
+
+            $this->taskService->create_task($sample, $users, $compatibility, $validated['process_number']);
+        } catch (NotEnoughMembersForProcessException $e) {
+            dd('exception!');
+            return redirect()
+                ->back()
+                ->withErrors(['process_number', trans('panel.projects.tasks.process_max', ['value' => 4])]);
+        }
 
         return redirect()->route('panel.projects.tasks.index', compact('project'))
             ->with('alert', trans('panel.projects.tasks.created_alert'));;
@@ -160,6 +170,7 @@ class TaskController extends Controller
 
         $assignments = $process->assignments()->paginate(config('phyto.pagination_size'));
 
-        return view('panel.projects.assignments.show', compact('project', 'process', 'assignment', 'assignments', 'tree', 'boxes', 'image'));
+        return view('panel.projects.assignments.show',
+            compact('project', 'process', 'assignment', 'assignments', 'tree', 'boxes', 'image'));
     }
 }

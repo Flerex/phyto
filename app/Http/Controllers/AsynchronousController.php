@@ -8,6 +8,7 @@ use App\Domain\Models\Image;
 use App\Domain\Models\Project;
 use App\Domain\Models\Sample;
 use App\Domain\Models\Species;
+use App\Domain\Models\Task;
 use App\Domain\Models\User;
 use App\Domain\Services\TaxonomyService;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -71,7 +72,7 @@ class AsynchronousController extends Controller
      *
      * @return Collection
      */
-    public function species() : Collection
+    public function species(): Collection
     {
         return $this->taxonomyService->getTree();
     }
@@ -303,6 +304,31 @@ class AsynchronousController extends Controller
                 'label' => $sample->name,
             ];
         });
+    }
+
+    /**
+     * Searches tasks for a given sample.
+     * @param  Project  $project
+     * @param  Request  $request
+     * @return Collection
+     * @throws AuthorizationException
+     */
+    public function search_tasks(Project $project, Request $request)
+    {
+        $validated = $request->validate([
+            'sample' => ['required', 'exists:samples,id'],
+        ]);
+
+        $this->authorize('view', $project);
+
+        return Task::without('processes')
+            ->with('sample')
+            ->where('sample_id', $validated['sample'])
+            ->get()
+            ->map(function (Task $task) {
+                $task->date = $task->created_at->format(config('phyto.date_format'));
+                return $task;
+            });
     }
 
     /**

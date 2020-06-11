@@ -9,19 +9,26 @@
 
             {{-- Sample selector --}}
             <div class="field">
-                <label class="label">@choice('panel.projects.samples.label', 1)</label>
+                <div id="sample_selector" data-project="{{ $project->getKey() }}"
+                     data-old="{{ old('sample') }}"></div>
+            </div>
 
-                <div class="control">
-                    <div id="sample_selector" data-project="{{ $project->getKey() }}"
-                         data-old="{{ old('sample') }}"></div>
-                </div>
-
-                @if ($errors->has('sample'))
+            @if ($errors->has('sample'))
+                <div class="field">
                     <p class="help is-danger">
                         {{ $errors->first('sample') }}
                     </p>
-                @endif
-            </div>
+                </div>
+            @endif
+
+            @if ($errors->has('compatibility'))
+                <div class="field">
+                    <p class="help is-danger">
+                        {{ $errors->first('compatibility') }}
+                    </p>
+                </div>
+            @endif
+
 
             {{-- Members --}}
             <div class="field">
@@ -41,10 +48,12 @@
 
             {{-- Process number --}}
             <div class="field">
-                <label class="label">@lang('panel.projects.tasks.process_number') @include('partials.info', ['info' => trans('panel.projects.tasks.process_explained')])</label>
+                <label
+                    class="label">@lang('panel.projects.tasks.process_number') @include('partials.info', ['info' => trans('panel.projects.tasks.process_explained')])</label>
 
                 <div class="control">
-                    <input type="number" class="input" name="process_number" value="{{ old('process_number') ?? 1 }}" min="1">
+                    <input type="number" class="input" name="process_number" value="{{ old('process_number') ?? 1 }}"
+                           min="1">
                 </div>
 
                 @if ($errors->has('process_number'))

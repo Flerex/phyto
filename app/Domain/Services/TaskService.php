@@ -19,10 +19,11 @@ interface TaskService
      *
      * @param  Sample  $sample
      * @param  Collection  $members
+     * @param  Collection  $compatibility
      * @param  int  $processCount
      * @return Task
      * @throws NotEnoughMembersForProcessException
      */
-    public function create_task(Sample $sample, Collection $members,int $processCount = 1): Task;
+    public function create_task(Sample $sample, Collection $members, Collection $compatibility, int $processCount = 1): Task;
 
 }

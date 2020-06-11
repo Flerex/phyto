@@ -30,6 +30,8 @@ class CreateTaskRequest extends FormRequest
             'users.*' => ['exists:users,id'],
             'sample' => ['required', 'exists:samples,id'],
             'process_number' => ['required', 'int', 'min:1'],
+            'compatibility' => ['sometimes', 'array'],
+            'compatibility.*' => ['exists:tasks,id'],
         ];
     }
 
@@ -44,10 +46,7 @@ class CreateTaskRequest extends FormRequest
     {
         $validator->after(function ($validator) {
             $this->membersAreFromProject($validator);
-
-            if ($this->maxProcesses($validator)) {
-                $validator->errors()->add('users', trans('panel.projects.tasks.must_be_members'));
-            }
+            $this->maxProcesses($validator);
         });
     }
 
@@ -63,7 +62,7 @@ class CreateTaskRequest extends FormRequest
         $project = $this->route('project');
         $members = $project->users()->findMany($validated['users'])->unique();
 
-        if (count($members) == $validated['users']) {
+        if (count($members) != count($validated['users'])) {
             $validator->errors()->add('users', trans('panel.projects.tasks.must_be_members'));
         }
 
@@ -88,6 +87,5 @@ class CreateTaskRequest extends FormRequest
                 trans('panel.projects.tasks.process_max', ['value' => $minNecessaryUsers]));
         }
 
-        trans('panel.projects.tasks.process_max', ['value' => $minNecessaryUsers]);
     }
 }

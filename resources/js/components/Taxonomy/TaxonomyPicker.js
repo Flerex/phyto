@@ -28,7 +28,7 @@ export default function TaxonomyPicker({tree, catalogs, onPick}) {
         return (
             <div className={styles.catalogSelector}>
                 <span>{Lang.trans('labels.projects.catalogs')}</span>
-                <Select options={catalogOptions} onChange={c => setCurrentCatalog(c)} defaultValue={currentCatalog}/>
+                <Select options={catalogOptions} onChange={setCurrentCatalog} defaultValue={currentCatalog}/>
             </div>
         )
     };

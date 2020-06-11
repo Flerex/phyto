@@ -78,6 +78,9 @@ return [
             'process_explained' => 'Here you can select how many times an image will be worked on. For every labeling you add, another member will work in the image. This can be useful to reduce the margin error.',
             'process_max' => 'There must be at least the same number of members as the the number of processes (:value).',
             'must_be_members' => 'Members must belong to the current project.',
+            'compatible_same_sample' => 'Compatible tasks must be from the same sample.',
+            'compatibility' => 'Backwards compatibility',
+            'compatibility_explained' => 'Backwards compatibility with previous tasks ensures that members will not be assigned to the same image if they were already assigned in compatible tasks.',
         ],
 
         'processes' => [
