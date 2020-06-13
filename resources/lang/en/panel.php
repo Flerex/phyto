@@ -74,13 +74,19 @@ return [
             'create' => 'New task',
             'automated_create' => 'New automated task',
             'created_alert' => 'Task successfully created.',
-            'repeat_images' => 'Image repetition',
-            'repeat_images_explain' => 'You can select how many users must tag each image so that there exist multiple opinions by different members.',
-            'process_number' => 'Processes',
-            'process_explained' => 'Here you can select how many times this sample will be tagged. For every process, the assignments for evey member will be unique. This means that the same person won’t be assigned the same image in different processes.',
-            'process_max' => 'There must be at least the same number of members as the the number of processes times the image repetition factor (:value).',
+            'process_number' => 'Labeling per image',
+            'process_explained' => 'Here you can select how many times an image will be worked on. For every labeling you add, another member will work in the image. This can be useful to reduce the margin error.',
+            'process_max' => 'There must be at least the same number of members as the the number of processes (:value).',
             'must_be_members' => 'Members must belong to the current project.',
+            'compatible_same_sample' => 'Compatible tasks must be from the same sample.',
+            'compatibility' => 'Backwards compatibility',
+            'compatibility_explained' => 'Backwards compatibility with previous tasks ensures that members will not be assigned to the same image if they were already assigned in compatible tasks.',
+            'not_enough_members_for_assignments' => 'There are not enough members for this amount of labeling per image. Please take into account that if you are setting compatibility with previous tasks, previous assignments will be taken into account. Please reduce the number of labeling per image or increase the number of members.',
         ],
+
+        'processes' => [
+            'empty' => 'There are no processes here.',
+        ]
     ],
 
 

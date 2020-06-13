@@ -15,7 +15,7 @@
             <th>@lang('labels.description')</th>
             <th>@lang('labels.samples.taken_on')</th>
             <th>{{ trans_choice('panel.projects.images.label', 0) }}</th>
-            <th class="has-text-right">@lang('general.actions')</th>
+            <th class="has-text-right" style="width: 15%">@lang('general.actions')</th>
             </thead>
 
             <tbody>
@@ -26,8 +26,13 @@
                     <td>{{ $sample->taken_on->format(trans('general.date_format')) }}</td>
                     <td>{{ $sample->images_count }}</td>
                     <td class="has-text-right">
+                        <a class="button is-rounded is-light is-small has-text-weight-bold"
+                           href="{{ route('panel.projects.images.index', compact('project', 'sample')) }}"
+                        data-tippy-content="@lang('general.overview')">
+                            <span class="icon"><i class="fas fa-eye"></i></span>
+                        </a>
                         <a class="button is-rounded is-light is-link is-small has-text-weight-bold"
-                           href="{{ route('panel.projects.images.index', compact('project', 'sample')) }}">
+                           href="{{ route('panel.projects.samples.show', compact('project', 'sample')) }}">
                             @lang('general.view')
                         </a>
                     </td>

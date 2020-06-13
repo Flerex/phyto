@@ -17,7 +17,7 @@
         <tbody>
         @foreach($assignments as $assignment)
             <tr>
-                <td><img class="thumbnail" src="{{ asset($assignment->image->thumbnail_path) }}"></td>
+                <td>@include('partials.thumbnail', ['image' => $assignment->image])</td>
                 <td>
                     @if($assignment->finished)
                         <span class="tag is-light is-success">@lang('labels.task.finished')</span>

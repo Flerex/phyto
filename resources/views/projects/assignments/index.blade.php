@@ -23,7 +23,7 @@
             <tbody>
             @foreach($assignments as $assignment)
                 <tr>
-                    <td><img class="thumbnail" src="{{ asset($assignment->image->thumbnail_path) }}"></td>
+                    <td>@include('partials.thumbnail', ['image' => $assignment->image])</td>
                     <td class="has-text-right">{{ $assignment->process->getKey() }}</td>
                     <td class="has-text-right">{{ $assignment->boxes_count }}</td>
                     <td class="has-text-right">{{ $assignment->untagged_count }}</td>

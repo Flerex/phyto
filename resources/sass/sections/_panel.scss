@@ -20,4 +20,28 @@
     height: 100px;
     object-fit: cover;
     border-radius: $radius;
+    background-color: $gray3;
+
+    &.nonexistent {
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: $danger-light;
+
+        &::after {
+            @include icon('f071');
+            font-size: 30px;
+            color: $danger;
+        }
+    }
+}
+
+.project-subtitle {
+    color: $grey;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: .9rem;
+    margin-top: 2rem;
+    margin-bottom: .75rem;
 }

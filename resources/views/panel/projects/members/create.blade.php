@@ -1,7 +1,7 @@
-@extends('panel.master')
+@extends('panel.projects.partials.layout')
 
-@section('panel_content')
-    <h1 class="title">@lang('panel.projects.add_users')</h1>
+@section('project_content')
+    <h2 class="project-subtitle">@lang('panel.projects.add_users')</h2>
     <form method="POST" action="{{ route('panel.projects.members.store', compact('project')) }}">
         @csrf
 

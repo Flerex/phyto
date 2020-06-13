@@ -19,6 +19,7 @@
         <table class="table is-fullwidth is-boxed">
             <thead>
             <th>@lang('labels.samples.sample')</th>
+            <th class="has-text-right">@choice('labels.task.processes', 0)</th>
             <th>@lang('general.progress')</th>
             <th>@lang('panel.projects.members.added_on')</th>
             <th class="has-text-right">@lang('general.actions')</th>
@@ -28,6 +29,7 @@
             @foreach($tasks as $task)
                 <tr>
                     <td>{{ $task->sample->name }}</td>
+                    <td class="has-text-right">{{ $task->processes->count() }}</td>
                     <td style="max-width: 100px">
                         @if($task->finished)
                             @lang('labels.task.finished')

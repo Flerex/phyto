@@ -4,6 +4,7 @@ namespace App\Domain\Services;
 
 use App\Domain\Models\Sample;
 use App\Domain\Models\Task;
+use App\Exceptions\NotEnoughMembersForProcessException;
 use Illuminate\Support\Collection;
 
 /**
@@ -18,10 +19,11 @@ interface TaskService
      *
      * @param  Sample  $sample
      * @param  Collection  $members
-     * @param  int  $repetitions
-     * @param  int  $processes
+     * @param  Collection  $compatibility
+     * @param  int  $processCount
      * @return Task
+     * @throws NotEnoughMembersForProcessException
      */
-    public function create_task(Sample $sample, Collection $members, int $repetitions = 1, int $processes = 1): Task;
+    public function create_task(Sample $sample, Collection $members, Collection $compatibility, int $processCount = 1): Task;
 
 }

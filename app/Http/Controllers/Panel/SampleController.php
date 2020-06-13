@@ -26,8 +26,7 @@ use Pion\Laravel\ChunkUpload\Receiver\FileReceiver;
 class SampleController extends Controller
 {
 
-    /** @var ProjectService $projectService */
-    protected $projectService;
+    protected ProjectService $projectService;
 
     public function __construct(ProjectService $projectService)
     {
@@ -194,5 +193,25 @@ class SampleController extends Controller
         $filename .= "_" . md5((string) time()) . "." . $extension;
 
         return $filename;
+    }
+
+    /**
+     * Show the list of processes for this sample.
+     *
+     * @param  Project  $project
+     * @param  Sample  $sample
+     * @return string
+     * @throws AuthorizationException
+     */
+    protected function show(Project $project, Sample $sample)
+    {
+
+        $this->authorize('view', $project);
+
+        $sample->with(['processes.assignments.user']);
+
+        $processes = $sample->processes;
+
+        return view('panel.projects.processes.index', compact('project', 'processes'));
     }
 }

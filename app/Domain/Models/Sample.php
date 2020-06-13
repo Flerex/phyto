@@ -39,7 +39,16 @@ class Sample extends Model
      *
      * @return BelongsTo
      */
-    public function project() {
+    public function project()
+    {
         return $this->belongsTo(Project::class);
+    }
+
+    /**
+     * Relationship to navigate to the processes of this sample.
+     */
+    public function processes()
+    {
+        return $this->hasManyThrough(TaskProcess::class, Task::class);
     }
 }

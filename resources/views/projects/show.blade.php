@@ -7,7 +7,7 @@
                 <a href="{{ route('projects.images.show', compact('project', 'image')) }}">
                     <div class="box">
                         <figure class="image">
-                            <img class="thumbnail" src="{{ asset($image->thumbnail_path) }}">
+                            @include('partials.thumbnail', compact('image'))
                         </figure>
                     </div>
                 </a>

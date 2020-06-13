@@ -95,6 +95,9 @@ Route::prefix('panel')->middleware('permission:'.Permissions::PANEL_ACCESS()->ge
         Route::post('projects/{project}/samples/upload', 'Panel\\SampleController@upload')
             ->name('panel.projects.samples.upload');
 
+        Route::get('projects/{project}/samples/{sample}', 'Panel\\SampleController@show')
+            ->name('panel.projects.samples.show');
+
 
         /*
          * Images

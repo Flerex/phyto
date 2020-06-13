@@ -12,7 +12,7 @@
             <div class="level-item">
                 <a href="{{ route('projects.show', compact('project')) }}" target="_blank" class="button is-rounded is-grey is-small"
                     data-tippy-content="@lang('panel.projects.go_to_project')">
-                    <span class="icon"><i class="fas fa-eye"></i></span>
+                    <span class="icon"><i class="fas fa-arrow-right"></i></span>
                 </a>
             </div>
         </div>
@@ -26,13 +26,13 @@
                     <span>@lang('general.general')</span>
                 </a>
             </li>
-            <li @if(Str::startsWith(Route::currentRouteName(), 'panel.projects.samples.index'))class="is-active"@endif>
+            <li @if(Str::startsWith(Route::currentRouteName(), 'panel.projects.samples.'))class="is-active"@endif>
                 <a href="{{ route('panel.projects.samples.index', compact('project')) }}">
                     <span class="icon is-small"><i class="fas fa-microscope" aria-hidden="true"></i></span>
                     <span>{{ trans_choice('panel.projects.samples.label', 0) }}</span>
                 </a>
             </li>
-            <li @if(Str::startsWith(Route::currentRouteName(), 'panel.projects.members.index'))class="is-active"@endif>
+            <li @if(Str::startsWith(Route::currentRouteName(), 'panel.projects.members.'))class="is-active"@endif>
                 <a href="{{ route('panel.projects.members.index', compact('project')) }}">
                     <span class="icon is-small"><i class="fas fa-users" aria-hidden="true"></i></span>
                     <span>{{ trans_choice('panel.projects.members.label', 0) }}</span>

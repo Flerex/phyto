@@ -29,8 +29,9 @@ class CreateTaskRequest extends FormRequest
             'users' => ['required', 'array', 'min:1'],
             'users.*' => ['exists:users,id'],
             'sample' => ['required', 'exists:samples,id'],
-            'repeat_images' => ['required', 'int', 'min:1'],
             'process_number' => ['required', 'int', 'min:1'],
+            'compatibility' => ['sometimes', 'array'],
+            'compatibility.*' => ['exists:tasks,id'],
         ];
     }
 
@@ -45,10 +46,7 @@ class CreateTaskRequest extends FormRequest
     {
         $validator->after(function ($validator) {
             $this->membersAreFromProject($validator);
-
-            if ($this->maxProcesses($validator)) {
-                $validator->errors()->add('users', trans('panel.projects.tasks.must_be_members'));
-            }
+            $this->maxProcesses($validator);
         });
     }
 
@@ -64,7 +62,7 @@ class CreateTaskRequest extends FormRequest
         $project = $this->route('project');
         $members = $project->users()->findMany($validated['users'])->unique();
 
-        if (count($members) == $validated['users']) {
+        if (count($members) != count($validated['users'])) {
             $validator->errors()->add('users', trans('panel.projects.tasks.must_be_members'));
         }
 
@@ -82,13 +80,12 @@ class CreateTaskRequest extends FormRequest
 
         $membersCount = count($validated['users']);
 
-        $minNecessaryUsers = $validated['repeat_images'] * $validated['process_number'];
+        $minNecessaryUsers = $validated['process_number'];
 
         if ($membersCount < $minNecessaryUsers) {
             $validator->errors()->add('process_number',
                 trans('panel.projects.tasks.process_max', ['value' => $minNecessaryUsers]));
         }
 
-        trans('panel.projects.tasks.process_max', ['value' => $minNecessaryUsers]);
     }
 }

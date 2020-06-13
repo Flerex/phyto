@@ -9,6 +9,7 @@ use App\Domain\Models\TaskProcess;
 use App\Domain\Models\User;
 use App\Domain\Services\TaskService;
 use App\Domain\Services\TaxonomyService;
+use App\Exceptions\NotEnoughMembersForProcessException;
 use App\Http\Controllers\Controller;
 use App\Domain\Models\Project;
 use App\Http\Requests\CreateTaskRequest;
@@ -18,6 +19,7 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 
 class TaskController extends Controller
@@ -45,6 +47,7 @@ class TaskController extends Controller
         $this->authorize('view', $project);
 
         $tasks = $project->tasks;
+
         return view('panel.projects.tasks.index', compact('project', 'tasks'));
     }
 
@@ -62,7 +65,9 @@ class TaskController extends Controller
 
         $task->with(['processes.assignments.user']);
 
-        return view('panel.projects.tasks.show', compact('project', 'task'));
+        $processes = $task->processes;
+
+        return view('panel.projects.processes.index', compact('project', 'processes'));
     }
 
     /**
@@ -94,10 +99,20 @@ class TaskController extends Controller
 
         // We make sure we get only users and samples belonging to the project
         $users = $project->users()->findMany($validated['users'])->unique();
+
+        /** @var Sample $sample */
         $sample = $project->samples()->find($validated['sample']);
 
-        $this->taskService->create_task($sample, $users, $validated['repeat_images'], $validated['process_number']);
+        $compatibility = $project->tasks()->findMany($validated['compatibility'])->unique();
 
+        try {
+
+            $this->taskService->create_task($sample, $users, $compatibility, $validated['process_number']);
+        } catch (NotEnoughMembersForProcessException $e) {
+            throw ValidationException::withMessages([
+                'process_number' => [trans('panel.projects.tasks.not_enough_members_for_assignments')]
+            ]);
+        }
 
         return redirect()->route('panel.projects.tasks.index', compact('project'))
             ->with('alert', trans('panel.projects.tasks.created_alert'));;
@@ -130,7 +145,7 @@ class TaskController extends Controller
                 ];
             });
 
-        return view('panel.projects.tasks.show_process', compact('project', 'process', 'task', 'assignments', 'assignees'));
+        return view('panel.projects.processes.show', compact('project', 'process', 'task', 'assignments', 'assignees'));
     }
 
     /**
@@ -155,6 +170,7 @@ class TaskController extends Controller
 
         $assignments = $process->assignments()->paginate(config('phyto.pagination_size'));
 
-        return view('panel.projects.tasks.show_assignment', compact('project', 'process', 'assignment', 'assignments', 'tree', 'boxes', 'image'));
+        return view('panel.projects.assignments.show',
+            compact('project', 'process', 'assignment', 'assignments', 'tree', 'boxes', 'image'));
     }
 }

@@ -15,4 +15,5 @@ return [
     'started_on' => 'Started',
     'tag' => 'Tag',
     'mark_as_finished' => 'Mark as finished',
+    'unprocessed_image' => 'This image is not available because it has not been processed yet. Please come back in a few minutes.',
 ];

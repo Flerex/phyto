@@ -122,7 +122,7 @@
                         <tr>
                             <td>
                                 <a href="{{ route('projects.assignments.show', ['project' => $assignment->project, 'assignment' => $assignment]) }}">
-                                    <img class="thumbnail" src="{{ asset($assignment->image->thumbnail_path) }}">
+                                    @include('partials.thumbnail', ['image' => $assignment->image])
                                 </a>
                             </td>
                             <td>{{ $assignment->project->name }}</td>

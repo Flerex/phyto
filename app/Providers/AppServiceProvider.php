@@ -12,6 +12,8 @@ use App\Domain\Services\TaxonomyService;
 use App\Domain\Services\TaxonomyServiceImpl;
 use App\Domain\Services\UserService;
 use App\Domain\Services\UserServiceImpl;
+use App\Domain\Services\Utils\AssignmentManager;
+use App\Domain\Services\Utils\AssignmentManagerImpl;
 use App\Utils\FileUtils;
 use App\Utils\FileUtilsImpl;
 use App\Utils\PackageUtils;
@@ -53,5 +55,7 @@ class AppServiceProvider extends ServiceProvider
 
         $this->app->bind(FileUtils::class, FileUtilsImpl::class);
         $this->app->bind(PackageUtils::class, PackageUtilsImpl::class);
+
+        $this->app->bind(AssignmentManager::class, AssignmentManagerImpl::class);
     }
 }

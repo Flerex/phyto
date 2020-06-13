@@ -20,7 +20,7 @@ class TaskAssignment extends Model
      *
      * @var string[]
      */
-    protected $fillable = ['task_process_id', 'user_id', 'image_id'];
+    protected $fillable = ['task_process_id', 'user_id', 'image_id', 'project_id'];
 
 
     /**
