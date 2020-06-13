@@ -14,14 +14,14 @@ class CreateBoundingBoxesTable extends Migration
     public function up()
     {
         Schema::create('bounding_boxes', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->unsignedInteger('left');
             $table->unsignedInteger('top');
             $table->unsignedInteger('width');
             $table->unsignedInteger('height');
-            $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('task_assignment_id');
-            $table->unsignedBigInteger('taggable_id')->nullable()->default(null);
+            $table->foreignId('user_id');
+            $table->foreignId('task_assignment_id');
+            $table->foreignId('taggable_id')->nullable()->default(null);
             $table->string('taggable_type')->nullable()->default(null);
             $table->timestamps();
 

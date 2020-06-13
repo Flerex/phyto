@@ -14,11 +14,11 @@ class CreateTaskAssignmentsTable extends Migration
     public function up()
     {
         Schema::create('task_assignments', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->unsignedBigInteger('task_process_id');
-            $table->unsignedBigInteger('project_id');
-            $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('image_id');
+            $table->id();
+            $table->foreignId('task_process_id');
+            $table->foreignId('project_id');
+            $table->foreignId('user_id');
+            $table->foreignId('image_id');
             $table->boolean('finished')->default(false);
             $table->timestamps();
 

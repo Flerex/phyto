@@ -14,8 +14,8 @@ class CreateTaskProcessesTable extends Migration
     public function up()
     {
         Schema::create('task_processes', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->unsignedBigInteger('task_id');
+            $table->id();
+            $table->foreignId('task_id');
             $table->boolean('finished')->default(false);
             $table->timestamps();
 

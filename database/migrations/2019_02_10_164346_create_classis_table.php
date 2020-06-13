@@ -14,9 +14,9 @@ class CreateClassisTable extends Migration
     public function up()
     {
         Schema::create('classis', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->string('name');
-            $table->unsignedBigInteger('domain_id');
+            $table->foreignId('domain_id');
             $table->timestamps();
 
             $table->foreign('domain_id')->references('id')->on('domains');

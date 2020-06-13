@@ -14,9 +14,9 @@ class CreateGeneraTable extends Migration
     public function up()
     {
         Schema::create('genera', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
             $table->string('name');
-            $table->unsignedBigInteger('classis_id');
+            $table->foreignId('classis_id');
             $table->timestamps();
 
             $table->foreign('classis_id')->references('id')->on('classis');

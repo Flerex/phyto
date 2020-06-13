@@ -14,8 +14,8 @@ class CreateCatalogsNodesTable extends Migration
     public function up()
     {
         Schema::create('catalogs_nodes', function (Blueprint $table) {
-            $table->unsignedBigInteger('catalog_id');
-            $table->unsignedBigInteger('node_id');
+            $table->foreignId('catalog_id');
+            $table->foreignId('node_id');
             $table->string('node_type')->nullable();
 
             $table->timestamps();

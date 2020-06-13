@@ -14,8 +14,8 @@ class CreateCatalogProjectTable extends Migration
     public function up()
     {
         Schema::create('catalog_project', function (Blueprint $table) {
-            $table->unsignedInteger('project_id');
-            $table->unsignedInteger('catalog_id');
+            $table->foreignId('project_id');
+            $table->foreignId('catalog_id');
             $table->timestamps();
 
 
