@@ -124,6 +124,14 @@ Route::prefix('panel')->middleware('permission:'.Permissions::PANEL_ACCESS()->ge
         Route::post('projects/{project}/tasks/create', 'Panel\\TaskController@store')
             ->name('panel.projects.tasks.store');
 
+        // Automated
+        Route::get('projects/{project}/tasks/automated/create', 'Panel\\AutomatedTaskController@create')
+            ->name('panel.projects.automated_tasks.create');
+
+        Route::post('projects/{project}/tasks/automated/create', 'Panel\\AutomatedTaskController@store')
+            ->name('panel.projects.automated_tasks.store');
+        // End automated
+
         Route::get('projects/{project}/tasks/{task}', 'Panel\\TaskController@show')
             ->name('panel.projects.tasks.show');
 

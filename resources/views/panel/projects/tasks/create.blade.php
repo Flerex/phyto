@@ -10,7 +10,7 @@
             {{-- Sample selector --}}
             <div class="field">
                 <div id="sample_selector" data-project="{{ $project->getKey() }}"
-                     data-old="{{ old('sample') }}"></div>
+                     data-old="{{ old('sample') }}" data-with-compatibility="{{ true }}"></div>
             </div>
 
             @if ($errors->has('sample'))

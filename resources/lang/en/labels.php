@@ -49,6 +49,8 @@ return [
     ],
 
     'task' => [
+        'automated' => 'Automated task',
+        'manual' => 'Manual task',
         'progress' => 'Progress',
         'finished' => 'Finished',
         'pending' => 'Pending',
@@ -56,5 +58,6 @@ return [
         'unfinished_assignments' => 'Pending assignment|Pending assignments',
         'assignments' => 'Assignments',
         'assignees' => 'Assignees',
+        'services' => 'Service|Services',
     ],
 ];

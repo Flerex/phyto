@@ -17,7 +17,8 @@ class CreateTaskAssignmentsTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('task_process_id');
             $table->unsignedBigInteger('project_id');
-            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('user_id')->nullable();
+            $table->string('service')->nullable()->default(null);
             $table->unsignedBigInteger('image_id');
             $table->boolean('finished')->default(false);
             $table->timestamps();

@@ -13,7 +13,7 @@ class Task extends Model
      *
      * @var string[] $fillable
      */
-    protected $fillable = ['project_id', 'sample_id'];
+    protected $fillable = ['project_id', 'sample_id', 'automated'];
 
 
     /**
@@ -58,12 +58,11 @@ class Task extends Model
     public function getCompletenessPercentageAttribute()
     {
 
-
-        $finished = TaskAssignment::whereHas('process', function(Builder $query) {
+        $finished = TaskAssignment::whereHas('process', function (Builder $query) {
             $query->where('task_id', $this->getKey());
         })->finished()->count();
 
-        $total = TaskAssignment::whereHas('process', function(Builder $query) {
+        $total = TaskAssignment::whereHas('process', function (Builder $query) {
             $query->where('task_id', $this->getKey());
         })->count();
 

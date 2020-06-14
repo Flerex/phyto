@@ -6,7 +6,7 @@ import Tippy from '@tippyjs/react'
 import styles from '../../sass/components/SampleSelector.scss'
 
 
-export default function SampleSelector({project, old}) {
+export default function SampleSelector({project, withCompatibility = false, old}) {
 
     /*
      * We need to set up a helper state attribute `enabled` so that the AsyncSelect component is never rendered
@@ -41,7 +41,7 @@ export default function SampleSelector({project, old}) {
 
 
     useEffect(() => {
-        if (!currentSample) return;
+        if (!withCompatibility || !currentSample) return;
 
         setLoading(true)
 
@@ -122,5 +122,5 @@ export default function SampleSelector({project, old}) {
 
 const el = document.getElementById('sample_selector')
 if (el) {
-    ReactDOM.render(<SampleSelector old={el.dataset.old} project={el.dataset.project}/>, el)
+    ReactDOM.render(<SampleSelector old={el.dataset.old} project={el.dataset.project} withCompatibility={el.dataset.withCompatibility}/>, el)
 }

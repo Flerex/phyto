@@ -5,7 +5,7 @@ namespace App\Domain\Services;
 
 
 use App\Domain\Models\Image;
-use App\Jobs\NormalizeImagePreview;
+use App\Jobs\NormalizeImagePreviewJob;
 use App\Domain\Models\Project;
 use App\Domain\Models\Sample;
 use App\Utils\FileUtils;
@@ -79,7 +79,7 @@ class ProjectServiceImpl implements ProjectService
                     'original_path' => $file,
                 ]);
 
-                NormalizeImagePreview::dispatch($image);
+                NormalizeImagePreviewJob::dispatch($image);
             }
 
             return $sample;

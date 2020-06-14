@@ -9,7 +9,7 @@
                 <span class="icon is-left"><i class="fas fa-tasks"></i></span>
                 <span>@lang('panel.projects.tasks.create')</span>
             </a>
-            <a href="#" class="button is-link is-rounded" disabled>
+            <a href="{{ route('panel.projects.automated_tasks.create', compact('project')) }}" class="button is-link is-rounded" {{ count(config('automated_identification.enabled')) ? '' : 'disabled'}}>
                 <span class="icon is-left"><i class="fas fa-robot"></i></span>
                 <span>@lang('panel.projects.tasks.automated_create')</span>
             </a>
@@ -18,6 +18,7 @@
     @if(count($tasks))
         <table class="table is-fullwidth is-boxed">
             <thead>
+            <th>@lang('general.type')</th>
             <th>@lang('labels.samples.sample')</th>
             <th class="has-text-right">@choice('labels.task.processes', 0)</th>
             <th>@lang('general.progress')</th>
@@ -28,6 +29,7 @@
             <tbody>
             @foreach($tasks as $task)
                 <tr>
+                    <td>@include('panel.projects.partials.task_type', compact('task'))</td>
                     <td>{{ $task->sample->name }}</td>
                     <td class="has-text-right">{{ $task->processes->count() }}</td>
                     <td style="max-width: 100px">

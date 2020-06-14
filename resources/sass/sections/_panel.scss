@@ -45,3 +45,20 @@
     margin-top: 2rem;
     margin-bottom: .75rem;
 }
+
+.task-type {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 30px;
+    height: 30px;
+    font-size: 12px;
+    background-color: $grey-lightest;
+    color: $grey-dark;
+    border-radius: 100%;
+
+    &__automated {
+        background-color: $grey-dark;
+        color: $grey-lightest;
+    }
+}

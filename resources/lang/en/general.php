@@ -30,4 +30,5 @@ return [
     'close' => 'Close',
     'you' => 'This is you!',
     'useful_links' => 'Useful links',
+    'type' => 'Type',
 ];
