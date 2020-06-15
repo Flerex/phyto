@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Panel;
 
+use App\Domain\Models\Domain;
 use App\Domain\Services\TaxonomyService;
 use App\Http\Controllers\Controller;
 use Illuminate\Contracts\View\Factory;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
 class SpeciesController extends Controller
@@ -32,6 +34,20 @@ class SpeciesController extends Controller
         $tree = $this->taxonomyService->getTree();
 
         return view('panel.species.index', compact('tree'));
+    }
+
+    /**
+     * Download a file containing all the species available in their tree.
+     *
+     * @return Factory|View
+     */
+    public function download()
+    {
+        $path = 'species/tree.json';
+
+        Storage::put($path, Domain::with('children.children.children')->get()->toJson(JSON_PRETTY_PRINT));
+
+        return Storage::download($path);
     }
 
 }

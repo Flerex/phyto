@@ -20,12 +20,9 @@ Route::prefix('panel')->middleware('permission:'.Permissions::PANEL_ACCESS()->ge
     /*
     * Species management
     */
-    Route::middleware('permission:'.Permissions::SPECIES_MANAGEMENT()->getValue())->group(function () {
-        Route::resource('species', 'Panel\\SpeciesController')
-            ->only(['index'])
-            ->names([
-                'index' => 'panel.species.index',
-            ]);
+    Route::prefix('species')->middleware('permission:'.Permissions::SPECIES_MANAGEMENT()->getValue())->group(function () {
+        Route::get('index', 'Panel\\SpeciesController@index')->name('panel.species.index');
+        Route::get('download', 'Panel\\SpeciesController@download')->name('panel.species.download');
     });
 
     /*
