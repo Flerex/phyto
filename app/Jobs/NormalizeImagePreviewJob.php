@@ -15,7 +15,7 @@ class NormalizeImagePreviewJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    protected $image;
+    protected Image $image;
 
     /**
      * Create a new job instance.

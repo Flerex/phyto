@@ -9,9 +9,10 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\URL;
 use Zttp\Zttp;
 
-class SendAutomatedIdentificationRequestJob // implements ShouldQueue
+class SendAutomatedIdentificationRequestJob //implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -42,7 +43,8 @@ class SendAutomatedIdentificationRequestJob // implements ShouldQueue
         Zttp::asMultipart()->post($service->endpoint, [
             [
                 'name' => 'callback',
-                'contents' => 'https://google.com'
+                'contents' => URL::signedRoute('automated_services.receive_bounding_boxes',
+                    ['assignment' => $this->assignment]),
             ],
             [
                 'name' => 'image',

@@ -59,7 +59,7 @@ export default function BoundingBoxListItem({box}) {
                     {renderBoxName()}
                     {!box.persisted && (<i className={`fas fa-spinner fa-spin ${styles.uploading}`}/>)}
                 </div>
-                <div className={styles.author}>{Lang.trans('boxer.by')} <strong>{box.user.name}</strong></div>
+                <div className={styles.author}>{Lang.trans('boxer.by')} <strong>{box.author}</strong></div>
             </div>
         </div>
     )

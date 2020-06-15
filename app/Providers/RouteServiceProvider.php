@@ -39,6 +39,8 @@ class RouteServiceProvider extends ServiceProvider
 
         $this->mapWebRoutes();
 
+        $this->mapWebhookRoutes();
+
         //
     }
 
@@ -52,13 +54,29 @@ class RouteServiceProvider extends ServiceProvider
     protected function mapWebRoutes()
     {
         Route::middleware('web')
-             ->namespace($this->namespace)
-             ->group(function() {
-                 foreach(array_diff(scandir(base_path('routes/web')), ['..', '.']) as $file) {
+            ->namespace($this->namespace)
+            ->group(function() {
+                foreach(array_diff(scandir(base_path('routes/web')), ['..', '.']) as $file) {
                     require base_path('routes/web/' . $file);
 
-                 }
-             });
+                }
+            });
+    }
+
+    /**
+     * Define the "webhooks" routes for the application.
+     *
+     * These routes all receive session state, CSRF protection, etc.
+     *
+     * @return void
+     */
+    protected function mapWebhookRoutes()
+    {
+
+        Route::prefix('webhooks')
+            ->middleware('webhooks')
+            ->namespace($this->namespace)
+            ->group(base_path('routes/webhooks.php'));
     }
 
     /**
