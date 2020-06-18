@@ -43,7 +43,7 @@ class ProjectPolicy
     public function access(User $user, Project $project)
     {
 
-        $users = $project->users()->pluck('id');
+        $users = $project->users->pluck('id');
 
         return $users->contains($user->getKey());
     }
