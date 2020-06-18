@@ -79,7 +79,7 @@ class ProjectServiceImpl implements ProjectService
                     'original_path' => $file,
                 ]);
 
-                NormalizeImagePreviewJob::dispatch($image);
+                NormalizeImagePreviewJob::dispatch($image)->onQueue('image-processing');
             }
 
             return $sample;

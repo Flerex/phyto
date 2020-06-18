@@ -41,6 +41,13 @@ return [
             'retry_after' => 90,
         ],
 
+        'image-processing' => [
+            'driver' => 'database',
+            'table' => 'image_processing_jobs',
+            'queue' => 'image-processing',
+            'retry_after' => 90,
+        ],
+
         'beanstalkd' => [
             'driver' => 'beanstalkd',
             'host' => 'localhost',
