@@ -21,7 +21,7 @@ class CatalogTableSeeder extends Seeder
                 'name' => $domain->name . ' catalog',
                 'status' => CatalogStatus::SEALED()->getValue(),
             ]);
-            $catalog->domains()->attach($domain);
+            $catalog->domains()->attach($domain, ['node_type' => 'domain']);
         }
 
 
