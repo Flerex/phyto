@@ -16,9 +16,16 @@ class BoundingBox extends Model
 
     protected $fillable = ['left', 'top', 'width', 'height', 'user_id', 'task_assignment_id'];
 
-    protected $visible = ['id', 'left', 'top', 'width', 'height', 'user', 'taggable'];
+    protected $visible = ['id', 'left', 'top', 'width', 'height', 'author', 'taggable'];
+
+    protected $appends = ['author'];
 
     protected $with = ['user', 'taggable'];
+
+    public function getAuthorAttribute()
+    {
+        return $this->user ? $this->user->name : config('automated_identification.services.'.$this->assignment->service.'.name');
+    }
 
     public function user()
     {

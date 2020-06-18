@@ -19,7 +19,7 @@ class CreateBoundingBoxesTable extends Migration
             $table->unsignedInteger('top');
             $table->unsignedInteger('width');
             $table->unsignedInteger('height');
-            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('user_id')->nullable();
             $table->unsignedBigInteger('task_assignment_id');
             $table->unsignedBigInteger('taggable_id')->nullable()->default(null);
             $table->string('taggable_type')->nullable()->default(null);

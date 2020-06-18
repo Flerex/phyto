@@ -6,7 +6,7 @@ namespace Tests\Unit\Services;
 
 use App\Domain\Models\Catalog;
 use App\Domain\Models\Image;
-use App\Jobs\NormalizeImagePreview;
+use App\Jobs\NormalizeImagePreviewJob;
 use App\Domain\Models\Project;
 use App\Domain\Services\ProjectService;
 use App\Domain\Models\User;
@@ -98,6 +98,6 @@ class ProjectServiceTest extends TestCase
             }));
         }
 
-        Queue::assertPushed(NormalizeImagePreview::class, $files->count());
+        Queue::assertPushed(NormalizeImagePreviewJob::class, $files->count());
     }
 }

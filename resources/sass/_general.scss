@@ -236,3 +236,9 @@
     margin: 1rem auto 0 auto;
     text-align: right;
 }
+
+
+.buttons.has-addons > .button.is-link:not(:last-child):not([disabled]) {
+    border-right: 1px solid rgba($link-light, .5);
+    margin-right: 0;
+}

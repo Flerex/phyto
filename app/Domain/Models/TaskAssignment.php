@@ -2,13 +2,16 @@
 
 namespace App\Domain\Models;
 
-use Illuminate\Database\Eloquent\Builder;
+use App\Domain\Traits\HasFinishedScope;
+use App\Domain\Traits\MarksParentProcessAsCompleted;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class TaskAssignment extends Model
 {
+    use HasFinishedScope, MarksParentProcessAsCompleted;
+
     /**
      * Eager load image and user field.
      * @var string[]
@@ -20,57 +23,7 @@ class TaskAssignment extends Model
      *
      * @var string[]
      */
-    protected $fillable = ['task_process_id', 'user_id', 'image_id', 'project_id'];
-
-
-    /**
-     * When we update the finished attribute, we check if it was the last assignment of the process to be marked as
-     * completed. If it was, we mark the process as completed.
-     */
-    protected static function boot()
-    {
-        parent::boot();
-
-        static::updated(function (TaskAssignment $assignment) {
-            if ($assignment->finished === $assignment->getOriginal('finished') || $assignment->finished === false) {
-                return;
-            }
-
-            $process = $assignment->process()->withCount([
-                'assignments AS unfinished_assignments_count' => function (Builder $query) {
-                    $query->unfinished();
-                }
-            ])->first();
-
-            if (!$process->unfinished_assignments_count) {
-                $process->finished = true;
-                $process->save();
-            }
-        });
-    }
-
-
-    /**
-     * Scope a query to only include unfinished assignments.
-     *
-     * @param  Builder  $query
-     * @return Builder
-     */
-    public function scopeUnfinished($query)
-    {
-        return $query->where('finished', false);
-    }
-
-    /**
-     * Scope a query to only include finished assignments.
-     *
-     * @param  Builder  $query
-     * @return Builder
-     */
-    public function scopeFinished($query)
-    {
-        return $query->where('finished', true);
-    }
+    protected $fillable = ['task_process_id', 'user_id', 'image_id', 'project_id', 'service'];
 
 
     /**
@@ -114,7 +67,7 @@ class TaskAssignment extends Model
     }
 
     /**
-     * Defines the relationship to naviagate to the bounding boxes created for the image in this assignment.
+     * Defines the relationship to navigate to the bounding boxes created for the image in this assignment.
      *
      * @return HasMany
      */

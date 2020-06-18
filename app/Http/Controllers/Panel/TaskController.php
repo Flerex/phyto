@@ -89,7 +89,7 @@ class TaskController extends Controller
      * @param  Project  $project
      * @param  CreateTaskRequest  $request
      * @return RedirectResponse
-     * @throws AuthorizationException
+     * @throws AuthorizationException|ValidationException
      */
     public function store(Project $project, CreateTaskRequest $request)
     {
@@ -103,7 +103,9 @@ class TaskController extends Controller
         /** @var Sample $sample */
         $sample = $project->samples()->find($validated['sample']);
 
-        $compatibility = $project->tasks()->findMany($validated['compatibility'])->unique();
+        $compatibility = isset($validated['compatibility'])
+            ? $project->tasks()->findMany($validated['compatibility'])->unique()
+            : collect();
 
         try {
 
@@ -133,17 +135,23 @@ class TaskController extends Controller
 
         $assignments = $process->assignments()->paginate(config('phyto.pagination_size'));
 
-        $assignees = $process->assignments->groupBy(fn(TaskAssignment $assignment) => $assignment->user->getKey())
-            ->map(function (Collection $group) {
-                $images = count($group);
-                $finished = $group->filter(fn(TaskAssignment $assignment) => $assignment->finished);
-                $percentage = round($finished->count() / $images, 2) * 100;
-                return (object) [
-                    'user' => $group[0]->user->name,
-                    'images' => $images,
-                    'percentage' => $percentage,
-                ];
-            });
+        $assignees = null;
+
+        if (!$task->automated) {
+            $assignees = $process->assignments
+                ->groupBy(fn(TaskAssignment $assignment) => $assignment->user->getKey())
+                ->map(function (Collection $group) {
+                    $images = count($group);
+                    $finished = $group->filter(fn(TaskAssignment $assignment) => $assignment->finished);
+                    $percentage = round($finished->count() / $images, 2) * 100;
+
+                    return (object) [
+                        'user' => $group[0]->user->name,
+                        'images' => $images,
+                        'percentage' => $percentage,
+                    ];
+                });
+        }
 
         return view('panel.projects.processes.show', compact('project', 'process', 'task', 'assignments', 'assignees'));
     }
@@ -163,11 +171,8 @@ class TaskController extends Controller
         $this->authorize('view', $task->project);
 
         $image = $assignment->image;
-
         $boxes = $assignment->boxes()->get();
-
         $tree = $this->taxonomyService->getTree();
-
         $assignments = $process->assignments()->paginate(config('phyto.pagination_size'));
 
         return view('panel.projects.assignments.show',

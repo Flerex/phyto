@@ -20,12 +20,9 @@ Route::prefix('panel')->middleware('permission:'.Permissions::PANEL_ACCESS()->ge
     /*
     * Species management
     */
-    Route::middleware('permission:'.Permissions::SPECIES_MANAGEMENT()->getValue())->group(function () {
-        Route::resource('species', 'Panel\\SpeciesController')
-            ->only(['index'])
-            ->names([
-                'index' => 'panel.species.index',
-            ]);
+    Route::prefix('species')->middleware('permission:'.Permissions::SPECIES_MANAGEMENT()->getValue())->group(function () {
+        Route::get('index', 'Panel\\SpeciesController@index')->name('panel.species.index');
+        Route::get('download', 'Panel\\SpeciesController@download')->name('panel.species.download');
     });
 
     /*
@@ -123,6 +120,14 @@ Route::prefix('panel')->middleware('permission:'.Permissions::PANEL_ACCESS()->ge
 
         Route::post('projects/{project}/tasks/create', 'Panel\\TaskController@store')
             ->name('panel.projects.tasks.store');
+
+        // Automated
+        Route::get('projects/{project}/tasks/automated/create', 'Panel\\AutomatedTaskController@create')
+            ->name('panel.projects.automated_tasks.create');
+
+        Route::post('projects/{project}/tasks/automated/create', 'Panel\\AutomatedTaskController@store')
+            ->name('panel.projects.automated_tasks.store');
+        // End automated
 
         Route::get('projects/{project}/tasks/{task}', 'Panel\\TaskController@show')
             ->name('panel.projects.tasks.show');

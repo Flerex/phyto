@@ -42,6 +42,11 @@ class Kernel extends HttpKernel
             'throttle:60,1',
             'bindings',
         ],
+
+        'webhooks' => [
+            'throttle:60,1',
+            'bindings',
+        ],
     ];
 
     /**
@@ -67,6 +72,9 @@ class Kernel extends HttpKernel
         'role' => \Spatie\Permission\Middlewares\RoleMiddleware::class,
         'permission' => \Spatie\Permission\Middlewares\PermissionMiddleware::class,
         'role_or_permission' => \Spatie\Permission\Middlewares\RoleOrPermissionMiddleware::class,
+
+        // Custom
+        'automated-services' => \App\Http\Middleware\AutomatedServicesAvailableMiddleware::class,
     ];
 
     /**

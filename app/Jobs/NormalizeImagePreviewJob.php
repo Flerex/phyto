@@ -11,11 +11,11 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\File;
 use Intervention\Image\Facades\Image as ImageManager;
 
-class NormalizeImagePreview implements ShouldQueue
+class NormalizeImagePreviewJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    protected $image;
+    protected Image $image;
 
     /**
      * Create a new job instance.
