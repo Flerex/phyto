@@ -28,24 +28,25 @@ class TaskServiceImpl implements TaskService
     /**
      * Create a task.
      *
+     * @param  string  $description
      * @param  Sample  $sample
      * @param  Collection  $members
      * @param  Collection  $compatibility
      * @param  int  $processCount
      * @return Task
-     * @throws Throwable|NotEnoughMembersForProcessException
+     * @throws Throwable
      */
     public function create_task(
+        string $description,
         Sample $sample,
         Collection $members,
         Collection $compatibility,
         int $processCount = 1
     ): Task {
-        return DB::transaction(function () use ($compatibility, $processCount, $members, $sample) {
+        return DB::transaction(function () use ($description, $compatibility, $processCount, $members, $sample) {
             if ($members->count() < $processCount) {
                 throw new NotEnoughMembersForProcessException;
             }
-
             /** @var AssignmentManager $assignmentManager */
             $assignmentManager = app(AssignmentManager::class, [
                 'compatibility' => $compatibility,
@@ -55,7 +56,7 @@ class TaskServiceImpl implements TaskService
             ]);
             $assignmentsByProcess = $assignmentManager->computeAssignments($processCount);
 
-            $task = $this->createTask($assignmentsByProcess, $sample);
+            $task = $this->createTask($assignmentsByProcess, $sample, $description);
             $this->notifyUsers($assignmentsByProcess, $members, $sample->project);
             return $task;
         });
@@ -90,12 +91,17 @@ class TaskServiceImpl implements TaskService
      *
      * @param  Collection  $assignmentsByProcess
      * @param  Sample  $sample
+     * @param  string  $description
      * @return Task
      */
-    private function createTask(Collection $assignmentsByProcess, Sample $sample): Task
+    private function createTask(Collection $assignmentsByProcess, Sample $sample, string $description): Task
     {
 
-        $task = Task::create(['project_id' => $sample->project->getKey(), 'sample_id' => $sample->getKey()]);
+        $task = Task::create([
+            'description' => $description,
+            'project_id' => $sample->project->getKey(),
+            'sample_id' => $sample->getKey()
+        ]);
 
         foreach ($assignmentsByProcess as $processAssignments) {
             $process = TaskProcess::create(['task_id' => $task->getKey()]);
@@ -130,7 +136,6 @@ class TaskServiceImpl implements TaskService
             Mail::to($user)->queue(new NewAssignmentsMail($user->name, $project->name, count($assignments), $link));
         }
     }
-
 
 
 }

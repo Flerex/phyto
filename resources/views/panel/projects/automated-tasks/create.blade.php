@@ -7,6 +7,22 @@
 
         <div class="box">
 
+            {{-- Description --}}
+            <div class="field">
+                <label
+                    class="label">@lang('panel.projects.tasks.description') @include('partials.info', ['info' => trans('panel.projects.tasks.description_explained')])</label>
+
+                <div class="control">
+                    <input type="text" class="input" name="description" value="{{ old('description') }}">
+                </div>
+
+                @if ($errors->has('description'))
+                    <p class="help is-danger">
+                        {{ $errors->first('description') }}
+                    </p>
+                @endif
+            </div>
+
             {{-- Sample selector --}}
             <div class="field">
                 <div id="sample_selector" data-project="{{ $project->getKey() }}"

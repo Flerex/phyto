@@ -26,9 +26,11 @@ return [
     */
 
     'services' => [
+
         'dummy' => [
             'name' => 'Dummy classifier',
             'endpoint' => 'http://localhost:8080/api/identify-species/',
         ],
+
     ],
 ];

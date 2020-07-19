@@ -43,6 +43,7 @@ class AutomatedTaskController extends Controller
         $enabledServices = $this->getEnabledServices();
 
         $validated = $request->validate([
+            'description' => ['required', 'string', 'min:3', 'max:25'],
             'sample' => ['required', 'exists:samples,id'],
             'services' => ['required', 'array', 'min:1'],
             'services.*' => [Rule::in($enabledServices->keys())],
@@ -53,6 +54,7 @@ class AutomatedTaskController extends Controller
             $sample = Sample::find($validated['sample']);
 
             $task = Task::create([
+                'description' => $validated['description'],
                 'project_id' => $sample->project->getKey(),
                 'sample_id' => $sample->getKey(),
                 'automated' => true,

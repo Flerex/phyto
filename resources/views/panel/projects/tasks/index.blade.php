@@ -19,6 +19,7 @@
         <table class="table is-fullwidth is-boxed">
             <thead>
             <th>@lang('general.type')</th>
+            <th>@lang('panel.projects.tasks.description')</th>
             <th>@lang('labels.samples.sample')</th>
             <th class="has-text-right">@choice('labels.task.processes', 0)</th>
             <th>@lang('general.progress')</th>
@@ -30,6 +31,7 @@
             @foreach($tasks as $task)
                 <tr>
                     <td>@include('panel.projects.partials.task_type', compact('task'))</td>
+                    <td>{{ $task->description }}</td>
                     <td>{{ $task->sample->name }}</td>
                     <td class="has-text-right">{{ $task->processes->count() }}</td>
                     <td style="max-width: 100px">

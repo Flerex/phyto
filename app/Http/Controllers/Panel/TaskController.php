@@ -109,7 +109,7 @@ class TaskController extends Controller
 
         try {
 
-            $this->taskService->create_task($sample, $users, $compatibility, $validated['process_number']);
+            $this->taskService->create_task($validated['description'], $sample, $users, $compatibility, $validated['process_number']);
         } catch (NotEnoughMembersForProcessException $e) {
             throw ValidationException::withMessages([
                 'process_number' => [trans('panel.projects.tasks.not_enough_members_for_assignments')]

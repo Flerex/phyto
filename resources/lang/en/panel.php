@@ -75,6 +75,8 @@ return [
             'automated_create' => 'New automated task',
             'created_alert' => 'Task successfully created.',
             'process_number' => 'Labeling per image',
+            'description' => 'Description',
+            'description_explained' => 'Something that can uniquely identify this task.',
             'process_explained' => 'Here you can select how many times an image will be worked on. For every labeling you add, another member will work in the image. This can be useful to reduce the margin error.',
             'process_max' => 'There must be at least the same number of members as the the number of processes (:value).',
             'must_be_members' => 'Members must belong to the current project.',

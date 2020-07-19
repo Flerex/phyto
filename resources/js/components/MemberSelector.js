@@ -58,6 +58,11 @@ export default class MemberSelector extends Component {
 
 const el = document.getElementById('member_selector')
 if (el) {
-    const old = el.dataset.old ? JSON.parse(el.dataset.old) : null;
+    let old = el.dataset.old ? JSON.parse(el.dataset.old) : null;
+
+    if (Array.isArray(old)) {
+        old = old.filter(e => e !== null)
+    }
+
     ReactDOM.render(<MemberSelector old={old} project={el.dataset.project}/>, el)
 }

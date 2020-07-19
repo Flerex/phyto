@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\URL;
 use Zttp\Zttp;
 
-class SendAutomatedIdentificationRequestJob //implements ShouldQueue
+class SendAutomatedIdentificationRequestJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 

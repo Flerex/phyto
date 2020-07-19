@@ -32,6 +32,7 @@ class CreateTaskRequest extends FormRequest
             'process_number' => ['required', 'int', 'min:1'],
             'compatibility' => ['sometimes', 'array'],
             'compatibility.*' => ['exists:tasks,id'],
+            'description' => ['required', 'string', 'min:3', 'max:25'],
         ];
     }
 
