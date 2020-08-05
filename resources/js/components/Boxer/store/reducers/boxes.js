@@ -1,7 +1,7 @@
 const mode = (state = [], action) => {
     switch (action.type) {
         case 'ADD_BOX':
-            return state.concat({...action.box, persisted: false, user: action.user});
+            return state.concat({...action.box, persisted: false, author: action.user});
         case 'PERSIST_BOX':
             return persistBox(state, action.boxOrId)
         case 'HIGHLIGHT_BOX':

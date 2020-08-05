@@ -46,7 +46,7 @@ export default function SelectableArea() {
 
         if (alreadyExists) return;
 
-        dispatch(addBox(coords, user, assignment));
+        dispatch(addBox(coords, user.name, assignment));
     }
 
     const endSelection = _ => {
