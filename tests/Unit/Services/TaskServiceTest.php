@@ -17,6 +17,7 @@ use App\Domain\Enums\Roles;
 use Carbon\Carbon;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Notification;
@@ -63,13 +64,13 @@ class TaskServiceTest extends TestCase
         // Get random members for assignment
         $assignees = $members->random(3);
 
-        $task = $this->taskService->create_task($sample, $assignees);
+        $task = $this->taskService->create_task('description', $sample, $assignees, collect());
 
         $this->assertEquals(count($assignees), $task->processes[0]->assignments()->pluck('user_id')->unique()->count());
 
 
         // Check the same user is not assigned to the same image
-        $task = $this->taskService->create_task($sample, $assignees, 3);
+        $task = $this->taskService->create_task('description 2', $sample, $assignees, collect(), 3);
 
 
         $images = $task->processes->map(fn(TaskProcess $process) => $process->assignments)

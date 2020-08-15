@@ -31,27 +31,27 @@ class SendAutomatedIdentificationRequestJob implements ShouldQueue
         $this->assignment = $assignment;
     }
 
-    /**
-     * Execute the job.
-     *
-     * @return void
-     */
-    public function handle()
-    {
-        $service = (object) config('automated_identification.services.'.$this->assignment->service);
+/**
+ * Execute the job.
+ *
+ * @return void
+ */
+public function handle()
+{
+    $service = (object) config('automated_identification.services.'.$this->assignment->service);
 
-        Zttp::asMultipart()->post($service->endpoint, [
-            [
-                'name' => 'callback',
-                'contents' => URL::signedRoute('automated_services.receive_bounding_boxes',
-                    ['assignment' => $this->assignment]),
-            ],
-            [
-                'name' => 'image',
-                'contents' => Storage::get('public/'.$this->assignment->image->original_path),
-                'filename' => basename($this->assignment->image->original_path),
-            ],
-        ]);
+    Zttp::asMultipart()->post($service->endpoint, [
+        [
+            'name' => 'callback',
+            'contents' => URL::signedRoute('automated_services.receive_bounding_boxes',
+                ['assignment' => $this->assignment]),
+        ],
+        [
+            'name' => 'image',
+            'contents' => Storage::get('public/'.$this->assignment->image->original_path),
+            'filename' => basename($this->assignment->image->original_path),
+        ],
+    ]);
 
-    }
+}
 }
