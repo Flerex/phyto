@@ -2,7 +2,6 @@
 
 namespace App\Providers;
 
-use App\Domain\Enums\Roles;
 use App\Domain\Models\Project;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Request;
@@ -111,8 +110,16 @@ class ViewServiceProvider extends ServiceProvider
     private function taggerNotificationsInProject()
     {
         ViewFacade::composer('projects.partials.layout', function (View $view) {
+
+            $request = $this->app->request;
+
+            $project = $request->route('project');
+
+
             // We assume only logged in users can access a project.
-            $unfinishedAssignments = Auth::user()->unfinishedAssignments()->count();
+            $unfinishedAssignments = Auth::user()
+                ->unfinishedAssignments()
+                ->where('project_id', $project->getKey())->count();
 
             $view->with(compact('unfinishedAssignments'));
         });
