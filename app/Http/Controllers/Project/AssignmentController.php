@@ -16,6 +16,7 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
@@ -62,7 +63,7 @@ class AssignmentController extends Controller
      *
      * @param  TaskAssignment  $assignment
      * @param  Request  $request
-     * @return Application|Factory|View
+     * @return Application|Factory|RedirectResponse|View
      * @throws AuthorizationException
      */
     public function finish(TaskAssignment $assignment, Request $request)

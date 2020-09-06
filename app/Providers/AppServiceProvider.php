@@ -6,6 +6,8 @@ use App\Domain\Services\CatalogService;
 use App\Domain\Services\CatalogServiceImpl;
 use App\Domain\Services\ProjectService;
 use App\Domain\Services\ProjectServiceImpl;
+use App\Domain\Services\SampleService;
+use App\Domain\Services\SampleServiceImpl;
 use App\Domain\Services\TaskService;
 use App\Domain\Services\TaskServiceImpl;
 use App\Domain\Services\TaxonomyService;
@@ -49,6 +51,7 @@ class AppServiceProvider extends ServiceProvider
         // Bind implementation to interface in order for the kernel's IoC to work
         $this->app->bind(UserService::class, UserServiceImpl::class);
         $this->app->bind(CatalogService::class, CatalogServiceImpl::class);
+        $this->app->bind(SampleService::class, SampleServiceImpl::class);
         $this->app->bind(ProjectService::class, ProjectServiceImpl::class);
         $this->app->bind(TaskService::class, TaskServiceImpl::class);
         $this->app->bind(TaxonomyService::class, TaxonomyServiceImpl::class);

@@ -8,6 +8,7 @@ use App\Domain\Models\Task;
 use App\Domain\Models\TaskAssignment;
 use App\Domain\Models\TaskAutomatedAssignment;
 use App\Domain\Models\TaskProcess;
+use App\Domain\Services\TaskService;
 use App\Http\Controllers\Controller;
 use App\Jobs\SendAutomatedIdentificationRequestJob;
 use Illuminate\Http\Request;
@@ -18,8 +19,12 @@ use Illuminate\Validation\Rule;
 class AutomatedTaskController extends Controller
 {
 
-    public function __construct()
+    protected TaskService $taskService;
+
+    public function __construct(TaskService $taskService)
     {
+        $this->taskService = $taskService;
+
         $this->middleware('automated-services');
     }
 
@@ -49,37 +54,8 @@ class AutomatedTaskController extends Controller
             'services.*' => [Rule::in($enabledServices->keys())],
         ]);
 
-        DB::transaction(function () use ($project, $validated) {
-
-            $sample = Sample::find($validated['sample']);
-
-            $task = Task::create([
-                'description' => $validated['description'],
-                'project_id' => $sample->project->getKey(),
-                'sample_id' => $sample->getKey(),
-                'automated' => true,
-            ]);
-
-            $assignments = collect();
-            foreach ($validated['services'] as $service) {
-                $process = TaskProcess::create(['task_id' => $task->getKey()]);
-                foreach ($sample->images as $image) {
-                    $assignment = TaskAssignment::create([
-                        'task_process_id' => $process->getKey(),
-                        'project_id' => $project->getKey(),
-                        'service' => $service,
-                        'image_id' => $image->getKey(),
-                    ]);
-
-                    $assignments->push($assignment);
-                }
-            }
-
-            // We loop again to make we are not dispatching a job when the transaction rolls back.
-            foreach ($assignments as $assignment) {
-                SendAutomatedIdentificationRequestJob::dispatch($assignment);
-            }
-        });
+        $this->taskService->create_automated_task($validated['description'], Sample::find($validated['sample']),
+            collect($validated['services']));
 
 
         return redirect()->route('panel.projects.tasks.index', compact('project'))

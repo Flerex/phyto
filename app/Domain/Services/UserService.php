@@ -2,6 +2,7 @@
 
 namespace App\Domain\Services;
 
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Spatie\Permission\Models\Role;
 
 /**
@@ -26,5 +27,11 @@ interface UserService
      * @return void
      */
     public function resetPassword(int $user_id) : void;
+
+    /**
+     * Retrieves a list of all users.
+     * @return mixed
+     */
+    public function get_users(): LengthAwarePaginator;
 
 }

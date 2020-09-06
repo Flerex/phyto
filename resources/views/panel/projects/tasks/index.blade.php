@@ -52,6 +52,7 @@
             @endforeach
             </tbody>
         </table>
+        {{ $tasks->links() }}
     @else
         <div class="message is-info">
             <div class="message-body">@lang('panel.projects.tasks.empty')</div>

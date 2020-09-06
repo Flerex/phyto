@@ -43,9 +43,8 @@ class SpeciesController extends Controller
      */
     public function download()
     {
-        $path = 'species/tree.json';
 
-        Storage::put($path, Domain::with('children.children.children')->get()->toJson(JSON_PRETTY_PRINT));
+        $path = $this->taxonomyService->generateJson();
 
         return Storage::download($path);
     }

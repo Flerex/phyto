@@ -11,7 +11,9 @@ use App\Domain\Models\TaskProcess;
 use App\Domain\Models\User;
 use App\Domain\Services\Utils\AssignmentManager;
 use App\Exceptions\NotEnoughMembersForProcessException;
+use App\Jobs\SendAutomatedIdentificationRequestJob;
 use App\Mail\NewAssignmentsMail;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
@@ -26,15 +28,7 @@ class TaskServiceImpl implements TaskService
 {
 
     /**
-     * Create a task.
-     *
-     * @param  string  $description
-     * @param  Sample  $sample
-     * @param  Collection  $members
-     * @param  Collection  $compatibility
-     * @param  int  $processCount
-     * @return Task
-     * @throws Throwable
+     * @inheritDoc
      */
     public function create_task(
         string $description,
@@ -87,12 +81,7 @@ class TaskServiceImpl implements TaskService
     }
 
     /**
-     * Creates the task model with the corresponding processes and assignments according to $assignmentsByProcess.
-     *
-     * @param  Collection  $assignmentsByProcess
-     * @param  Sample  $sample
-     * @param  string  $description
-     * @return Task
+     * @inheritDoc
      */
     private function createTask(Collection $assignmentsByProcess, Sample $sample, string $description): Task
     {
@@ -120,11 +109,7 @@ class TaskServiceImpl implements TaskService
     }
 
     /**
-     * Sends an email to the users to notify them of the new assignments.
-     *
-     * @param  Collection  $assignments
-     * @param  Collection  $members
-     * @param  Project  $project
+     * @inheritDoc
      */
     private function notifyUsers(Collection $assignments, Collection $members, Project $project): void
     {
@@ -138,4 +123,105 @@ class TaskServiceImpl implements TaskService
     }
 
 
+    /**
+     * @inheritDoc
+     */
+    public function create_automated_task(
+        string $description,
+        Sample $sample,
+        Collection $services
+    ): Task {
+        return DB::transaction(function () use ($sample, $description, $services) {
+
+            $task = Task::create([
+                'description' => $description,
+                'project_id' => $sample->project->getKey(),
+                'sample_id' => $sample->getKey(),
+                'automated' => true,
+            ]);
+
+            $assignments = collect();
+            foreach ($services as $service) {
+                $process = TaskProcess::create(['task_id' => $task->getKey()]);
+                foreach ($sample->images as $image) {
+                    $assignment = TaskAssignment::create([
+                        'task_process_id' => $process->getKey(),
+                        'project_id' => $sample->project->getKey(),
+                        'service' => $service,
+                        'image_id' => $image->getKey(),
+                    ]);
+
+                    $assignments->push($assignment);
+                }
+            }
+
+            // We loop again to make we are not dispatching a job when the transaction rolls back.
+            foreach ($assignments as $assignment) {
+                SendAutomatedIdentificationRequestJob::dispatch($assignment);
+            }
+
+            return $task;
+        });
+    }
+
+
+    /**
+     * @inheritDoc
+     */
+    public function get_from_project(Project $project): LengthAwarePaginator
+    {
+        return $project->tasks()->paginate(config('phyto.pagination_size'));
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function get_processes(Task $task): Collection
+    {
+        return $task->processes;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function get_assignments_for_process_with_percentage(TaskProcess $process): Collection
+    {
+        return $process->assignments
+            ->groupBy(fn(TaskAssignment $assignment) => $assignment->user->getKey())
+            ->map(function (Collection $group) {
+                $images = count($group);
+                $finished = $group->filter(fn(TaskAssignment $assignment) => $assignment->finished);
+                $percentage = round($finished->count() / $images, 2) * 100;
+
+                return (object) [
+                    'user' => $group[0]->user->name,
+                    'images' => $images,
+                    'percentage' => $percentage,
+                ];
+            });
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function get_assignments_for_process(TaskProcess $process): Collection
+    {
+        $process->assignments()->paginate(config('phyto.pagination_size'));
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function get_boxes_for_assignment(TaskAssignment $assignment): Collection
+    {
+        return $assignment->boxes()->get();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function get_assignment_image(TaskAssignment $assignment): Image
+    {
+        return $assignment->image;
+    }
 }

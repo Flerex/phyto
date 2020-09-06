@@ -26,7 +26,7 @@ class UserController extends Controller
 
     public function index()
     {
-        $users = User::orderBy('id', 'desc')->paginate(config('phyto.pagination_size'));
+        $users = $this->userService->get_users();
         return view('panel.users.index', compact('users'));
     }
 

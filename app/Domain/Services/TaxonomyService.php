@@ -15,4 +15,10 @@ interface TaxonomyService
      * @return Collection
      */
     public function getTree() : Collection;
+
+    /**
+     * Returns the path to a file that contains the Taxonomy in JSON format.
+     * @return string
+     */
+    public function generateJson(): string;
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Panel;
 
+use App\Domain\Services\ProjectService;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AddUserToProjectRequest;
 use App\Domain\Models\Project;
@@ -11,10 +12,18 @@ use Illuminate\Http\Request;
 
 class MemberController extends Controller
 {
+
+    protected ProjectService $projectService;
+
+    public function __construct(ProjectService $projectService)
+    {
+        $this->projectService = $projectService;
+    }
+
     public function index(Project $project)
     {
 
-        $members = $project->users;
+        $members = $this->projectService->get_members($project);
 
         return view('panel.projects.members.index', compact('project', 'members'));
     }
@@ -25,7 +34,7 @@ class MemberController extends Controller
             'active' => ['required', 'int', 'min:0', 'max:1'],
         ]);
 
-        $project->users()->updateExistingPivot($member, ['active' => (bool) $validated['active']]);
+        $this->projectService->set_member_status($project, $member, (bool) $validated['active']);
 
         return redirect()->back();
     }
@@ -51,14 +60,7 @@ class MemberController extends Controller
 
         $validated = $request->validated();
 
-        $alreadyAdded = $project->users
-            ->push($project->manager)
-            ->pluck('id');
-
-
-        $filteredUsers = collect($validated['users'])->diff($alreadyAdded);
-
-        $project->users()->attach($filteredUsers);
+        $this->projectService->add_members($project, collect($validated['users']));
 
         return redirect()->route('panel.projects.members.index', compact('project'));
     }

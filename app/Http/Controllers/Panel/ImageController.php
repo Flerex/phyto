@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Panel;
 
+use App\Domain\Services\SampleService;
 use App\Http\Controllers\Controller;
 use App\Domain\Models\Image;
 use App\Domain\Models\Project;
@@ -14,11 +15,18 @@ use Illuminate\View\View;
 class ImageController extends Controller
 {
 
+    protected SampleService $sampleService;
+
+    public function __construct(SampleService $sampleService)
+    {
+        $this->sampleService = $sampleService;
+    }
+
     /**
      * Image list of a given sample.
      *
-     * @param Project $project
-     * @param Sample $sample
+     * @param  Project  $project
+     * @param  Sample  $sample
      * @return Factory|View
      * @throws AuthorizationException
      */
@@ -27,9 +35,9 @@ class ImageController extends Controller
 
         $this->authorize('viewAny', [Image::class, $project, $sample]);
 
-        $images = $sample->images()->whereNotNull('path')->get();
+        $images = $this->sampleService->get_processed_images($sample);
 
-        $totalImages = $sample->images()->count();
+        $totalImages =  $this->sampleService->get_total_images($sample);
 
         return view('panel.projects.images.index', compact('project', 'sample', 'images', 'totalImages'));
     }

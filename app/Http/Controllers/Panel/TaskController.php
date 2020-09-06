@@ -46,7 +46,7 @@ class TaskController extends Controller
     {
         $this->authorize('view', $project);
 
-        $tasks = $project->tasks;
+        $tasks = $this->taskService->get_from_project($project);
 
         return view('panel.projects.tasks.index', compact('project', 'tasks'));
     }
@@ -65,7 +65,7 @@ class TaskController extends Controller
 
         $task->with(['processes.assignments.user']);
 
-        $processes = $task->processes;
+        $processes = $this->taskService->get_processes($task);
 
         return view('panel.projects.processes.index', compact('project', 'processes'));
     }
@@ -138,19 +138,7 @@ class TaskController extends Controller
         $assignees = null;
 
         if (!$task->automated) {
-            $assignees = $process->assignments
-                ->groupBy(fn(TaskAssignment $assignment) => $assignment->user->getKey())
-                ->map(function (Collection $group) {
-                    $images = count($group);
-                    $finished = $group->filter(fn(TaskAssignment $assignment) => $assignment->finished);
-                    $percentage = round($finished->count() / $images, 2) * 100;
-
-                    return (object) [
-                        'user' => $group[0]->user->name,
-                        'images' => $images,
-                        'percentage' => $percentage,
-                    ];
-                });
+            $assignees =  $this->taskService->get_assignments_for_process_with_percentage($process);
         }
 
         return view('panel.projects.processes.show', compact('project', 'process', 'task', 'assignments', 'assignees'));
@@ -170,10 +158,10 @@ class TaskController extends Controller
     {
         $this->authorize('view', $task->project);
 
-        $image = $assignment->image;
-        $boxes = $assignment->boxes()->get();
+        $image = $this->taskService->get_assignment_image($assignment);
+        $boxes = $this->taskService->get_boxes_for_assignment($assignment);
         $tree = $this->taxonomyService->getTree();
-        $assignments = $process->assignments()->paginate(config('phyto.pagination_size'));
+        $assignments = $this->taskService->get_assignments_for_process($process);
 
         return view('panel.projects.assignments.show',
             compact('project', 'process', 'assignment', 'assignments', 'tree', 'boxes', 'image'));

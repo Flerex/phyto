@@ -6,6 +6,7 @@ namespace App\Domain\Services;
 use App\Domain\Models\User;
 use App\Domain\Enums\Roles;
 use Illuminate\Auth\Events\Registered;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Password;
 use Spatie\Permission\Models\Role;
 
@@ -45,5 +46,13 @@ class UserServiceImpl implements UserService
         User::findOrFail($user_id); // Throw ModelNotFoundException if user does not exist
 
         Password::broker()->sendResetLink(['id' => $user_id]);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function get_users(): LengthAwarePaginator
+    {
+        return User::orderBy('id', 'desc')->paginate(config('phyto.pagination_size'));
     }
 }

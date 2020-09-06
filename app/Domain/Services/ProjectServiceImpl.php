@@ -5,6 +5,7 @@ namespace App\Domain\Services;
 
 
 use App\Domain\Models\Image;
+use App\Domain\Models\User;
 use App\Jobs\NormalizeImagePreviewJob;
 use App\Domain\Models\Project;
 use App\Domain\Models\Sample;
@@ -88,7 +89,29 @@ class ProjectServiceImpl implements ProjectService
     }
 
 
+    /**
+     * Retrieves all members of a project.
+     * @param  Project  $project
+     * @return Collection
+     */
+    public function get_members(Project $project): Collection
+    {
+        return $project->users;
+    }
 
+    public function set_member_status(Project $project, User $member, bool $status)
+    {
+        return $project->users()->updateExistingPivot($member, ['active' => $status]);
+    }
 
+    public function add_members(Project $project, Collection $users)
+    {
+        $alreadyAdded = $project->users
+            ->push($project->manager)
+            ->pluck('id');
 
+        $filteredUsers = $users->diff($alreadyAdded);
+
+        $project->users()->attach($filteredUsers);
+    }
 }
