@@ -6,6 +6,7 @@ use DatabaseSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 use Illuminate\Foundation\Testing\WithFaker;
+use PopulatedDatabaseSeeder;
 
 abstract class TestCase extends BaseTestCase
 {
@@ -25,5 +26,6 @@ abstract class TestCase extends BaseTestCase
         parent::setUp();
 
         $this->seed(DatabaseSeeder::class);
+        $this->seed(PopulatedDatabaseSeeder::class);
     }
 }
