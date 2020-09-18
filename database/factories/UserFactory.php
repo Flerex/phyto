@@ -33,7 +33,11 @@ $factory->afterCreating(User::class, function (User $user) {
     $user->assignRole($role);
 });
 
-$factory->afterMakingState(User::class, 'manager', function (User $user) {
-    $user->assignRole(Roles::MANAGER()->getValue());
+$factory->afterCreatingState(User::class, 'manager', function (User $user) {
+    $user->syncRoles(Roles::MANAGER()->getValue());
+});
+
+$factory->afterCreatingState(User::class, 'tagger', function (User $user) {
+    $user->syncRoles(Roles::TAGGER()->getValue());
 });
 

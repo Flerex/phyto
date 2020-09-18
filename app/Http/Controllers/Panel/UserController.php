@@ -7,6 +7,9 @@ use App\Http\Requests\CreateUser;
 use App\Domain\Models\Role;
 use App\Domain\Services\UserService;
 use App\Domain\Models\User;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\View\View;
 
 class UserController extends Controller
 {
@@ -24,6 +27,11 @@ class UserController extends Controller
         $this->userService = $userService;
     }
 
+    /**
+     * Show the paginated user list
+     *
+     * @return View
+     */
     public function index()
     {
         $users = $this->userService->get_users();

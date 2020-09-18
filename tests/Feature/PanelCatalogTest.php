@@ -38,8 +38,9 @@ class PanelCatalogTest extends TestCase
     public function test_only_supervisors_and_greater_can_manage_catalogs()
     {
 
-        $this->be(factory(User::class)->create());
+        $user = factory(User::class)->states('tagger')->create();
 
+        $this->be($user);
         $response = $this->get(route('panel.catalogs.index'));
 
         $response->assertStatus(403);
