@@ -45,8 +45,11 @@ class FileUtilsImpl implements FileUtils
             ->map(function ($path, $i) use ($finalPath) {
                 $extension = File::extension(storage_path($path));
 
-                $newPath = $finalPath . '/' . ($i + 1) . '.' . $extension;
-                Storage::move($path, 'public/' . $newPath);
+                $newPath = $finalPath.'/'.($i + 1).'.'.$extension;
+
+                if (!Storage::exists($newPath)) {
+                    Storage::move($path, 'public/'.$newPath);
+                }
 
                 return $newPath;
             });
@@ -61,7 +64,7 @@ class FileUtilsImpl implements FileUtils
     /**
      * Checks whether a file is considered of type package (e.g. a ZIP file).
      *
-     * @param string $file
+     * @param  string  $file
      * @return bool
      */
     private function isPackage(string $file)
@@ -77,13 +80,13 @@ class FileUtilsImpl implements FileUtils
      *
      * If a file is not of an allowed MIME type, it will be discarded.
      *
-     * @param string $path
+     * @param  string  $path
      * @return string|null
      */
     private function extractPackageImages(string $path): ?string
     {
         $packageTempId = uniqid();
-        $tempDir = 'temp/' . $packageTempId . '/'; // The temporary directory where the files will be left.
+        $tempDir = 'temp/'.$packageTempId.'/'; // The temporary directory where the files will be left.
 
         try {
             if (Storage::exists($tempDir)) { // We only extract the zip if it wasn't previously extracted (e.g. a repeated request)
@@ -97,7 +100,7 @@ class FileUtilsImpl implements FileUtils
             // Move all the valid files to the temp directory
             foreach ($this->filterValidFiles($files) as $file) {
                 $name = substr($file, strrpos($file, '/')); // Contains the slash (/)
-                $newPath = $tempDir . $name;
+                $newPath = $tempDir.$name;
                 Storage::move($file, $newPath);
             }
         } catch (Exception $e) {
@@ -116,7 +119,7 @@ class FileUtilsImpl implements FileUtils
     /**
      * Returns a list with the valid file types.
      *
-     * @param Collection $files
+     * @param  Collection  $files
      * @return Collection
      */
     private function filterValidFiles(Collection $files): Collection
@@ -136,13 +139,13 @@ class FileUtilsImpl implements FileUtils
      * Extracts the package to a directory in the
      * same place as the package.
      *
-     * @param string $packagePath
+     * @param  string  $packagePath
      * @return string The extraction directory.
      * @throws Exceptions\ExtractionException
      */
     private function extractPackageInSamePath(string $packagePath)
     {
-        $destination = $packagePath . '_extracted';
+        $destination = $packagePath.'_extracted';
 
         $package = local_path($packagePath);
 
