@@ -20,8 +20,7 @@
     <table class="table is-boxed is-fullwidth">
         <thead>
         <th class="has-text-right">@lang('labels.id')</th>
-        <th>@lang('labels.user.name')</th>
-        <th>@lang('labels.user.email')</th>
+        <th>@lang('panel.users.user')</th>
         <th>@lang('labels.user.role')</th>
         <th class="has-text-centered">@lang('panel.users.joined')</th>
         <th>@lang('panel.users.registered')</th>
@@ -33,8 +32,15 @@
             <tr>
                 <th class="has-text-right">{{ $user->id }}</th>
                 <td>
-                    @include('partials.avatar', compact('user'))<span>{{ $user->name }}</span></td>
-                <td><a href="mailto:{{ $user->email }}">{{ $user->email }}</a></td>
+                    <div class="is-flex" style="align-items: center">
+                            @include('partials.avatar', compact('user'))
+                        <div>
+                            <span>{{ $user->name }}</span>
+                            <br>
+                            <a href="mailto:{{ $user->email }}">{{ $user->email }}</a>
+                        </div>
+                    </div>
+                </td>
                 <td>
                     @forelse($user->roles as $role)
                         {{ trans('auth.roles.' . $role->name) }}@if(!$loop->last), @endif

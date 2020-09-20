@@ -97,8 +97,6 @@ class AsynchronousController extends Controller
      */
     public function edit_node(Request $request)
     {
-
-
         $validator = $this->validateEditRequest($request);
 
         if ($validator->fails()) {
