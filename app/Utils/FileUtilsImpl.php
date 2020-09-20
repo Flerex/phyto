@@ -4,6 +4,7 @@
 namespace App\Utils;
 
 
+use App\Utils\Exceptions\ExtractionException;
 use Exception;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\File;
@@ -82,6 +83,7 @@ class FileUtilsImpl implements FileUtils
      *
      * @param  string  $path
      * @return string|null
+     * @throws ExtractionException
      */
     private function extractPackageImages(string $path): ?string
     {
@@ -104,7 +106,7 @@ class FileUtilsImpl implements FileUtils
                 Storage::move($file, $newPath);
             }
         } catch (Exception $e) {
-            return null;
+            throw new ExtractionException('Could not extract '.$path);
         } finally {
             Storage::delete($path);
 

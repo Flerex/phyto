@@ -25,7 +25,7 @@ class PackageUtilsImpl implements PackageUtils
     public function extractTo(string $destinationPath, string $packagePath)
     {
 
-        if (!Storage::exists($packagePath)) {
+        if (!file_exists($packagePath)) {
             throw new InvalidArgumentException;
         }
 
