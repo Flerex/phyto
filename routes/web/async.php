@@ -8,8 +8,7 @@ Route::prefix('async')->group(function () {
             ->name('async.species');
     });
 
-
-    Route::middleware('permission:'.Permissions::SPECIES_MANAGEMENT()->getValue().','.Permissions::CATALOG_MANAGEMENT()->getValue())
+    Route::middleware('permission:'.Permissions::SPECIES_MANAGEMENT()->getValue().'|'.Permissions::CATALOG_MANAGEMENT()->getValue())
         ->group(function () {
             Route::post('/hierarchy/add', 'AsynchronousController@add_to_hierarchy')
                 ->name('async.add_to_hierarchy');
