@@ -75,9 +75,9 @@ interface TaskService
      * Returns the assignments for a given process.
      *
      * @param  TaskProcess  $process
-     * @return Collection
+     * @return LengthAwarePaginator
      */
-    public function get_assignments_for_process(TaskProcess $process): Collection;
+    public function get_assignments_for_process(TaskProcess $process): LengthAwarePaginator;
 
     /**
      * Retrieves bounding boxes for a given assignment.

@@ -204,9 +204,9 @@ class TaskServiceImpl implements TaskService
     /**
      * @inheritDoc
      */
-    public function get_assignments_for_process(TaskProcess $process): Collection
+    public function get_assignments_for_process(TaskProcess $process): LengthAwarePaginator
     {
-        $process->assignments()->paginate(config('phyto.pagination_size'));
+        return $process->assignments()->paginate(config('phyto.pagination_size'));
     }
 
     /**
