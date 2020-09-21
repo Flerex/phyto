@@ -11,7 +11,7 @@ export default function TaxonomyList({tree: originalTree, ...props}) {
     const [query, setQuery] = useState('')
 
     useEffect(() => {
-        setTree(query.trim() ? filter(originalTree, query) : originalTree)
+        setTree(query.trim() ? filterTree(originalTree, n => isAMatch(n.name, query)) : originalTree)
     }, [originalTree])
 
 
