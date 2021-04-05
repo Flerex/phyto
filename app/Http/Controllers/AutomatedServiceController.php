@@ -46,6 +46,7 @@ class AutomatedServiceController extends Controller
                     'top' => $box['top'],
                     'width' => $box['width'],
                     'height' => $box['height'],
+                    'rotation' => $box['rotation'] ?? 0,
                 ]);
 
                 $boundingBox->task_assignment_id = $assignment->getKey();

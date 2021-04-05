@@ -12,11 +12,12 @@ class BoundingBox extends Model
         'top' => ['required', 'integer', 'min:0'],
         'width' => ['required', 'integer', 'min:5'],
         'height' => ['required', 'integer', 'min:5'],
+        'rotation' => ['number', 'between:0,360'],
     ];
 
-    protected $fillable = ['left', 'top', 'width', 'height', 'user_id', 'task_assignment_id'];
+    protected $fillable = ['left', 'top', 'width', 'height', 'rotation', 'user_id', 'task_assignment_id'];
 
-    protected $visible = ['id', 'left', 'top', 'width', 'height', 'author', 'taggable'];
+    protected $visible = ['id', 'left', 'top', 'width', 'height', 'rotation', 'author', 'taggable'];
 
     protected $appends = ['author'];
 
