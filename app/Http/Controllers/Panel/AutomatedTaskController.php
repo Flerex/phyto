@@ -48,7 +48,7 @@ class AutomatedTaskController extends Controller
         $enabledServices = $this->getEnabledServices();
 
         $validated = $request->validate([
-            'description' => ['required', 'string', 'min:3', 'max:25'],
+            'description' => ['required', 'unique:tasks', 'string', 'min:3', 'max:25'],
             'sample' => ['required', 'exists:samples,id'],
             'services' => ['required', 'array', 'min:1'],
             'services.*' => [Rule::in($enabledServices->keys())],
