@@ -17,7 +17,6 @@ export default function BoundingBox({box}) {
 
 
     const getBoundingBoxStyle = () => {
-        console.log(box)
         return {
             transform: 'rotate(' + box.rotation + 'deg)',
             width: box.width + 'px',
