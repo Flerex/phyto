@@ -1,6 +1,7 @@
 <?php
 
 use App\Domain\Enums\Permissions;
+use Illuminate\Support\Facades\Route;
 
 Route::prefix('async')->group(function () {
     Route::middleware('auth')->group(function () {

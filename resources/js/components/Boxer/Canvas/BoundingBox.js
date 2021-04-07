@@ -18,10 +18,12 @@ export default function BoundingBox({box}) {
 
     const getBoundingBoxStyle = () => {
         return {
+            transform: 'rotate(' + box.rotation + 'deg)',
             width: box.width + 'px',
             height: box.height + 'px',
             top: box.top + 'px',
             left: box.left + 'px',
+
         }
     }
 

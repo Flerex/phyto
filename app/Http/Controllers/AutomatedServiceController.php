@@ -16,18 +16,31 @@ class AutomatedServiceController extends Controller
         $this->middleware('signed');
     }
 
-    public function receiveBoundingBoxes(TaskAssignment $assignment, Request $request)
+    /**
+     * Expected a POST request for the automated service with a `boxes` parameter as an array
+     * of objects with, at least, `width`, `height`, `top` and `left` properties.
+     *
+     * @param TaskAssignment $assignment
+     * @param Request $request
+     * @return bool[]
+     */
+    public function receiveBoundingBoxes(TaskAssignment $assignment, Request $request): array
     {
+
         if($assignment->finished) {
             abort(Response::HTTP_FORBIDDEN, 'This assignment was already processed.');
         }
 
-        $validated = $request->validate([
-            'boxes' => ['required', 'array'],
-        ]);
+        $boxes = json_decode($request->getContent(), true);
 
-        $boxes = collect($validated['boxes']);
 
+        if ($boxes === null) {
+            abort(Response::HTTP_BAD_REQUEST, 'JSON expected as POST request body');
+        }
+
+        $boxes = collect($boxes);
+
+        // Minimum required properties for a bounding box
         $expectedProperties = collect(['top', 'left', 'width', 'height']);
 
         $wellFormed = $boxes->every(function (array $box) use ($expectedProperties) {
@@ -53,6 +66,10 @@ class AutomatedServiceController extends Controller
                 if (isset($box['taggable_id']) && isset($box['taggable_type'])) {
                     $boundingBox->taggable_id = $box['taggable_id'];
                     $boundingBox->taggable_type = $box['taggable_type'];
+                }
+
+                if (isset($box['rotation'])) {
+                    $boundingBox->rotation = $box['rotation'];
                 }
 
                 $boundingBox->save();
